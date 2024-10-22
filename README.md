@@ -13,8 +13,8 @@ Moodel is our output for the CSIT321 and CSIT340 joint-project submission. Moode
 
 | Full Name                     | GitHub Profile                               |
 | ----------------------------- | -------------------------------------------- |
-| **Arda**, Brett Westley A.    | [Github Profile Link]()                      |
-| **Baltazar**, Rigel L.        | [Github Profile Link]()                      |
+| **Arda**, Brett Westley A.    | [bardatt1](https://github.com/bardatt1)      |
+| **Baltazar**, Rigel L.        | [Tadashi10x](https://github.com/Tadashi10x)  |
 | **Matunog**, Margaret Anne C. | [marginggg](https://github.com/margamatunog) |
 | **Porter**, Nicolo Ryne A.    | [nicoryne](https://github.com/nicoryne)      |
 | **San Diego**, Gabe Jeremy R. | [gabejeremy](https://github.com/gabejeremy)  |
