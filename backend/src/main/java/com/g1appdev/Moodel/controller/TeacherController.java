@@ -26,9 +26,9 @@ public class TeacherController {
     @Autowired
     TeacherService tserv;
 
-    @GetMapping("/008")
+    @GetMapping("/testConnection")
     public String print() {
-        return "CONNECTION IS GOOD!";
+        return "Teacher API connected sucessfully!";
     }
 
     // CREATE
@@ -53,11 +53,11 @@ public class TeacherController {
     public Teacher putMethodName(@RequestParam int teacherId, @RequestParam int courseId) {
         return tserv.addCourse(teacherId, courseId);
     }
-    
 
     // DELETE
     @DeleteMapping("/deleteTeacherDetails/{id}")
     public String deleteTeacher(@PathVariable int id) {
         return tserv.deleteTeacher(id);
     }
+    
 }

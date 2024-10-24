@@ -24,9 +24,9 @@ public class CourseController {
     @Autowired
     CourseService cserv;
 
-    @GetMapping("/009")
+    @GetMapping("/testConnection")
     public String print() {
-        return "CONNECTION IS GOOD!";
+        return "Course API connected sucessfully!";
     }
 
     // CREATE
@@ -52,8 +52,6 @@ public class CourseController {
     @DeleteMapping("/deleteCourseDetails/{id}")
     public String deleteCourse(@PathVariable int id) {
         return cserv.deleteCourse(id);
-    }
-
-
+    }    
     
 }
