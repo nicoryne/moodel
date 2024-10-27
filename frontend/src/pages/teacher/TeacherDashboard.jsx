@@ -6,11 +6,13 @@ import {
   Button,
   Avatar,
   IconButton,
-  Grid2,
+  Grid,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Home, MenuBook, Settings, AccountCircle } from "@mui/icons-material";
-
+{
+  /*CHANGE this to fit what design!*/
+}
 export default function TeacherDashboard() {
   return (
     <Box display="flex" height="100vh" bgcolor="#f5f5f5">
@@ -57,9 +59,9 @@ export default function TeacherDashboard() {
             </Link>
           </Button>
         </Box>
-        <Grid2 container spacing={2}>
+        <Grid container spacing={2}>
           {Array.from({ length: 3 }).map((_, index) => (
-            <Grid2 item xs={12} key={index}>
+            <Grid item xs={12} key={index}>
               <Paper
                 elevation={3}
                 sx={{
@@ -71,9 +73,9 @@ export default function TeacherDashboard() {
                 <Typography variant="h6">Course Name</Typography>
                 <Typography variant="subtitle1"># of Students</Typography>
               </Paper>
-            </Grid2>
+            </Grid>
           ))}
-        </Grid2>
+        </Grid>
       </Box>
 
       {/* Teacher Details Section */}
