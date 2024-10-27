@@ -32,8 +32,8 @@ public class TeacherCourseOwnershipController {
 
     // CREATE
     @PostMapping("/postTeacherCourseOwnership")
-    public TeacherCourseOwnership postTeacherCourseOwnershipRecord(@RequestParam int courseId, @RequestParam int teacherId, @RequestParam String ownershipDate) {
-        return tcoserv.postTeacherCourseOwnershipRecord(courseId, teacherId, ownershipDate);
+    public TeacherCourseOwnership postTeacherCourseOwnershipRecord(@RequestBody TeacherCourseOwnership teacherCourseOwnership) {
+        return tcoserv.postTeacherCourseOwnershipRecord(teacherCourseOwnership);
     }
 
     // READ

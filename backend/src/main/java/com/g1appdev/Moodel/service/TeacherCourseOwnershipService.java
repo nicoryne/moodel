@@ -16,6 +16,7 @@ import com.g1appdev.Moodel.respository.CourseRepo;
 import com.g1appdev.Moodel.respository.TeacherCourseOwnershipRepo;
 import com.g1appdev.Moodel.respository.TeacherRepo;
 
+import jakarta.persistence.EntityNotFoundException;
 @Service
 public class TeacherCourseOwnershipService {
 
@@ -23,32 +24,27 @@ public class TeacherCourseOwnershipService {
     private TeacherCourseOwnershipRepo tcorepo;
 
     @Autowired
-    private CourseRepo crepo;
-
-    @Autowired
     private TeacherRepo trepo;
+
+    @Autowired CourseRepo crepo;
 
     public TeacherCourseOwnershipService() {
         super();
     }
 
     // CREATE
-    public TeacherCourseOwnership postTeacherCourseOwnershipRecord(int courseId, int teacherId, String ownershipDate) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = formatter.parse(ownershipDate);
-        } catch (ParseException e) {
-            System.err.println("🔴 ERROR: Parsing String to Date String with format yyy-MM-dd");
-        }
-        
+    public TeacherCourseOwnership postTeacherCourseOwnershipRecord(TeacherCourseOwnership teacherCourseOwnership) {
+        int teacherId = teacherCourseOwnership.getTeacherCourseId().getTeacherId();
+        int courseId = teacherCourseOwnership.getTeacherCourseId().getCourseId();
+
         Teacher teacher = trepo.findById(teacherId)
-        .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Teacher record with ID " + teacherId + " was NOT found."));
+            .orElseThrow(() -> new EntityNotFoundException("🔴 ERROR: Teacher record with ID " + teacherId + " was NOT found."));
 
         Course course = crepo.findById(courseId)
-        .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Course record with ID " + courseId + " was NOT found."));
-        
-        TeacherCourseOwnership teacherCourseOwnership = new TeacherCourseOwnership(teacher, course, date);
+            .orElseThrow(() -> new EntityNotFoundException("🔴 ERROR: Course record with ID " + courseId + " was NOT found."));
+            
+        teacherCourseOwnership.setTeacher(teacher);
+        teacherCourseOwnership.setCourse(course);
         return tcorepo.save(teacherCourseOwnership);
     }
 
