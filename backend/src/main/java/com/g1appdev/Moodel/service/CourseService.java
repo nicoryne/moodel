@@ -39,7 +39,7 @@ public class CourseService {
             course.setTitle(newCourseDetails.getTitle());
             course.setDescription(newCourseDetails.getDescription());
         } catch (NoSuchElementException e) {
-            throw new NoSuchElementException("Course " + id + " not found");
+            throw new NoSuchElementException("🔴 ERROR: Course record with ID " + id + " was NOT found.");
         } finally {
             return crepo.save(course);
         }
@@ -48,11 +48,11 @@ public class CourseService {
     // DELETE
     public String deleteCourse(int id) {
         if(crepo.findById(id) == null) {
-            return "Course record with ID " + id + " was NOT found."; 
+            return "🔴 ERROR: Course record with ID " + id + " was NOT found."; 
         }
 
         crepo.deleteById(id);
-        return "Course record with ID " + id + " has been successfully deleted.";
+        return "✅ SUCCESS: Course record with ID " + id + " has been successfully deleted.";
     }
 
 }

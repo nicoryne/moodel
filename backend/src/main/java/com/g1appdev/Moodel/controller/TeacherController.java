@@ -28,7 +28,7 @@ public class TeacherController {
 
     @GetMapping("/testConnection")
     public String print() {
-        return "Teacher API connected sucessfully!";
+        return "✅ SUCCESS: Teacher API connected sucessfully!";
     }
 
     // CREATE
@@ -49,10 +49,6 @@ public class TeacherController {
         return tserv.putTeacherDetails(id, newTeacher);
     }
 
-    @PutMapping("/putCourseToTeacher")
-    public Teacher putMethodName(@RequestParam int teacherId, @RequestParam int courseId) {
-        return tserv.addCourse(teacherId, courseId);
-    }
 
     // DELETE
     @DeleteMapping("/deleteTeacherDetails/{id}")

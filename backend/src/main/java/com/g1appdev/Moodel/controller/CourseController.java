@@ -26,7 +26,7 @@ public class CourseController {
 
     @GetMapping("/testConnection")
     public String print() {
-        return "Course API connected sucessfully!";
+        return "✅ SUCCESS: Course API connected sucessfully!";
     }
 
     // CREATE

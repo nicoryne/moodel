@@ -1,20 +1,20 @@
 import React from "react";
 import {
   Container,
-  Box,
   Grid2,
   Paper,
   TextField,
   Button,
   Checkbox,
   FormControlLabel,
+  Box,
   IconButton,
   InputAdornment,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-export default function Login() {
+export default function StudentSignUp() {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const togglePasswordVisibility = () => {
@@ -26,16 +26,14 @@ export default function Login() {
       <Paper elevation={3} style={{ padding: "20px" }}>
         <Grid2 container direction="column" spacing={3}>
           <Box display="flex" justifyContent="center" width="100%" gap={2}>
-            <Button variant="outlined">
-              <Link
-                to="/signup"
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                Sign Up
-              </Link>
+            <Button variant="contained">Sign Up</Button>
+            <Button variant="outlined" component={Link} to="/student/login">
+              Login
             </Button>
-            <Button variant="contained">Login</Button>
           </Box>
+          <Grid2 item>
+            <TextField label="Name" fullWidth variant="outlined" />
+          </Grid2>
           <Grid2 item>
             <TextField label="Email" fullWidth variant="outlined" />
           </Grid2>
@@ -64,17 +62,19 @@ export default function Login() {
             justifyContent="space-between"
             alignItems="center"
           >
-            <FormControlLabel control={<Checkbox />} label="Remember me" />
-            <Button variant="text">Forgot password?</Button>
+            <FormControlLabel
+              control={<Checkbox />}
+              label="I agree to the terms and conditions"
+            />
           </Grid2>
           <Grid2 item>
             <Button variant="contained" fullWidth>
-              Log In
+              Sign Up
             </Button>
           </Grid2>
           <Grid2 item>
             <Button variant="outlined" fullWidth>
-              Login with Google
+              Sign Up with Google
             </Button>
           </Grid2>
         </Grid2>

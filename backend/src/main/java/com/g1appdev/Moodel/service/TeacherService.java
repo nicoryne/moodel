@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.g1appdev.Moodel.entity.Course;
 import com.g1appdev.Moodel.entity.Teacher;
 import com.g1appdev.Moodel.respository.CourseRepo;
 import com.g1appdev.Moodel.respository.TeacherRepo;
@@ -51,33 +50,20 @@ public class TeacherService {
             teacher.setPhoneNumber(newTeacherDetails.getPhoneNumber());
             teacher.setHireDate(newTeacherDetails.getHireDate());
         } catch (NoSuchElementException e) {
-            throw new NoSuchElementException("Teacher " + id + " not found");
+            throw new NoSuchElementException("🔴 ERROR: Teacher record with ID " + id + " was NOT found.");
         } finally {
             return trepo.save(teacher);
         }
-    }
-
-    public Teacher addCourse(int teacherId, int courseId) {
-        Teacher teacher = trepo.findById(teacherId)
-            .orElseThrow(() -> new NoSuchElementException("Teacher not found"));
-        Course course = crepo.findById(courseId)
-            .orElseThrow(() -> new NoSuchElementException("Course not found"));
-        
-        teacher.getCourses().add(course);
-
-        trepo.save(teacher);
-    
-        return  teacher;
     }
     
 
     // DELETE
     public String deleteTeacher(int id) {
         if(trepo.findById(id) == null) {
-            return "Teacher record with ID " + id + " was NOT found."; 
+            return "🔴 ERROR: Teacher record with ID " + id + " was NOT found."; 
         }
 
         trepo.deleteById(id);
-        return "Teacher record with ID " + id + " has been successfully deleted.";  
+        return "✅ SUCCESS: Teacher record with ID " + id + " has been successfully deleted.";  
     }
 }

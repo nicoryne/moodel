@@ -4,24 +4,20 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 @Entity
-@Table(name="teachers")
+@Table(name="Teachers")
 public class Teacher {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int teacherid;
+    private int teacherId;
 
     private String lname;
     private String fname;
@@ -32,18 +28,11 @@ public class Teacher {
     private String phoneNumber;
     private Date hireDate;
 
-    @ManyToMany
-    @JoinTable (
-        name = "teachercourseownership",
-        joinColumns = @JoinColumn(name = "teacherid"),
-        inverseJoinColumns = @JoinColumn(name = "courseid")
-    )
-    @JsonManagedReference
-    private Set<Course> coursesOwned;
+    @OneToMany(mappedBy = "teacher")
+    private Set<TeacherCourseOwnership> ownedCourses;
+    
+    public Teacher() {}
 
-    public Teacher() {
-        
-    }
     public Teacher(String lname, String fname, Date birthDate, int age, String password, String email, String phoneNumber, Date hireDate) {
         this.lname = lname;
         this.fname = fname;
@@ -53,15 +42,11 @@ public class Teacher {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.hireDate = hireDate;
-        this.coursesOwned = new HashSet<>();
-    }
-    
-    public Set<Course> getCourses() {
-        return coursesOwned;
+        this.ownedCourses = new HashSet<>();
     }
 
     public int getTeacherId() {
-        return this.teacherid;
+        return this.teacherId;
     }
 
     public String getLname() {
@@ -126,6 +111,10 @@ public class Teacher {
 
     public void setHireDate(Date hireDate) {
         this.hireDate = hireDate;
+    }
+
+    public Set<TeacherCourseOwnership> getOwnedCourses() {
+        return this.ownedCourses;
     }
 
 }
