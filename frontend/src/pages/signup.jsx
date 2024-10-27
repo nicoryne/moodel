@@ -10,15 +10,23 @@ import {
   Box,
   IconButton,
   InputAdornment,
+  RadioGroup,
+  Radio,
+  FormLabel,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export default function StudentSignUp() {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [role, setRole] = React.useState("student"); // Default role is student
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleRoleChange = (event) => {
+    setRole(event.target.value); // Update role based on selected radio button
   };
 
   return (
@@ -27,13 +35,10 @@ export default function StudentSignUp() {
         <Grid2 container direction="column" spacing={3}>
           <Box display="flex" justifyContent="center" width="100%" gap={2}>
             <Button variant="contained">Sign Up</Button>
-            <Button variant="outlined" component={Link} to="/student/login">
+            <Button variant="outlined" component={Link} to="/login">
               Login
             </Button>
           </Box>
-          <Grid2 item>
-            <TextField label="Name" fullWidth variant="outlined" />
-          </Grid2>
           <Grid2 item>
             <TextField label="Email" fullWidth variant="outlined" />
           </Grid2>
@@ -55,6 +60,21 @@ export default function StudentSignUp() {
                 },
               }}
             />
+          </Grid2>
+          <Grid2 item>
+            <FormLabel component="legend">Sign up as</FormLabel>
+            <RadioGroup row value={role} onChange={handleRoleChange}>
+              <FormControlLabel
+                value="student"
+                control={<Radio />}
+                label="Student"
+              />
+              <FormControlLabel
+                value="teacher"
+                control={<Radio />}
+                label="Teacher"
+              />
+            </RadioGroup>
           </Grid2>
           <Grid2
             item

@@ -26,7 +26,7 @@ export default function StudentLogin() {
       <Paper elevation={3} style={{ padding: "20px" }}>
         <Grid2 container direction="column" spacing={3}>
           <Box display="flex" justifyContent="center" width="100%" gap={2}>
-            <Button variant="outlined" component={Link} to="/student/signup">
+            <Button variant="outlined" component={Link} to="/signup">
               Sign Up
             </Button>
             <Button variant="contained">Login</Button>

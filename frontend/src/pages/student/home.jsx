@@ -6,13 +6,15 @@ import {
   Button,
   Avatar,
   IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { Home, MenuBook, Settings, AccountCircle, Person } from "@mui/icons-material";
+import {
+  Home,
+  MenuBook,
+  Settings,
+  AccountCircle,
+  Person,
+} from "@mui/icons-material";
 
 export default function StudentDashboard() {
   return (
@@ -57,7 +59,14 @@ export default function StudentDashboard() {
           </Button>
         </Box>
         <Box display="flex" flexDirection="column" gap={2}>
-          <Paper elevation={3} style={{ padding: "15px", backgroundColor: "#3f51b5", color: "white" }}>
+          <Paper
+            elevation={3}
+            style={{
+              padding: "15px",
+              backgroundColor: "#3f51b5",
+              color: "white",
+            }}
+          >
             <Typography variant="h6">Course Name</Typography>
             <Typography variant="subtitle2">Instructor</Typography>
           </Paper>
@@ -65,7 +74,14 @@ export default function StudentDashboard() {
             <Typography variant="h6">Course Name</Typography>
             <Typography variant="subtitle2">Instructor</Typography>
           </Paper>
-          <Paper elevation={3} style={{ padding: "15px", backgroundColor: "#3f51b5", color: "white" }}>
+          <Paper
+            elevation={3}
+            style={{
+              padding: "15px",
+              backgroundColor: "#3f51b5",
+              color: "white",
+            }}
+          >
             <Typography variant="h6">Course Name</Typography>
             <Typography variant="subtitle2">Instructor</Typography>
           </Paper>
@@ -97,13 +113,25 @@ export default function StudentDashboard() {
           User
         </Typography>
         <Box mt={2} width="100%">
-          <Button variant="outlined" fullWidth style={{ color: "white", borderColor: "white" }}>
+          <Button
+            variant="outlined"
+            fullWidth
+            style={{ color: "white", borderColor: "white" }}
+          >
             Account
           </Button>
-          <Button variant="outlined" fullWidth style={{ marginTop: "10px", color: "white", borderColor: "white" }}>
+          <Button
+            variant="outlined"
+            fullWidth
+            style={{ marginTop: "10px", color: "white", borderColor: "white" }}
+          >
             Courses
           </Button>
-          <Button variant="outlined" fullWidth style={{ marginTop: "10px", color: "white", borderColor: "white" }}>
+          <Button
+            variant="outlined"
+            fullWidth
+            style={{ marginTop: "10px", color: "white", borderColor: "white" }}
+          >
             My Projects
           </Button>
         </Box>

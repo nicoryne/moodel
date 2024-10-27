@@ -1,4 +1,4 @@
-import { Stack, Container, Box, Button, Typography } from "@mui/material";
+import { Stack, Container, Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo192.png";
 

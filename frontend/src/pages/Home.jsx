@@ -2,7 +2,7 @@ import React from "react";
 import {
   Container,
   Box,
-  Grid,
+  Grid2,
   Typography,
   Button,
   Avatar,
@@ -12,13 +12,13 @@ export default function Home() {
   return (
     <Box sx={{ bgcolor: "#f5f5f5", minHeight: "100vh" }}>
       <Container sx={{ paddingTop: 5 }}>
-        <Grid container spacing={4} alignItems="center">
+        <Grid2 container spacing={4} alignItems="center">
           {/* Left Side: Header and Text */}
-          <Grid item xs={12} md={6}>
+          <Grid2 item xs={12} md={6}>
             <Typography variant="h2" gutterBottom>
               I AM HEADER
             </Typography>
-            <Typography variant="body1" paragraph>
+            <Typography variant="body1" component="paragraph">
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -30,17 +30,17 @@ export default function Home() {
             <Button variant="contained" color="primary" sx={{ mt: 2 }}>
               Get Started
             </Button>
-          </Grid>
+          </Grid2>
 
           {/* Right Side: Profile Picture */}
-          <Grid item xs={12} md={6} display="flex" justifyContent="center">
+          <Grid2 item xs={12} md={6} display="flex" justifyContent="center">
             <Avatar
               alt="Profile Picture"
               src="/path/" // Replace with the actual path
               sx={{ width: 200, height: 200, borderRadius: "15px" }}
             />
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Container>
     </Box>
   );
