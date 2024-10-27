@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Box,
-  Grid2,
   Paper,
   Typography,
   Button,
@@ -11,100 +10,110 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Grid,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Home, MenuBook, Settings, AccountCircle } from "@mui/icons-material";
-
+{/*CHANGE this to fit what design!*/}
 export default function TeacherDashboard() {
   return (
-    <Box display="flex" height="100vh">
+    <Box display="flex" height="100vh" bgcolor="#f5f5f5">
       {/* Sidebar */}
-      <Box width="15%" bgcolor="grey.100" p={2}>
-        <List>
-          <ListItem button>
-            <ListItemIcon>
-              <Home />
-            </ListItemIcon>
-            <ListItemText primary="Home" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <MenuBook />
-            </ListItemIcon>
-            <ListItemText primary="My Courses" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <Settings />
-            </ListItemIcon>
-            <ListItemText primary="Settings" />
-          </ListItem>
-        </List>
+      <Box
+        width="80px"
+        bgcolor="#3f51b5"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        py={3}
+        borderRadius="0 15px 15px 0"
+      >
+        <IconButton>
+          <Home style={{ color: "white" }} />
+        </IconButton>
+        <IconButton>
+          <MenuBook style={{ color: "white" }} />
+        </IconButton>
+        <IconButton>
+          <Settings style={{ color: "white" }} />
+        </IconButton>
+
+        {/* Push User Icon to the Bottom */}
+        <Box flexGrow={1} />
+
+        <IconButton>
+          <AccountCircle style={{ color: "white" }} />
+        </IconButton>
       </Box>
 
       {/* Main Dashboard Content */}
-      <Box flex={1} p={2}>
+      <Box flex={1} p={3}>
         <Typography variant="h4" gutterBottom>
           Teacher Dashboard
         </Typography>
-        <Box mb={2}>
+        <Box mb={2} display="flex" gap={2}>
           <Button variant="contained" color="primary">
             My Classes
           </Button>
-          <Button variant="outlined" style={{ marginLeft: "10px" }}>
+          <Button variant="outlined">
             <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
               Log Out
             </Link>
           </Button>
         </Box>
-        <Grid2 container spacing={2}>
-          <Grid2 xs={12}>
-            <Paper elevation={3} style={{ padding: "20px" }}>
-              <Typography variant="h6">Course Name</Typography>
-              <Typography variant="subtitle1"># of Students</Typography>
-            </Paper>
-          </Grid2>
-          <Grid2 xs={12}>
-            <Paper elevation={3} style={{ padding: "20px" }}>
-              <Typography variant="h6">Course Name</Typography>
-              <Typography variant="subtitle1"># of Students</Typography>
-            </Paper>
-          </Grid2>
-          <Grid2 xs={12}>
-            <Paper elevation={3} style={{ padding: "20px" }}>
-              <Typography variant="h6">Course Name</Typography>
-              <Typography variant="subtitle1"># of Students</Typography>
-            </Paper>
-          </Grid2>
-        </Grid2>
+        <Grid container spacing={2}>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <Grid item xs={12} key={index}>
+              <Paper
+                elevation={3}
+                sx={{
+                  padding: "20px",
+                  backgroundColor: index % 2 === 0 ? "#3f51b5" : "white",
+                  color: index % 2 === 0 ? "white" : "black",
+                }}
+              >
+                <Typography variant="h6">Course Name</Typography>
+                <Typography variant="subtitle1"># of Students</Typography>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
       </Box>
 
       {/* Teacher Details Section */}
-      <Box width="25%" bgcolor="grey.100" p={2}>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
+      <Box
+        width="300px"
+        bgcolor="#3f51b5"
+        p={3}
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        borderRadius="15px"
+        color="white"
+        margin={2}
+      >
+        <Box display="flex" justifyContent="space-between" width="100%">
           <Typography variant="h6">Teacher Details</Typography>
           <IconButton>
-            <Settings />
+            <Settings style={{ color: "white" }} />
           </IconButton>
         </Box>
-        <Box display="flex" flexDirection="column" alignItems="center" mt={2}>
-          <Avatar style={{ width: 80, height: 80 }}>
-            <AccountCircle style={{ fontSize: 60 }} />
-          </Avatar>
-          <Typography variant="h6" mt={1}>
-            Name
-          </Typography>
-          <Box mt={2}>
-            <Button variant="outlined" fullWidth>
-              Account
-            </Button>
-            <Button variant="outlined" fullWidth style={{ marginTop: "10px" }}>
-              Grades
-            </Button>
-            <Button variant="outlined" fullWidth style={{ marginTop: "10px" }}>
-              Class Management
-            </Button>
-          </Box>
+        <Avatar sx={{ width: 80, height: 80, marginTop: 2 }}>
+          <AccountCircle sx={{ fontSize: 60 }} />
+        </Avatar>
+        <Typography variant="h6" mt={1}>
+          Name
+        </Typography>
+        <Box mt={2} width="100%">
+          <Button variant="outlined" fullWidth sx={{ color: "white", borderColor: "white" }}>
+            Account
+          </Button>
+          <Button variant="outlined" fullWidth sx={{ marginTop: "10px", color: "white", borderColor: "white" }}>
+            Grades
+          </Button>
+          <Button variant="outlined" fullWidth sx={{ marginTop: "10px", color: "white", borderColor: "white" }}>
+            Class Management
+          </Button>
         </Box>
       </Box>
     </Box>
