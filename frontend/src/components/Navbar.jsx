@@ -1,4 +1,4 @@
-import { Stack, Container, Box, Button } from "@mui/material";
+import { Stack, Container, Box, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo192.png";
 
@@ -10,7 +10,12 @@ const navLinks = [
 
 export default function Navbar() {
   return (
-    <Box sx={{ backgroundColor: "transparent", paddingY: 4 }}>
+    <Box
+      sx={{
+        backgroundColor: "#3f51b5", // Set the navbar background to blue
+        paddingY: 2,
+      }}
+    >
       {/* Outer Container */}
       <Container maxWidth="xl">
         {/* Inner Stack */}
@@ -19,8 +24,8 @@ export default function Navbar() {
           alignItems="center"
           justifyContent="space-between"
         >
-          {/* Logo and Navlink Stack */}
-          <Stack direction="row" spacing={8}>
+          {/* Logo and Navigation Links Section */}
+          <Stack direction="row" spacing={8} alignItems="center">
             {/* Logo Section */}
             <Box>
               <img src={logo} alt="Logo" style={{ height: "50px" }} />
@@ -29,10 +34,14 @@ export default function Navbar() {
             {/* Navigation Links */}
             <Stack direction="row" spacing={3}>
               {navLinks.map((navlink) => (
-                <Button key={navlink.text}>
+                <Button key={navlink.text} sx={{ color: "white" }}>
                   <Link
                     to={navlink.href}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    style={{
+                      textDecoration: "none",
+                      color: "inherit",
+                      fontWeight: "bold",
+                    }}
                   >
                     {navlink.text}
                   </Link>
@@ -42,10 +51,18 @@ export default function Navbar() {
           </Stack>
 
           {/* Login Button */}
-          <Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            sx={{
+              borderRadius: 3,
+              paddingX: 4,
+              textTransform: "none",
+            }}
+          >
             <Link
               to="/login"
-              style={{ textDecoration: "none", color: "inherit" }}
+              style={{ textDecoration: "none", color: "white" }}
             >
               Login
             </Link>
