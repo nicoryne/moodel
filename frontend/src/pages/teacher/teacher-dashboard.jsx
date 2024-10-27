@@ -10,9 +10,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Home, MenuBook, Settings, AccountCircle } from "@mui/icons-material";
-{
-  /*CHANGE this to fit what design!*/
-}
+
 export default function TeacherDashboard() {
   return (
     <Box display="flex" height="100vh" bgcolor="#f5f5f5">
