@@ -1,4 +1,4 @@
-package com.g1appdev.Moodel.Entity;
+package com.g1appdev.Moodel.entity;
 
 import jakarta.persistence.Entity;
 
@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="individualsubmissions")
-public class IndividualSubmissionsEntity {
+public class IndividualSubmissions {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -26,13 +26,13 @@ public class IndividualSubmissionsEntity {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "studentId")
-    private StudentEntity student;
+    private Student student;
 
-    public IndividualSubmissionsEntity() {
+    public IndividualSubmissions() {
         super();
     }
 
-    public IndividualSubmissionsEntity(int submissionId, int projectId, String submissionDate, String feedback, String fileURL, String description, int accumulatedPoints) {
+    public IndividualSubmissions(int submissionId, int projectId, String submissionDate, String feedback, String fileURL, String description, int accumulatedPoints) {
         super();
         this.submissionId = submissionId;
         this.projectId = projectId;

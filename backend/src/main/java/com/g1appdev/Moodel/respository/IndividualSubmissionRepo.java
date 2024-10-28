@@ -1,14 +1,14 @@
-package com.g1appdev.Moodel.Repository;
+package com.g1appdev.Moodel.respository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.g1appdev.Moodel.Entity.IndividualSubmissionsEntity;
-import com.g1appdev.Moodel.Entity.StudentEntity;
+import com.g1appdev.Moodel.entity.IndividualSubmissions;
+import com.g1appdev.Moodel.entity.Student;
 
 
 @Repository
-public interface IndividualSubmissionRepository extends JpaRepository<IndividualSubmissionEntity, Integer> {
-	List<IndividualSubmissionEntity> findByStudent(StudentEntity student);
+public interface IndividualSubmissionRepo extends JpaRepository<IndividualSubmissions, Integer> {
+	List<IndividualSubmissions> findByStudent(Student student);
 }
