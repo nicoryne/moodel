@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 
 import com.g1appdev.Moodel.entity.StudentCourseEnrollment;
 import com.g1appdev.Moodel.entity.StudentCourseEnrollmentKey;
-import com.g1appdev.Moodel.repository.StudentCourseEnrollmentRepo;
+import com.g1appdev.Moodel.respository.StudentCourseEnrollmentRepo;
 
 @Service
 public class StudentCourseEnrollmentService {
