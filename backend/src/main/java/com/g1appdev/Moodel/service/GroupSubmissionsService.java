@@ -11,50 +11,58 @@ import com.g1appdev.Moodel.respository.GroupSubmissionsRepo;
 
 @Service
 public class GroupSubmissionsService {
-
+    
     @Autowired
-    GroupSubmissionsRepo srepo;
+    GroupSubmissionsRepo gsrepo;
 
     public GroupSubmissionsService() {
         super();
     }
 
-    // CREATE
-    public GroupSubmissions postSubmissionRecord(GroupSubmissions submission) {
-        return srepo.save(submission);
+    //CREATE
+    public GroupSubmissions postGroupSubmissionsRecord(GroupSubmissions groupSubmissions) {
+        return gsrepo.save(groupSubmissions);
     }
 
-    // READ
-    public List<GroupSubmissions> getAllSubmissions() {
-        return srepo.findAll();
+    //READ
+    //read all group submissions
+    public List<GroupSubmissions> getAllGroupSubmissions() {
+        return gsrepo.findAll();
     }
 
-    // UPDATE
+    //read a group submission by it's id
+    public GroupSubmissions getGroupSubmissionsById(int id) {
+        return gsrepo.findBySubmissionId(id);
+    }
+
+    //UPDATE
     @SuppressWarnings("finally")
-    public GroupSubmissions putSubmissionDetails(Long id, GroupSubmissions newSubmissionDetails) {
-        GroupSubmissions submission = new GroupSubmissions();
+    public GroupSubmissions putGroupSubmissionsDetails(int id, GroupSubmissions newGroupSubmissionsDetails) {
+        GroupSubmissions groupSubmissions = new GroupSubmissions();
         try {
-            submission = srepo.findById(id).get();
+            groupSubmissions = gsrepo.findBySubmissionId(id);
 
-            submission.setSubmissionDate(newSubmissionDetails.getSubmissionDate());
-            submission.setFeedback(newSubmissionDetails.getFeedback());
-            submission.setFileURL(newSubmissionDetails.getFileURL());
-            submission.setDescription(newSubmissionDetails.getDescription());
-            submission.setAccumulatedPoints(newSubmissionDetails.getAccumulatedPoints());
+            groupSubmissions.setSubmissionDate(newGroupSubmissionsDetails.getSubmissionDate());
+            groupSubmissions.setFeedback(newGroupSubmissionsDetails.getFeedback());
+            groupSubmissions.setFileUrl(newGroupSubmissionsDetails.getFileUrl());
+            groupSubmissions.setDescription(newGroupSubmissionsDetails.getDescription());
+            groupSubmissions.setAccumilatedPoints(newGroupSubmissionsDetails.getAccumilatedPoints());
+            
         } catch (NoSuchElementException e) {
-            throw new NoSuchElementException("Submission " + id + " not found");
+            throw new NoSuchElementException("Group Submission "+ id + " not found");
         } finally {
-            return srepo.save(submission);
+            return gsrepo.save(groupSubmissions);
         }
     }
 
-    // DELETE
-    public String deleteSubmission(Long id) {
-        if (!srepo.existsById(id)) {
-            return "Submission record with ID " + id + " was NOT found.";
+    //DELETE
+    public String deleteGroupSubmissions(int id) {
+        if(gsrepo.findById(id) == null) {
+            return "Group Submissions record with ID "+ id + "was NOT found.";
         }
 
-        srepo.deleteById(id);
-        return "Submission record with ID " + id + " has been successfully deleted.";
+        gsrepo.deleteById(id);
+        return "Group Submissions record with ID "+ id + "has been deleted.";
     }
+
 }

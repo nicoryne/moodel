@@ -4,14 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.g1appdev.Moodel.entity.GroupSubmissions;
-import java.util.List;
 
 @Repository
-public interface GroupSubmissionsRepo extends JpaRepository<GroupSubmissions, Long> {
+public interface GroupSubmissionsRepo extends JpaRepository<GroupSubmissions, Integer>{
 
-    // Custom query to find submissions by description
-    public List<GroupSubmissionsRepo> findByDescription(String description);
-
-    // Custom query to find submissions by accumulated points greater than a certain value
-    public List<GroupSubmissionsRepo> findByAccumulatedPointsGreaterThan(int points);
+    public GroupSubmissions findBySubmissionId(int submissionId);
+    
 }
