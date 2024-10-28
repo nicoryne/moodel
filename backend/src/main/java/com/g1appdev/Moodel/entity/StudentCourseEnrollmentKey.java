@@ -49,8 +49,4 @@ public class StudentCourseEnrollmentKey implements Serializable {
     public int hashCode() {
         return Objects.hash(studentId, courseId);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> bb4508a084c4a26c16d2d88cbd0f3d4f3b7ce6ce
