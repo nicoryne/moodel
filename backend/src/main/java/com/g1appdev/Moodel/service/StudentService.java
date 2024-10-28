@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.g1appdev.Moodel.entity.Course;
 import com.g1appdev.Moodel.entity.Student;
+import com.g1appdev.Moodel.entity.StudentCourseEnrollment;
+import com.g1appdev.Moodel.entity.StudentCourseEnrollmentKey;
 import com.g1appdev.Moodel.respository.CourseRepo;
 import com.g1appdev.Moodel.respository.StudentRepo;
+import com.g1appdev.Moodel.respository.StudentCourseEnrollmentRepo;
 
 @Service
 public class StudentService {
@@ -19,6 +22,9 @@ public class StudentService {
 
     @Autowired
     CourseRepo courseRepo;
+
+    @Autowired
+    StudentCourseEnrollmentRepo enrollmentRepo;
 
     public StudentService() {
         super();
@@ -52,14 +58,18 @@ public class StudentService {
         return studentRepo.save(student);
     }
 
-    public Student enrollInCourse(int studentId, int courseId) {
+    // ENROLL IN COURSE
+    public StudentCourseEnrollment enrollInCourse(int studentId, int courseId) {
         Student student = studentRepo.findById(studentId)
             .orElseThrow(() -> new NoSuchElementException("Student not found"));
         Course course = courseRepo.findById(courseId)
             .orElseThrow(() -> new NoSuchElementException("Course not found"));
 
-        student.getEnrolledCourses().add(course);
-        return studentRepo.save(student);
+        StudentCourseEnrollment enrollment = new StudentCourseEnrollment(
+            new StudentCourseEnrollmentKey(studentId, courseId), student, course, new java.util.Date()
+        );
+
+        return enrollmentRepo.save(enrollment);
     }
 
     // DELETE

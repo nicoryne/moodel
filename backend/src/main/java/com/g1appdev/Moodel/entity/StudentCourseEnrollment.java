@@ -9,19 +9,19 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "StudentCourseEnrollment")
+@Table(name = "student_course_enrollment")
 public class StudentCourseEnrollment {
 
     @EmbeddedId
-    private StudentCourseEnrollmentKey studentCourseId;
+    private StudentCourseEnrollmentKey id;  // Use a single composite key
 
     @ManyToOne
-    @MapsId("studentId")
+    @MapsId("studentId")  // Use the composite key’s studentId
     @JoinColumn(name = "student_id")
     private Student student;
 
     @ManyToOne
-    @MapsId("courseId")
+    @MapsId("courseId")  // Use the composite key’s courseId
     @JoinColumn(name = "course_id")
     private Course course;
 
@@ -29,19 +29,19 @@ public class StudentCourseEnrollment {
 
     public StudentCourseEnrollment() {}
 
-    public StudentCourseEnrollment(StudentCourseEnrollmentKey studentCourseId, Student student, Course course, Date enrollmentDate) {
-        this.studentCourseId = studentCourseId;
+    public StudentCourseEnrollment(StudentCourseEnrollmentKey id, Student student, Course course, Date enrollmentDate) {
+        this.id = id;
         this.student = student;
         this.course = course;
         this.enrollmentDate = enrollmentDate;
     }
 
-    public StudentCourseEnrollmentKey getStudentCourseId() {
-        return studentCourseId;
+    public StudentCourseEnrollmentKey getId() {
+        return id;
     }
 
-    public void setStudentCourseId(StudentCourseEnrollmentKey studentCourseId) {
-        this.studentCourseId = studentCourseId;
+    public void setId(StudentCourseEnrollmentKey id) {
+        this.id = id;
     }
 
     public Student getStudent() {
