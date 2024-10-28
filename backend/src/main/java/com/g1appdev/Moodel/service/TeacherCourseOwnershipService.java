@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.g1appdev.Moodel.entity.Course;
 import com.g1appdev.Moodel.entity.Teacher;
 import com.g1appdev.Moodel.entity.TeacherCourseOwnership;
+import com.g1appdev.Moodel.entity.TeacherCourseOwnershipKey;
 import com.g1appdev.Moodel.respository.CourseRepo;
 import com.g1appdev.Moodel.respository.TeacherCourseOwnershipRepo;
 import com.g1appdev.Moodel.respository.TeacherRepo;
@@ -54,29 +55,24 @@ public class TeacherCourseOwnershipService {
     }
 
     // UPDATE
-    @SuppressWarnings("finally")
-    public TeacherCourseOwnership putTeacherCourseOwnership(int id, TeacherCourseOwnership newTeacherCourseOwnership) {
-        TeacherCourseOwnership teacherCourseOwnership = new TeacherCourseOwnership();
-        try {
-            teacherCourseOwnership = tcorepo.findById(id).get();
+    public TeacherCourseOwnership putTeacherCourseOwnership(TeacherCourseOwnership newTeacherCourseOwnership) {
+        TeacherCourseOwnership teacherCourseOwnership = tcorepo.findById(newTeacherCourseOwnership.getTeacherCourseId())
+            .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: TeacherCourseOwnership record with ID " + newTeacherCourseOwnership.getTeacherCourseId() + " was NOT found."));
+        
+        teacherCourseOwnership.setOwnershipDate(newTeacherCourseOwnership.getOwnershipDate());
 
-            teacherCourseOwnership.setCourse(newTeacherCourseOwnership.getCourse());
-            teacherCourseOwnership.setTeacher(newTeacherCourseOwnership.getTeacher());
-        } catch (NoSuchElementException e) {
-            throw new NoSuchElementException("🔴 ERROR: TeacherCourseOwnership record with ID " + id + " was NOT found.");
-        } finally {
-            return tcorepo.save(teacherCourseOwnership);
-        }
+        return tcorepo.save(teacherCourseOwnership);
     }
 
     // DELETE
-    public String deleteTeacherCourseOwnership(int id) {
-        if(tcorepo.findById(id) == null) {
-            return "🔴 ERROR: TeacherCourseOwnership record with ID " + id + " was NOT found."; 
-        }
+    public String deleteTeacherCourseOwnership(int teacherId, int courseId) {
+        TeacherCourseOwnershipKey teacherCourseOwnershipKey = new TeacherCourseOwnershipKey(teacherId, courseId);
+
+        TeacherCourseOwnership teacherCourseOwnership = tcorepo.findById(teacherCourseOwnershipKey)
+            .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: TeacherCourseOwnership record with ID " + teacherCourseOwnershipKey + " was NOT found."));
         
-        tcorepo.deleteById(id);
-        return "✅ SUCCESS: TeacherCourseOwnership record with ID " + id + " has been successfully deleted.";
+        tcorepo.deleteById(teacherCourseOwnershipKey);
+        return "✅ SUCCESS: TeacherCourseOwnership record with ID " + teacherCourseOwnership + " has been successfully deleted.";
     }
     
 }

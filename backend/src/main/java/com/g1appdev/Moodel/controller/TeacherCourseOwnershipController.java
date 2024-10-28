@@ -46,13 +46,13 @@ public class TeacherCourseOwnershipController {
 
     // UPDATE
     @PutMapping("/putTeacherCourseOwnershipDetails")
-    public TeacherCourseOwnership putTeacherCourseOwnershipDetails (@RequestParam int id, @RequestBody TeacherCourseOwnership newTeacherCourseOwnership) {
-        return tcoserv.putTeacherCourseOwnership(id, newTeacherCourseOwnership);
+    public TeacherCourseOwnership putTeacherCourseOwnershipDetails (@RequestBody TeacherCourseOwnership newTeacherCourseOwnership) {
+        return tcoserv.putTeacherCourseOwnership(newTeacherCourseOwnership);
     }
 
     // DELETE
-    @DeleteMapping("/deleteTeacherCourseOwnership/{id}")
-    public String deleteTeacherCourseOwnership(@PathVariable int id) {
-        return tcoserv.deleteTeacherCourseOwnership(id);
+    @DeleteMapping("/deleteTeacherCourseOwnership/{teacherId}/{courseId}")
+    public String deleteTeacherCourseOwnership(@PathVariable int teacherId, @PathVariable int courseId) {
+        return tcoserv.deleteTeacherCourseOwnership(teacherId, courseId);
     }
 }
