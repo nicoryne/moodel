@@ -9,5 +9,7 @@ import com.g1appdev.Moodel.entity.Teacher;
 public interface TeacherRepo extends JpaRepository<Teacher, Integer> {
 
     public Teacher findByLname(String lname);
+
+    public Teacher findByEmail(String email);
     
 }

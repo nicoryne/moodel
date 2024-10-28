@@ -34,6 +34,10 @@ public class TeacherService {
         return trepo.findAll();
     }
 
+    public Teacher getTeacherByEmail(String email) {
+        return trepo.findByEmail(email);
+    }
+
     // UPDATE
     @SuppressWarnings("finally")
     public Teacher putTeacherDetails(int id, Teacher newTeacherDetails) {

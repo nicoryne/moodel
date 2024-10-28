@@ -2,9 +2,10 @@ package com.g1appdev.Moodel.entity;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
@@ -15,31 +16,35 @@ import jakarta.persistence.Table;
 public class TeacherCourseOwnership {
 
     @EmbeddedId
-    TeacherCourseOwnershipKey id;
+    private TeacherCourseOwnershipKey teacherCourseId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("teacherId")
-    @JoinColumn(name = "teacherId", insertable = false, updatable = false)
+    @JoinColumn(name = "teacher_id")
+    @JsonIgnoreProperties("ownedCourses")
     Teacher teacher;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("courseId")
-    @JoinColumn(name = "courseId", insertable = false, updatable = false)
+    @JoinColumn(name = "course_id")
+    @JsonIgnoreProperties("ownedByTeachers")
     Course course;
 
     private Date ownershipDate;
 
     public TeacherCourseOwnership() {}
 
-    public TeacherCourseOwnership(Teacher teacher, Course course, Date ownershipDate) {
-        this.id = new TeacherCourseOwnershipKey(teacher.getTeacherId(), course.getCourseId());
+
+    public TeacherCourseOwnership(TeacherCourseOwnershipKey teacherCourseId, Teacher teacher, Course course, Date ownershipDate) {
+        this.teacherCourseId = teacherCourseId;
         this.teacher = teacher;
         this.course = course;
-        this.ownershipDate = ownershipDate != null ? ownershipDate : new Date();
+        this.ownershipDate = ownershipDate;
     }
 
-    public TeacherCourseOwnershipKey getId() {
-        return this.id;
+
+    public TeacherCourseOwnershipKey getTeacherCourseId() {
+        return this.teacherCourseId;
     }
 
     public Teacher getTeacher() {
@@ -48,7 +53,6 @@ public class TeacherCourseOwnership {
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
-        this.id.setTeacherId(teacher.getTeacherId());
     }
 
     public Course getCourse() {
@@ -57,7 +61,6 @@ public class TeacherCourseOwnership {
 
     public void setCourse(Course course) {
         this.course = course;
-        this.id.setCourseId(course.getCourseId());
     }
 
     public Date getOwnershipDate() {

@@ -7,6 +7,8 @@ import com.g1appdev.Moodel.entity.Student;
 
 @Repository
 public interface StudentRepo extends JpaRepository<Student, Integer> {
+
     public Student findByLastName(String lastName);
+    
 }
 

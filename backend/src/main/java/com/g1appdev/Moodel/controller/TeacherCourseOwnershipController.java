@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import com.g1appdev.Moodel.entity.TeacherCourseOwnership;
 import com.g1appdev.Moodel.service.TeacherCourseOwnershipService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(method = RequestMethod.GET,path="/api/teacherCourseOwnership")
 public class TeacherCourseOwnershipController {
     
@@ -32,8 +34,8 @@ public class TeacherCourseOwnershipController {
 
     // CREATE
     @PostMapping("/postTeacherCourseOwnership")
-    public TeacherCourseOwnership postTeacherCourseOwnershipRecord(@RequestParam int courseId, @RequestParam int teacherId, @RequestParam String ownershipDate) {
-        return tcoserv.postTeacherCourseOwnershipRecord(courseId, teacherId, ownershipDate);
+    public TeacherCourseOwnership postTeacherCourseOwnershipRecord(@RequestBody TeacherCourseOwnership teacherCourseOwnership) {
+        return tcoserv.postTeacherCourseOwnershipRecord(teacherCourseOwnership);
     }
 
     // READ

@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +32,7 @@ public class Teacher {
     private Date hireDate;
 
     @OneToMany(mappedBy = "teacher")
+    @JsonIgnoreProperties("teacher")
     private Set<TeacherCourseOwnership> ownedCourses;
     
     public Teacher() {}

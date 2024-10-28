@@ -3,6 +3,7 @@ package com.g1appdev.Moodel.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(method = RequestMethod.GET,path="/api/teacher")
 public class TeacherController {
     
@@ -41,6 +43,11 @@ public class TeacherController {
     @GetMapping("/getAllTeachers")
     public List<Teacher> getAllTeachers() {
         return tserv.getAllTeachers();
+    }
+
+    @GetMapping("/getTeacherByEmail")
+    public Teacher getTeacherByEmail(@RequestParam String email) {
+        return tserv.getTeacherByEmail(email);
     }
 
     // UPDATE
