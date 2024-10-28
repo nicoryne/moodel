@@ -42,6 +42,10 @@ public class Student {
     @JsonManagedReference
     private Set<Course> enrolledCourses = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student", cascade = cascadeType.ALL)
+    @JsonIgnore
+    private List<IndividualSubmissionsEntity> subs;
+
     public Student() {}
 
     public Student(String lastName, String firstName, Date birthDate, int age, String password, String email, String phoneNumber, Date enrollmentDate, String address) {
