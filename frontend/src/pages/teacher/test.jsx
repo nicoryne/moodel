@@ -1,6 +1,6 @@
 // test.jsx
 import React, { useEffect, useState } from "react";
-import teacherTestConnection from "../../api/teacher"; // Adjust the import path as necessary
+import { teacherGetByEmail } from "../../api/services/Teacher";
 
 export default function Test() {
   const [data, setData] = useState(null);
@@ -9,7 +9,7 @@ export default function Test() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await teacherTestConnection();
+        const result = await teacherGetByEmail("email");
         setData(result);
       } catch (err) {
         setError(err.message);
@@ -17,7 +17,7 @@ export default function Test() {
     };
 
     fetchData();
-  }, []); // Empty dependency array to run once when the component mounts
+  }, []);
 
   if (error) {
     return <p>Error: {error}</p>;
@@ -30,7 +30,7 @@ export default function Test() {
   return (
     <div>
       <h2>Test Connection Result:</h2>
-      <pre>{JSON.stringify(data, null, 2)}</pre> {/* Display fetched data */}
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   );
 }

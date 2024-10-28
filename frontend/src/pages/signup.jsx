@@ -19,14 +19,16 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export default function StudentSignUp() {
   const [showPassword, setShowPassword] = React.useState(false);
-  const [role, setRole] = React.useState("student"); // Default role is student
+  const [role, setRole] = React.useState("student");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   const handleRoleChange = (event) => {
-    setRole(event.target.value); // Update role based on selected radio button
+    setRole(event.target.value);
   };
 
   return (
@@ -40,11 +42,17 @@ export default function StudentSignUp() {
             </Button>
           </Box>
           <Grid2 item>
-            <TextField label="Email" fullWidth variant="outlined" />
+            <TextField
+              label="Email"
+              onChange={(e) => setEmail(e.target.value)}
+              fullWidth
+              variant="outlined"
+            />
           </Grid2>
           <Grid2 item>
             <TextField
               label="Password"
+              onChange={(e) => setPassword(e.target.value)}
               fullWidth
               variant="outlined"
               type={showPassword ? "text" : "password"}
@@ -81,12 +89,7 @@ export default function StudentSignUp() {
             container
             justifyContent="space-between"
             alignItems="center"
-          >
-            <FormControlLabel
-              control={<Checkbox />}
-              label="I agree to the terms and conditions"
-            />
-          </Grid2>
+          ></Grid2>
           <Grid2 item>
             <Button variant="contained" fullWidth>
               Sign Up

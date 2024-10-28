@@ -11,14 +11,24 @@ import {
   IconButton,
   InputAdornment,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { login } from "../api/auth";
+import { Link, useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export default function StudentLogin() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = React.useState(false);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleLogin = () => {
+    if (login(email, password)) {
+      navigate("/teacher/home");
+    }
   };
 
   return (
@@ -32,11 +42,17 @@ export default function StudentLogin() {
             <Button variant="contained">Login</Button>
           </Box>
           <Grid2 item>
-            <TextField label="Email" fullWidth variant="outlined" />
+            <TextField
+              label="Email"
+              onChange={(e) => setEmail(e.target.value)}
+              fullWidth
+              variant="outlined"
+            />
           </Grid2>
           <Grid2 item>
             <TextField
               label="Password"
+              onChange={(e) => setPassword(e.target.value)}
               fullWidth
               variant="outlined"
               type={showPassword ? "text" : "password"}
@@ -63,7 +79,7 @@ export default function StudentLogin() {
             <Button variant="text">Forgot password?</Button>
           </Grid2>
           <Grid2 item>
-            <Button variant="contained" fullWidth>
+            <Button variant="contained" fullWidth onClick={() => handleLogin()}>
               Log In
             </Button>
           </Grid2>
