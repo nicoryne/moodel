@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./pages/Layout";
-import Home from "./pages/Home";
+import Layout from "./pages/layout";
+import Home from "./pages/home";
 import StudentDashboard from "./pages/student/student-dashboard";
 import TeacherDashboard from "./pages/teacher/teacher-dashboard";
 import Login from "./pages/login";
