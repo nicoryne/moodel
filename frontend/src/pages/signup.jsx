@@ -70,7 +70,7 @@ export default function StudentSignUp() {
             />
           </Grid2>
           <Grid2 item>
-            <FormLabel component="legend">Sign up as</FormLabel>
+            <FormLabel component="legend">Sign Up As</FormLabel>
             <RadioGroup row value={role} onChange={handleRoleChange}>
               <FormControlLabel
                 value="student"
