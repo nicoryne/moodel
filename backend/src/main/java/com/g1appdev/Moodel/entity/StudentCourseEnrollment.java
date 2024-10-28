@@ -9,7 +9,7 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "StudentCourseEnrollment")
+@Table(name = "student_course_enrollment")
 public class StudentCourseEnrollment {
 
     @EmbeddedId
@@ -17,19 +17,20 @@ public class StudentCourseEnrollment {
 
     @ManyToOne
     @MapsId("studentId")
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "student_id", referencedColumnName = "studentId")
     private Student student;
 
     @ManyToOne
     @MapsId("courseId")
-    @JoinColumn(name = "course_id")
+    @JoinColumn(name = "course_id", referencedColumnName = "courseId")
     private Course course;
 
     private Date enrollmentDate;
 
     public StudentCourseEnrollment() {}
 
-    public StudentCourseEnrollment(StudentCourseEnrollmentKey studentCourseId, Student student, Course course, Date enrollmentDate) {
+    public StudentCourseEnrollment(StudentCourseEnrollmentKey studentCourseId, Student student, 
+                                   Course course, Date enrollmentDate) {
         this.studentCourseId = studentCourseId;
         this.student = student;
         this.course = course;

@@ -5,19 +5,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name="students")
+@Table(name = "students")
 public class Student {
 
     @Id
@@ -34,19 +30,14 @@ public class Student {
     private Date enrollmentDate;
     private String address;
 
-    
-    @ManyToMany
-    @JoinTable(
-        name = "studentCourseEnrollment",
-        joinColumns = @JoinColumn(name = "studentId"),
-        inverseJoinColumns = @JoinColumn(name = "courseId")
-    )
-    @JsonManagedReference
-    private Set<Course> enrolledCourses = new HashSet<>();
+    @OneToMany(mappedBy = "student")
+    @JsonIgnore
+    private Set<StudentCourseEnrollment> courseEnrollments = new HashSet<>();
 
     public Student() {}
 
-    public Student(String lastName, String firstName, Date birthDate, int age, String password, String email, String phoneNumber, Date enrollmentDate, String address) {
+    public Student(String lastName, String firstName, Date birthDate, int age, String password, 
+                   String email, String phoneNumber, Date enrollmentDate, String address) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthDate = birthDate;
@@ -56,10 +47,6 @@ public class Student {
         this.phoneNumber = phoneNumber;
         this.enrollmentDate = enrollmentDate;
         this.address = address;
-    }
-
-    public Set<Course> getEnrolledCourses() {
-        return enrolledCourses;
     }
 
     public int getStudentId() {
@@ -136,5 +123,13 @@ public class Student {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Set<StudentCourseEnrollment> getCourseEnrollments() {
+        return courseEnrollments;
+    }
+
+    public void setCourseEnrollments(Set<StudentCourseEnrollment> courseEnrollments) {
+        this.courseEnrollments = courseEnrollments;
     }
 }

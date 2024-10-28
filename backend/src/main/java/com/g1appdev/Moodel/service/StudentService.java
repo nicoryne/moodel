@@ -8,17 +8,23 @@ import org.springframework.stereotype.Service;
 
 import com.g1appdev.Moodel.entity.Course;
 import com.g1appdev.Moodel.entity.Student;
+import com.g1appdev.Moodel.entity.StudentCourseEnrollment;
+import com.g1appdev.Moodel.entity.StudentCourseEnrollmentKey;
 import com.g1appdev.Moodel.respository.CourseRepo;
+import com.g1appdev.Moodel.respository.StudentCourseEnrollmentRepo;
 import com.g1appdev.Moodel.respository.StudentRepo;
 
 @Service
 public class StudentService {
 
     @Autowired
-    StudentRepo studentRepo;
+    private StudentRepo studentRepo;
 
     @Autowired
-    CourseRepo courseRepo;
+    private CourseRepo courseRepo;
+
+    @Autowired
+    private StudentCourseEnrollmentRepo enrollmentRepo;
 
     public StudentService() {
         super();
@@ -29,7 +35,7 @@ public class StudentService {
         return studentRepo.save(student);
     }
 
-    // READ
+    // READ ALL
     public List<Student> getAllStudents() {
         return studentRepo.findAll();
     }
@@ -52,14 +58,20 @@ public class StudentService {
         return studentRepo.save(student);
     }
 
-    public Student enrollInCourse(int studentId, int courseId) {
+    // ENROLL STUDENT IN A COURSE
+    public StudentCourseEnrollment enrollInCourse(int studentId, int courseId) {
         Student student = studentRepo.findById(studentId)
             .orElseThrow(() -> new NoSuchElementException("Student not found"));
         Course course = courseRepo.findById(courseId)
             .orElseThrow(() -> new NoSuchElementException("Course not found"));
 
-        student.getEnrolledCourses().add(course);
-        return studentRepo.save(student);
+        StudentCourseEnrollmentKey enrollmentKey = new StudentCourseEnrollmentKey(studentId, courseId);
+        if (enrollmentRepo.existsById(enrollmentKey)) {
+            throw new IllegalStateException("Student is already enrolled in this course.");
+        }
+
+        StudentCourseEnrollment enrollment = new StudentCourseEnrollment(enrollmentKey, student, course, new java.util.Date());
+        return enrollmentRepo.save(enrollment);
     }
 
     // DELETE

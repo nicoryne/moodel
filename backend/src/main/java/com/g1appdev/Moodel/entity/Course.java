@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="Courses")
+@Table(name = "courses")
 public class Course {
 
     @Id
@@ -27,8 +26,12 @@ public class Course {
     private Date createdAt;
 
     @OneToMany(mappedBy = "course")
+    @JsonIgnore
+    private Set<StudentCourseEnrollment> enrolledStudents = new HashSet<>();
+
+    @OneToMany(mappedBy = "course")
     @JsonIgnoreProperties("courses")
-    private Set<TeacherCourseOwnership> ownedByTeachers;
+    private Set<TeacherCourseOwnership> ownedByTeachers = new HashSet<>();
 
     public Course() {}
 
@@ -36,15 +39,14 @@ public class Course {
         this.title = title;
         this.description = description;
         this.createdAt = createdAt;
-        this.ownedByTeachers = new HashSet<>();
     }
 
     public int getCourseId() {
-        return this.courseId;
+        return courseId;
     }
 
     public String getTitle() {
-        return this.title;
+        return title;
     }
 
     public void setTitle(String title) {
@@ -52,7 +54,7 @@ public class Course {
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public void setDescription(String description) {
@@ -60,11 +62,18 @@ public class Course {
     }
 
     public Date getCreatedAt() {
-        return this.createdAt;
-    } 
+        return createdAt;
+    }
+
+    public Set<StudentCourseEnrollment> getEnrolledStudents() {
+        return enrolledStudents;
+    }
+
+    public void setEnrolledStudents(Set<StudentCourseEnrollment> enrolledStudents) {
+        this.enrolledStudents = enrolledStudents;
+    }
 
     public Set<TeacherCourseOwnership> getOwnedByTeachers() {
-        return this.ownedByTeachers;
+        return ownedByTeachers;
     }
-    
 }
