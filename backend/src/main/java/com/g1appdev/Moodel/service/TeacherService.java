@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.security.core.userdetails.UserDetails;
+// import org.springframework.security.core.userdetails.UserDetailsService;
+// import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.g1appdev.Moodel.entity.Teacher;
@@ -70,4 +73,15 @@ public class TeacherService {
         trepo.deleteById(id);
         return "✅ SUCCESS: Teacher record with ID " + id + " has been successfully deleted.";  
     }
+
+
+    // // AUTH
+    // @Override
+    // public UserDetails loadUserByUsername(String username) {
+    //     Teacher teacher = trepo.findByEmail(username);
+
+    //     return teacher.map(UserInfoDetails::new)
+    //         .orElseThrow(() -> new UsernameNotFoundException("🔴 ERROR: Teacher record with email " + email + " was NOT found."));
+
+    // }
 }

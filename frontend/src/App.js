@@ -7,29 +7,35 @@ import TeacherDashboard from "./pages/teacher/teacher-dashboard";
 import Login from "./pages/login";
 import SignUp from "./pages/signup";
 import Test from "./pages/teacher/test";
+import { AuthProvider } from "./middleware/AuthProvider";
+import PrivateRoutes from "./middleware/ProtectedRoutes";
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        {/* General Routes */}
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-        </Route>
+      <AuthProvider>
+        <Routes>
+          {/* General Routes */}
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            {/* Student Routes */}
+            <Route path="/student">
+              <Route path="/student/home" element={<StudentDashboard />} />
+            </Route>
 
-        {/* Student Routes */}
-        <Route path="/student">
-          <Route path="/student/home" element={<StudentDashboard />} />
-        </Route>
+            {/* Teacher Routes */}
+            <Route path="/teacher">
+              <Route path="/teacher/home" element={<TeacherDashboard />} />
+              <Route path="/teacher/testConnection" element={<Test />} />
+            </Route>
+          </Route>
 
-        {/* Teacher Routes */}
-        <Route path="/teacher">
-          <Route path="/teacher/home" element={<TeacherDashboard />} />
-          <Route path="/teacher/testConnection" element={<Test />} />
-        </Route>
-      </Routes>
+          {/* Private Routes */}
+          <Route element={<PrivateRoutes />}></Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

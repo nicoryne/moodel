@@ -3,6 +3,10 @@ package com.g1appdev.Moodel.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.security.authentication.AuthenticationManager;
+// import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+// import org.springframework.security.core.Authentication;
+// import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+// import com.g1appdev.Moodel.entity.AuthRequest;
 import com.g1appdev.Moodel.entity.Teacher;
 import com.g1appdev.Moodel.service.TeacherService;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,6 +33,13 @@ public class TeacherController {
     @Autowired
     TeacherService tserv;
 
+    // @Autowired
+    // private JwtService jwtService;
+
+    // @Autowired
+    // private AuthenticationManager authenticationManager;
+
+
     @GetMapping("/testConnection")
     public String print() {
         return "✅ SUCCESS: Teacher API connected sucessfully!";
@@ -38,6 +50,21 @@ public class TeacherController {
     public Teacher postTeacherRecord(@RequestBody Teacher teacher) {
         return tserv.postTeacherRecord(teacher);
     }
+
+    // @PostMapping("/generateToken")
+    // public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+    //     Authentication authentication = authenticationManager.authenticate(
+    //         new UsernamePasswordAuthenticationToken(
+    //             authRequest.getUsername(), 
+    //             authRequest.getPassword())
+    //     );
+
+    //     if(!authentication.isAuthenticated()) {
+    //         throw new UsernameNotFoundException("🔴 ERROR: Invalid username when authenticating");
+    //     }
+
+    //     return jwtService.generateToken(authRequest.getUsername());
+    // }
 
     // READ
     @GetMapping("/getAllTeachers")

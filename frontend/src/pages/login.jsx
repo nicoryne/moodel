@@ -26,7 +26,9 @@ export default function StudentLogin() {
   };
 
   const handleLogin = () => {
-    if (login(email, password)) {
+    let data = login(email, password);
+    if (data) {
+      localStorage.setItem("data", JSON.stringify(data));
       navigate("/teacher/home");
     }
   };

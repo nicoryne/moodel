@@ -16,7 +16,7 @@ async function login(email, password) {
     throw new Error("🔴 ERROR: Invalid password.");
   }
 
-  return true;
+  return data;
 }
 
 export { login };

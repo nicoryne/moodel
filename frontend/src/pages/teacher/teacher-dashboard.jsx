@@ -12,6 +12,17 @@ import { Link } from "react-router-dom";
 import { Home, MenuBook, Settings, AccountCircle } from "@mui/icons-material";
 
 export default function TeacherDashboard() {
+  const [data, setData] = React.useState(null);
+
+  React.useEffect(async () => {
+    const savedData = await login("email", "password");
+    console.log("Fetched data from localStorage:", savedData);
+    if (savedData) {
+      setData(savedData);
+      console.log(data.name);
+    }
+  }, []);
+
   return (
     <Box display="flex" height="100vh" bgcolor="#f5f5f5">
       {/* Sidebar */}
@@ -33,10 +44,7 @@ export default function TeacherDashboard() {
         <IconButton>
           <Settings style={{ color: "white" }} />
         </IconButton>
-
-        {/* Push User Icon to the Bottom */}
         <Box flexGrow={1} />
-
         <IconButton>
           <AccountCircle style={{ color: "white" }} />
         </IconButton>
@@ -57,23 +65,37 @@ export default function TeacherDashboard() {
             </Link>
           </Button>
         </Box>
-        <Grid container spacing={2}>
-          {Array.from({ length: 3 }).map((_, index) => (
-            <Grid item xs={12} key={index}>
-              <Paper
-                elevation={3}
-                sx={{
-                  padding: "20px",
-                  backgroundColor: index % 2 === 0 ? "#3f51b5" : "white",
-                  color: index % 2 === 0 ? "white" : "black",
-                }}
-              >
-                <Typography variant="h6">Course Name</Typography>
-                <Typography variant="subtitle1"># of Students</Typography>
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
+
+        {/* Display Owned Courses */}
+        {data?.ownedCourses && data.ownedCourses.length > 0 ? (
+          <Grid container spacing={2}>
+            {data.ownedCourses.map((course, index) => (
+              <Grid item xs={12} key={course.teacherCourseId.courseId}>
+                <Paper
+                  elevation={3}
+                  sx={{
+                    padding: "20px",
+                    backgroundColor: index % 2 === 0 ? "#3f51b5" : "white",
+                    color: index % 2 === 0 ? "white" : "black",
+                  }}
+                >
+                  <Typography variant="h6">{course.course.title}</Typography>
+                  <Typography variant="subtitle1">
+                    {course.course.description}
+                  </Typography>
+                  <Typography variant="body2">
+                    Created on:{" "}
+                    {new Date(course.course.createdAt).toLocaleDateString()}
+                  </Typography>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Typography variant="body1" color="textSecondary">
+            No courses available.
+          </Typography>
+        )}
       </Box>
 
       {/* Teacher Details Section */}
@@ -98,7 +120,7 @@ export default function TeacherDashboard() {
           <AccountCircle sx={{ fontSize: 60 }} />
         </Avatar>
         <Typography variant="h6" mt={1}>
-          Name
+          {data?.fname} {data?.lname}
         </Typography>
         <Box mt={2} width="100%">
           <Button
