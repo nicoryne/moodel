@@ -4,17 +4,18 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.security.core.userdetails.UserDetails;
-// import org.springframework.security.core.userdetails.UserDetailsService;
-// import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.g1appdev.Moodel.details.TeacherDetails;
 import com.g1appdev.Moodel.entity.Teacher;
 import com.g1appdev.Moodel.respository.CourseRepo;
 import com.g1appdev.Moodel.respository.TeacherRepo;
 
 @Service
-public class TeacherService {
+public class TeacherService implements UserDetailsService {
     
     @Autowired
     TeacherRepo trepo;
@@ -75,13 +76,15 @@ public class TeacherService {
     }
 
 
-    // // AUTH
-    // @Override
-    // public UserDetails loadUserByUsername(String username) {
-    //     Teacher teacher = trepo.findByEmail(username);
+    // AUTH
+    @Override
+    public TeacherDetails loadUserByUsername(String email) {
+        Teacher teacher = trepo.findByEmail(email);
+        
+        if(teacher == null) {
+            throw new UsernameNotFoundException("🔴 ERROR: Teacher record with email " + email + " was NOT found.");
+        }
 
-    //     return teacher.map(UserInfoDetails::new)
-    //         .orElseThrow(() -> new UsernameNotFoundException("🔴 ERROR: Teacher record with email " + email + " was NOT found."));
-
-    // }
+        return new TeacherDetails(teacher);
+    }
 }

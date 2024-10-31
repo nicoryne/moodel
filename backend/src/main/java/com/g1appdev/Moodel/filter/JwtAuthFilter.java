@@ -1,62 +1,66 @@
-// package com.g1appdev.Moodel.filter;
+package com.g1appdev.Moodel.filter;
 
-// import java.io.IOException;
+import com.g1appdev.Moodel.service.JwtService;
 
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-// import org.springframework.security.core.context.SecurityContext;
-// import org.springframework.security.core.context.SecurityContextHolder;
-// import org.springframework.security.web.authentication.WebAuthenticationDetails;
-// import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-// import org.springframework.stereotype.Component;
-// import org.springframework.web.filter.OncePerRequestFilter;
+import java.io.IOException;
 
-// import com.g1appdev.Moodel.entity.Teacher;
-// import com.g1appdev.Moodel.service.TeacherService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-// import jakarta.servlet.FilterChain;
-// import jakarta.servlet.ServletException;
-// import jakarta.servlet.http.HttpServletRequest;
-// import jakarta.servlet.http.HttpServletResponse;
+import com.g1appdev.Moodel.details.TeacherDetails;
+import com.g1appdev.Moodel.service.TeacherService;
 
-// @Component
-// public class JwtAuthFilter extends OncePerRequestFilter {
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-//     @Autowired
-//     private JwtService jwtService;
+@Component
+public class JwtAuthFilter extends OncePerRequestFilter {
 
-//     @Autowired
-//     private TeacherService tserv;
+    @Autowired
+    private JwtService jwtService;
 
-//     @Override
-//     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-//             throws ServletException, IOException {
+    @Autowired
+    @Lazy
+    private TeacherService tserv;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         
-//         String authHeader = request.getHeader("Authorization");
-//         String token = null;
-//         String username = null;
+        String authHeader = request.getHeader("Authorization");
+        String token = null;
+        String username = null;
 
-//         if(authHeader != null && authHeader.startsWith("Bearer ")) {
-//             token = authHeader.substring(7);
-//             username = jwtService.extractUsername(token);
-//         }
+        if(authHeader != null && authHeader.startsWith("Bearer ")) {
+            token = authHeader.substring(7);
+            username = jwtService.extractUsername(token);
+        }
 
-//         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-//             Teacher teacher =  tserv.loadUserByUsername(username);
+        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            TeacherDetails teacherDetails = tserv.loadUserByUsername(username);
 
-//             if(jwtService.validateToken(token, teacher)) {
-//                 UsernamePasswordAuthenticationToken authToken = new
-//                  UsernamePasswordAuthenticationToken(
-//                     teacher,
-//                     null,
-//                     teacher.getAuthorities()
-//                 );
-//                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//                 SecurityContextHolder.getContext().setAuthentication(authToken);
-//             }
-//         }
+            if(jwtService.validateToken(token, teacherDetails)) {
+                
+                UsernamePasswordAuthenticationToken authToken = new
+                 UsernamePasswordAuthenticationToken(
+                    teacherDetails,
+                    null,
+                    teacherDetails.getAuthorities()
+                );
 
-//         filterChain.doFilter(request, response);
-//     }
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+
+        filterChain.doFilter(request, response);
+    }
     
-// }
+}
