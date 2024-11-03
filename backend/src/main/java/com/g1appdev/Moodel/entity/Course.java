@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -74,8 +75,4 @@ public class Course {
     public Set<TeacherCourseOwnership> getOwnedByTeachers() {
         return ownedByTeachers;
     }
-<<<<<<< HEAD
-=======
-    
->>>>>>> 15b880722b3e8e94892afaf32930d2ffc1b8dd65
 }

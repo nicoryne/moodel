@@ -6,25 +6,18 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-<<<<<<< HEAD
 
 import jakarta.persistence.CascadeType;
-=======
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
->>>>>>> 15b880722b3e8e94892afaf32930d2ffc1b8dd65
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name="students")
+@Table(name = "students")
 public class Student {
 
     @Id
@@ -41,21 +34,9 @@ public class Student {
     private Date enrollmentDate;
     private String address;
 
-<<<<<<< HEAD
     @OneToMany(mappedBy = "student")
     @JsonIgnore
     private Set<StudentCourseEnrollment> courseEnrollments = new HashSet<>();
-=======
-    
-    @ManyToMany
-    @JoinTable(
-        name = "studentCourseEnrollment",
-        joinColumns = @JoinColumn(name = "studentId"),
-        inverseJoinColumns = @JoinColumn(name = "courseId")
-    )
-    @JsonManagedReference
-    private Set<Course> enrolledCourses = new HashSet<>();
->>>>>>> 15b880722b3e8e94892afaf32930d2ffc1b8dd65
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -63,12 +44,8 @@ public class Student {
 
     public Student() {}
 
-<<<<<<< HEAD
     public Student(String lastName, String firstName, Date birthDate, int age, String password, 
                    String email, String phoneNumber, Date enrollmentDate, String address) {
-=======
-    public Student(String lastName, String firstName, Date birthDate, int age, String password, String email, String phoneNumber, Date enrollmentDate, String address) {
->>>>>>> 15b880722b3e8e94892afaf32930d2ffc1b8dd65
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthDate = birthDate;
@@ -78,10 +55,6 @@ public class Student {
         this.phoneNumber = phoneNumber;
         this.enrollmentDate = enrollmentDate;
         this.address = address;
-    }
-
-    public Set<Course> getEnrolledCourses() {
-        return enrolledCourses;
     }
 
     public int getStudentId() {
@@ -159,7 +132,6 @@ public class Student {
     public void setAddress(String address) {
         this.address = address;
     }
-<<<<<<< HEAD
 
     public Set<StudentCourseEnrollment> getCourseEnrollments() {
         return courseEnrollments;
@@ -168,6 +140,4 @@ public class Student {
     public void setCourseEnrollments(Set<StudentCourseEnrollment> courseEnrollments) {
         this.courseEnrollments = courseEnrollments;
     }
-=======
->>>>>>> 15b880722b3e8e94892afaf32930d2ffc1b8dd65
 }

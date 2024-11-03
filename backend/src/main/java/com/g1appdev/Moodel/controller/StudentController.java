@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.g1appdev.Moodel.entity.Student;
+import com.g1appdev.Moodel.entity.StudentCourseEnrollment;
 import com.g1appdev.Moodel.service.StudentService;
 
 @RestController
@@ -39,8 +40,9 @@ public class StudentController {
         return studentService.updateStudentDetails(id, newStudentDetails);
     }
 
+    // ENROLL IN COURSE
     @PutMapping("/enrollInCourse")
-    public Student enrollInCourse(@RequestParam int studentId, @RequestParam int courseId) {
+    public StudentCourseEnrollment enrollInCourse(@RequestParam int studentId, @RequestParam int courseId) {
         return studentService.enrollInCourse(studentId, courseId);
     }
 
