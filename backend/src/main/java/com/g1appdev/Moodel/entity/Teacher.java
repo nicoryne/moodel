@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,18 +33,23 @@ public class Teacher {
     private Date birthDate;
     private int age;
     private String password;
+    
+    @Column(unique = true)
     private String email;
+    
     private String phoneNumber;
+    private String address;
     private Date hireDate;
-    private String roles;
+    private String roles = "ROLE_USER";
+   
 
     @OneToMany(mappedBy = "teacher")
     @JsonIgnoreProperties("teacher")
-    private Set<TeacherCourseOwnership> ownedCourses;
+    private Set<TeacherCourseOwnership> ownedCourses = new HashSet<>();
     
     public Teacher() {}
 
-    public Teacher(String lname, String fname, Date birthDate, int age, String password, String email, String phoneNumber, Date hireDate) {
+    public Teacher(String lname, String fname, Date birthDate, int age, String password, String email, String phoneNumber, String address, Date hireDate) {
         this.lname = lname;
         this.fname = fname;
         this.birthDate = birthDate;
@@ -51,9 +57,8 @@ public class Teacher {
         this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.address = address;
         this.hireDate = hireDate;
-        this.roles = "ROLE_USER";
-        this.ownedCourses = new HashSet<>();
     }
 
     @Override
@@ -130,6 +135,14 @@ public class Teacher {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Date getHireDate() {

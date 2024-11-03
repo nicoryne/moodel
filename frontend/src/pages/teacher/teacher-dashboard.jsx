@@ -14,13 +14,13 @@ import { Home, MenuBook, Settings, AccountCircle } from "@mui/icons-material";
 export default function TeacherDashboard() {
   const [data, setData] = React.useState(null);
 
-  React.useEffect(async () => {
-    const savedData = await login("email", "password");
-    console.log("Fetched data from localStorage:", savedData);
-    if (savedData) {
-      setData(savedData);
-      console.log(data.name);
+  React.useEffect(() => {
+    let data = localStorage.getItem("user");
+
+    if (data != null) {
+      setData(data);
     }
+    console.log(data);
   }, []);
 
   return (

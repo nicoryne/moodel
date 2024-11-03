@@ -11,7 +11,7 @@ import {
   IconButton,
   InputAdornment,
 } from "@mui/material";
-import { login } from "../api/auth";
+import { login } from "../services/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
@@ -26,7 +26,7 @@ export default function StudentLogin() {
   };
 
   const handleLogin = () => {
-    let data = login(email, password);
+    let data = login(email, password, "teacher");
     if (data) {
       localStorage.setItem("data", JSON.stringify(data));
       navigate("/teacher/home");

@@ -30,6 +30,9 @@ public class TeacherService implements UserDetailsService {
 
     // CREATE
     public Teacher postTeacherRecord(Teacher teacher) {
+        if(trepo.findByEmail(teacher.getEmail()) != null) {
+            throw new RuntimeException ("🔴 ERROR: Teacher record with email " + teacher.getEmail() + " already exists.");
+        }
         return trepo.save(teacher);
     }
 
