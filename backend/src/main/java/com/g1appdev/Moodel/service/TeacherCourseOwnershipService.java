@@ -68,11 +68,12 @@ public class TeacherCourseOwnershipService {
     public String deleteTeacherCourseOwnership(int teacherId, int courseId) {
         TeacherCourseOwnershipKey teacherCourseOwnershipKey = new TeacherCourseOwnershipKey(teacherId, courseId);
 
-        TeacherCourseOwnership teacherCourseOwnership = tcorepo.findById(teacherCourseOwnershipKey)
-            .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: TeacherCourseOwnership record with ID " + teacherCourseOwnershipKey + " was NOT found."));
+        if(!tcorepo.existsById(teacherCourseOwnershipKey)) {
+            throw new NoSuchElementException("🔴 ERROR: TeacherCourseOwnership record with ID " + teacherCourseOwnershipKey + " was NOT found.");
+        }
         
         tcorepo.deleteById(teacherCourseOwnershipKey);
-        return "✅ SUCCESS: TeacherCourseOwnership record with ID " + teacherCourseOwnership + " has been successfully deleted.";
+        return "✅ SUCCESS: TeacherCourseOwnership record with ID " + teacherCourseOwnershipKey + " has been successfully deleted.";
     }
     
 }

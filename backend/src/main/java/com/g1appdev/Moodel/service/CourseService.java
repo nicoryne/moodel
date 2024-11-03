@@ -47,7 +47,7 @@ public class CourseService {
 
     // DELETE
     public String deleteCourse(int id) {
-        if(crepo.findById(id) == null) {
+        if(crepo.findById(id).get() == null) {
             return "🔴 ERROR: Course record with ID " + id + " was NOT found."; 
         }
 

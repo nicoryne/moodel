@@ -67,8 +67,8 @@ public class TeacherService implements UserDetailsService {
 
     // DELETE
     public String deleteTeacher(int id) {
-        if(trepo.findById(id) == null) {
-            return "🔴 ERROR: Teacher record with ID " + id + " was NOT found."; 
+        if(!trepo.existsById(id)) {
+            throw new NoSuchElementException("🔴 ERROR: Teacher record with ID " + id + " was NOT found.");  
         }
 
         trepo.deleteById(id);
