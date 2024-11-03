@@ -1,6 +1,8 @@
 package com.g1appdev.Moodel.entity;
 
+
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -10,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,20 +29,24 @@ public class GroupSubmissions {
     private String description;
     private int accumilatedPoints;
 
+    @OneToMany(mappedBy = "groupSubmissions")
+    private List<Projects> projects;
+
     @ManyToOne
-    @JoinColumn(name = "groupId", nullable=false)
+    @JoinColumn(name = "groupId")
     @JsonIgnore
     private Group group;
 
     public GroupSubmissions() {        
     }
 
-    public GroupSubmissions(int accumilatedPoints, String description, String feedback, String fileUrl, Group group, Date submissionDate, int submissionId) {
+    public GroupSubmissions(int accumilatedPoints, String description, String feedback, String fileUrl, Group group, List<Projects> projects, Date submissionDate, int submissionId) {
         this.accumilatedPoints = accumilatedPoints;
         this.description = description;
         this.feedback = feedback;
         this.fileUrl = fileUrl;
         this.group = group;
+        this.projects = projects;
         this.submissionDate = submissionDate;
         this.submissionId = submissionId;
     }
@@ -90,6 +97,14 @@ public class GroupSubmissions {
 
     public void setAccumilatedPoints(int accumilatedPoints) {
         this.accumilatedPoints = accumilatedPoints;
+    }
+
+    public List<Projects> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Projects> projects) {
+        this.projects = projects;
     }
 
     public Group getGroup() {

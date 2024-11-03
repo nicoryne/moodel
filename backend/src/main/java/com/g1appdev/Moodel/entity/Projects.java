@@ -1,15 +1,19 @@
 package com.g1appdev.Moodel.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 import jakarta.persistence.Entity;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+import jakarta.persistence.Table;
+
 @Entity
+@Table(name = "projects")
 public class Projects {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +29,25 @@ public class Projects {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
+
+    @ManyToOne
+    @JoinColumn(name = "submission_id")
+    private GroupSubmissions groupSubmissions;  
+    
+    public Projects() {}
+
+
+    public Projects(Course course, String description, GroupSubmissions groupSubmissions, boolean isActive, boolean isGroupProject, Long projectId, Date submissionDeadline, String title, int totalPoints) {
+        this.course = course;
+        this.description = description;
+        this.groupSubmissions = groupSubmissions;
+        this.isActive = isActive;
+        this.isGroupProject = isGroupProject;
+        this.projectId = projectId;
+        this.submissionDeadline = submissionDeadline;
+        this.title = title;
+        this.totalPoints = totalPoints;
+    }
 
     // Getters and Setters
     public Long getProjectId() { 
@@ -89,4 +112,12 @@ public class Projects {
     public void setCourse(Course course) { 
         this.course = course; 
     }
-}
+
+    public GroupSubmissions getGroupSubmissions() {
+        return groupSubmissions;
+    }
+
+    public void setGroupSubmissions(GroupSubmissions groupSubmissions) {
+        this.groupSubmissions = groupSubmissions;
+    }
+}         

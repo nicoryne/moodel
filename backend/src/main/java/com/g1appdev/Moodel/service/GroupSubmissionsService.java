@@ -20,8 +20,8 @@ public class GroupSubmissionsService {
     }
 
     //CREATE
-    public GroupSubmissions postGroupSubmissionsRecord(GroupSubmissions groupSubmissions) {
-        return gsrepo.save(groupSubmissions);
+    public GroupSubmissions postGroupSubmission(GroupSubmissions groupSubmission) {
+        return gsrepo.save(groupSubmission);
     }
 
     //READ
@@ -30,17 +30,19 @@ public class GroupSubmissionsService {
         return gsrepo.findAll();
     }
 
+    /*
     //read a group submission by it's id
     public GroupSubmissions getGroupSubmissionsById(int id) {
         return gsrepo.findBySubmissionId(id);
     }
+    */
 
     //UPDATE
     @SuppressWarnings("finally")
-    public GroupSubmissions putGroupSubmissionsDetails(int id, GroupSubmissions newGroupSubmissionsDetails) {
+    public GroupSubmissions putGroupSubmissionsDetails(int submissionId, GroupSubmissions newGroupSubmissionsDetails) {
         GroupSubmissions groupSubmissions = new GroupSubmissions();
         try {
-            groupSubmissions = gsrepo.findBySubmissionId(id);
+            groupSubmissions = gsrepo.findById(submissionId).get();
 
             groupSubmissions.setSubmissionDate(newGroupSubmissionsDetails.getSubmissionDate());
             groupSubmissions.setFeedback(newGroupSubmissionsDetails.getFeedback());
@@ -49,20 +51,21 @@ public class GroupSubmissionsService {
             groupSubmissions.setAccumilatedPoints(newGroupSubmissionsDetails.getAccumilatedPoints());
             
         } catch (NoSuchElementException e) {
-            throw new NoSuchElementException("Group Submission "+ id + " not found");
+            throw new NoSuchElementException("Group Submission "+ submissionId + " not found");
         } finally {
             return gsrepo.save(groupSubmissions);
         }
     }
 
     //DELETE
-    public String deleteGroupSubmissions(int id) {
-        if(gsrepo.findById(id) == null) {
-            return "Group Submissions record with ID "+ id + "was NOT found.";
+    public String deleteGroupSubmission(int submissionId) {
+        if (!gsrepo.existsById(submissionId)) {
+            return "GroupSubmission with ID " + submissionId + " was NOT found.";
         }
 
-        gsrepo.deleteById(id);
-        return "Group Submissions record with ID "+ id + "has been deleted.";
+        gsrepo.deleteById(submissionId);
+        return "GroupSubmission with ID " + submissionId + " has been successfully deleted.";
     }
+
 
 }

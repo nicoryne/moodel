@@ -1,7 +1,6 @@
 package com.g1appdev.Moodel.entity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -9,38 +8,30 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="groups")
+@Table(name = "studentgroups")
 public class Group {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int groupId;
-    
+
     private int groupNumber;
 
-    
-    @ManyToMany
-    @JoinTable(
-        name = "groupstudentassignation",
-        joinColumns = @JoinColumn(name = "groupId"),
-        inverseJoinColumns = @JoinColumn(name = "studentId")
-    )
+
+    @OneToMany(mappedBy="group")
     @JsonIgnore
-    private Set<Student> groupAssigned = new HashSet<>();
+    private List<GroupSubmissions> groupSubmissions;
 
-    public Group() {
-        
-    }
+    public Group() {}
 
-    public Group(int groupId, int groupNumber) {
+    public Group(int groupId, int groupNumber, List<GroupSubmissions> groupSubmissions) {
         this.groupId = groupId;
         this.groupNumber = groupNumber;
-        this.groupAssigned = new HashSet<>();
+        this.groupSubmissions = groupSubmissions;
     }
 
     public int getGroupId() {
@@ -59,14 +50,12 @@ public class Group {
         this.groupNumber = groupNumber;
     }
 
-    public Set<Student> getGroupAssigned() {
-        return groupAssigned;
+    public List<GroupSubmissions> getGroupSubmissions() {
+        return groupSubmissions;
     }
 
-    public void setGroupAssigned(Set<Student> groupAssigned) {
-        this.groupAssigned = groupAssigned;
+    public void setGroupSubmissions(List<GroupSubmissions> groupSubmissions) {
+        this.groupSubmissions = groupSubmissions;
     }
-         
 
-    
 }

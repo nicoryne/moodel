@@ -33,8 +33,8 @@ public class GroupSubmissionsController {
     //CREATE
     @PostMapping("/postGroupSubmissionsRecord")
     public GroupSubmissions GroupSubmissions(@RequestBody GroupSubmissions groupSubmissions) {
-        return gsserv.postGroupSubmissionsRecord(groupSubmissions);
-    }    
+        return gsserv.postGroupSubmission(groupSubmissions);
+    }   
     
     //READ
     @GetMapping("/getAllGroupSubmissions")
@@ -42,6 +42,7 @@ public class GroupSubmissionsController {
         return gsserv.getAllGroupSubmissions();
     }
 
+    /*
     @GetMapping("/getGroupSubmission/{id}")
     public GroupSubmissions getGroupSubmissionsById(@PathVariable int id) {
         GroupSubmissions groupSubmissions = gsserv.getGroupSubmissionsById(id);
@@ -49,8 +50,7 @@ public class GroupSubmissionsController {
             return groupSubmissions;
         }
         return null;
-    }
-    
+    }*/
 
     //UPDATE
     @PutMapping("/putGroupSubmissionsDetails")
@@ -59,9 +59,9 @@ public class GroupSubmissionsController {
     }
 
     //DELETE
-    @DeleteMapping("/deleteGroupSubmissionsDetails/{id}")
-    public String deleteGroupSubmissions(@PathVariable int id) {
-        return gsserv.deleteGroupSubmissions(id);
-    }    
+    @DeleteMapping("/deleteGroupSubmissionsDetails/{submission_id}")
+    public String deleteGroupSubmissions(@PathVariable int submission_id) {
+        return gsserv.deleteGroupSubmission(submission_id);
+    } 
 
 }
