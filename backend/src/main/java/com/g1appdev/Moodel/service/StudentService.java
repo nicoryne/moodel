@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.g1appdev.Moodel.entity.Course;
 import com.g1appdev.Moodel.entity.Student;
-import com.g1appdev.Moodel.entity.StudentCourseEnrollment;
-import com.g1appdev.Moodel.entity.StudentCourseEnrollmentKey;
 import com.g1appdev.Moodel.respository.CourseRepo;
+<<<<<<< HEAD
 import com.g1appdev.Moodel.respository.StudentCourseEnrollmentRepo;
+=======
+>>>>>>> 15b880722b3e8e94892afaf32930d2ffc1b8dd65
 import com.g1appdev.Moodel.respository.StudentRepo;
 
 @Service
@@ -23,9 +24,12 @@ public class StudentService {
     @Autowired
     private CourseRepo courseRepo;
 
+<<<<<<< HEAD
     @Autowired
     private StudentCourseEnrollmentRepo enrollmentRepo;
 
+=======
+>>>>>>> 15b880722b3e8e94892afaf32930d2ffc1b8dd65
     public StudentService() {
         super();
     }
@@ -58,13 +62,18 @@ public class StudentService {
         return studentRepo.save(student);
     }
 
+<<<<<<< HEAD
     // ENROLL STUDENT IN A COURSE
     public StudentCourseEnrollment enrollInCourse(int studentId, int courseId) {
+=======
+    public Student enrollInCourse(int studentId, int courseId) {
+>>>>>>> 15b880722b3e8e94892afaf32930d2ffc1b8dd65
         Student student = studentRepo.findById(studentId)
             .orElseThrow(() -> new NoSuchElementException("Student not found"));
         Course course = courseRepo.findById(courseId)
             .orElseThrow(() -> new NoSuchElementException("Course not found"));
 
+<<<<<<< HEAD
         StudentCourseEnrollmentKey enrollmentKey = new StudentCourseEnrollmentKey(studentId, courseId);
         if (enrollmentRepo.existsById(enrollmentKey)) {
             throw new IllegalStateException("Student is already enrolled in this course.");
@@ -72,6 +81,10 @@ public class StudentService {
 
         StudentCourseEnrollment enrollment = new StudentCourseEnrollment(enrollmentKey, student, course, new java.util.Date());
         return enrollmentRepo.save(enrollment);
+=======
+        student.getEnrolledCourses().add(course);
+        return studentRepo.save(student);
+>>>>>>> 15b880722b3e8e94892afaf32930d2ffc1b8dd65
     }
 
     // DELETE
