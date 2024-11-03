@@ -25,7 +25,6 @@ public class Course {
     private Date createdAt;
 
     @OneToMany(mappedBy = "course")
-    @JsonIgnore
     private Set<StudentCourseEnrollment> enrolledStudents = new HashSet<>();
 
     @OneToMany(mappedBy = "course")
