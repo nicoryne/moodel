@@ -1,12 +1,18 @@
-import { teacherGetByEmail } from "./Teacher";
+import { teacherGenerateToken } from "./Teacher";
 import { redirect } from "react-router-dom";
 
 async function login(email, password, roleType) {
   let data = null;
+  
+
+  let formData = {
+    "username": email,
+    "password": password
+  }
 
   switch (roleType) {
     case "teacher":
-      data = await teacherGetByEmail(email);
+      data = await teacherGenerateToken(formData);
       break;
     case "student":
       // TODO: implement student
@@ -23,9 +29,11 @@ async function login(email, password, roleType) {
     throw new Error("🔴 ERROR: Invalid password.");
   }
 
-  localStorage.setItem("user", JSON.stringify(data));
-  console.log(data);
-  return data;
+  if(data) {
+    localStorage.setItem("user", JSON.stringify(data));
+    console.log(data);
+    return data;
+  }
 }
 
 export { login };

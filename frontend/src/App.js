@@ -19,8 +19,12 @@ function App() {
             <Route index element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            {/* Student Routes */}
-            <Route path="/student">
+          </Route>
+
+          {/* Private Routes */}
+          <Route element={<PrivateRoutes />}>
+          {/* Student Routes */}
+          <Route path="/student">
               <Route path="/student/home" element={<StudentDashboard />} />
             </Route>
 
@@ -29,9 +33,6 @@ function App() {
               <Route path="/teacher/home" element={<TeacherDashboard />} />
             </Route>
           </Route>
-
-          {/* Private Routes */}
-          <Route element={<PrivateRoutes />}></Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>

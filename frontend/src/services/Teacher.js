@@ -1,6 +1,33 @@
+async function teacherGenerateToken(formData) {
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+
+  console.log(formData)
+
+  const res = await fetch(
+    `http://localhost:3000/api/teacher/generateToken`,
+    {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: headers,
+    }
+  );
+
+
+  if (!res.ok) {
+    throw new Error(
+      `🔴 ERROR: Failed to generate teacher token. Status: ${res.status}`
+    );
+  }
+
+  const data = await res.json();
+  return data.token;
+
+}
+
 async function teacherGetByEmail(email) {
   let res = await fetch(
-    `http://localhost:8080/api/teacher/getTeacherByEmail?email=${email}`
+    `http://localhost:3000/api/teacher/getTeacherByEmail?email=${email}`
   );
 
   if (!res.ok) {
@@ -18,7 +45,7 @@ async function teacherGetByEmail(email) {
 
 async function teacherDeleteById(id) {
   const res = await fetch(
-    `http://localhost:8080/api/teacher/deleteTeacherDetails/${id}`,
+    `http://localhost:3000/api/teacher/deleteTeacherDetails/${id}`,
     {
       method: "DELETE",
     }
@@ -34,12 +61,12 @@ async function teacherDeleteById(id) {
   return data;
 }
 
-async function createTeacher(formData) {
+async function teacherPostRecord(formData) {
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
   const res = await fetch(
-    `http://localhost:8080/api/teacher/postTeacherRecord`,
+    `http://localhost:3000/api/teacher/postTeacherRecord`,
     {
       method: "POST",
       body: JSON.stringify(formData),
@@ -58,7 +85,7 @@ async function createTeacher(formData) {
 }
 
 async function teacherTestConnection() {
-  const res = await fetch("http://localhost:8080/api/teacher/testConnection");
+  const res = await fetch("http://localhost:3000/api/teacher/testConnection");
 
   if (!res.ok) {
     throw new Error(`🔴 ERROR: Connection test failed. Status: ${res.status}`);
@@ -69,8 +96,9 @@ async function teacherTestConnection() {
 }
 
 export {
+  teacherGenerateToken,
   teacherGetByEmail,
   teacherDeleteById,
-  createTeacher,
+  teacherPostRecord,
   teacherTestConnection,
 };

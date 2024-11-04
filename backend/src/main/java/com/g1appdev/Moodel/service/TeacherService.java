@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -81,11 +80,11 @@ public class TeacherService implements UserDetailsService {
 
     // AUTH
     @Override
-    public TeacherDetails loadUserByUsername(String email) {
-        Teacher teacher = trepo.findByEmail(email);
-        
+    public TeacherDetails loadUserByUsername(String username) {
+        Teacher teacher = trepo.findByEmail(username);
+
         if(teacher == null) {
-            throw new UsernameNotFoundException("🔴 ERROR: Teacher record with email " + email + " was NOT found.");
+            throw new UsernameNotFoundException("🔴 ERROR: Teacher record with email " + username + " was NOT found.");
         }
 
         return new TeacherDetails(teacher);

@@ -6,7 +6,9 @@ export default function Layout() {
     <>
       <Navbar />
 
-      <Outlet />
+      <main className="mt-16 h-full">
+        <Outlet />
+      </main>
     </>
   );
 }
