@@ -1,39 +1,38 @@
-import { teacherGenerateToken } from "./Teacher";
-import { redirect } from "react-router-dom";
+import { teacherGenerateToken } from "./Teacher"
+import { redirect } from "react-router-dom"
 
 async function login(email, password, roleType) {
-  let data = null;
-  
+  let data = null
 
   let formData = {
-    "username": email,
-    "password": password
+    username: email,
+    password: password,
   }
 
   switch (roleType) {
     case "teacher":
-      data = await teacherGenerateToken(formData);
-      break;
+      data = await teacherGenerateToken(formData)
+      break
     case "student":
       // TODO: implement student
-      break;
+      break
     default:
-      break;
+      break
   }
 
   if (!data) {
-    throw new Error("🔴 ERROR: Invalid username.");
+    throw new Error("🔴 ERROR: Invalid username.")
   }
 
   if (password !== data.password) {
-    throw new Error("🔴 ERROR: Invalid password.");
+    throw new Error("🔴 ERROR: Invalid password.")
   }
 
-  if(data) {
-    localStorage.setItem("user", JSON.stringify(data));
-    console.log(data);
-    return data;
+  if (data) {
+    localStorage.setItem("user", JSON.stringify(data))
+    console.log(data)
+    return data
   }
 }
 
-export { login };
+export { login }

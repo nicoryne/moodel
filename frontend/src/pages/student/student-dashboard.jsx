@@ -1,6 +1,6 @@
-import React from "react";
+import React from "react"
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
 export default function StudentDashboard() {
   return (
@@ -8,5 +8,5 @@ export default function StudentDashboard() {
       <h1>Student Dashboard</h1>
       <p>This is student dashboard</p>
     </>
-  );
+  )
 }

@@ -1,8 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: ["./src/pages/**/*.jsx", "./src/components/**/*.jsx"],
   theme: {
     extend: {},
   },
   plugins: [],
-};
+}

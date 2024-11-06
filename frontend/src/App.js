@@ -1,13 +1,12 @@
-import "./styles/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./pages/layout";
-import Home from "./pages/home";
-import StudentDashboard from "./pages/student/student-dashboard";
-import TeacherDashboard from "./pages/teacher/teacher-dashboard";
-import Login from "./pages/login";
-import SignUp from "./pages/signup";
-import { AuthProvider } from "./middleware/AuthProvider";
-import PrivateRoutes from "./middleware/ProtectedRoutes";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import HomePage from "./pages/home"
+import Layout from "./pages/layout"
+import StudentDashboard from "./pages/student/student-dashboard"
+import TeacherDashboard from "./pages/teacher/teacher-dashboard"
+import LoginPage from "./pages/login"
+import { AuthProvider } from "./middleware/AuthProvider"
+import PrivateRoutes from "./middleware/ProtectedRoutes"
+import SignUpPage from "./pages/signup"
 
 function App() {
   return (
@@ -16,15 +15,16 @@ function App() {
         <Routes>
           {/* General Routes */}
           <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
+            <Route index element={<HomePage />} />
           </Route>
+
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
 
           {/* Private Routes */}
           <Route element={<PrivateRoutes />}>
-          {/* Student Routes */}
-          <Route path="/student">
+            {/* Student Routes */}
+            <Route path="/student">
               <Route path="/student/home" element={<StudentDashboard />} />
             </Route>
 
@@ -36,7 +36,7 @@ function App() {
         </Routes>
       </AuthProvider>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -1,101 +1,159 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/20/solid";
+import React from "react"
+import { Link, useNavigate } from "react-router-dom"
+import {
+  EyeIcon,
+  EyeSlashIcon,
+  LockClosedIcon,
+  EnvelopeIcon,
+  AcademicCapIcon,
+  BriefcaseIcon,
+} from "@heroicons/react/20/solid"
+import { motion } from "framer-motion"
 import { login } from "../services/auth"
-
+import { MotionComponent } from "./MotionComponent"
 
 export default function LoginForm() {
-    const navigate = useNavigate();
-    const [passwordHidden, togglePasswordHidden] = React.useState(false);
-    const [email, setEmail] = React.useState(null);
-    const [password, setPassword] = React.useState(null);
-    const [role, setRole] = React.useState(null);
+  const navigate = useNavigate()
+  const [passwordHidden, togglePasswordHidden] = React.useState(false)
+  const [email, setEmail] = React.useState(null)
+  const [password, setPassword] = React.useState(null)
+  const [role, setRole] = React.useState("teacher")
+  const [error, setError] = React.useState("")
 
-    const handleLogin = () => {
-        
-        if(!email || !password || !role) {
-            // TODO: handle no input
-            return 
-        }
+  const handleLogin = async () => {
+    if (!email || !password || !role) {
+      setError("All fields are required.")
+      return
+    }
 
-        let data = login(email, password, role);
+    try {
+      let data = await login(email, password, role)
+      if (data) {
+        localStorage.setItem("data", JSON.stringify(data))
+        navigate(`/${role}/home`)
+      }
+    } catch (error) {
+      setError(error.message || "Login failed. Please try again.")
+    }
+  }
 
-        if (data) {
-          localStorage.setItem("data", JSON.stringify(data));
-          navigate(`/${role}/home`);
-        }
-    };
+  return (
+    <section className="mx-auto h-fit rounded-md border-2 border-blue-400 bg-white p-8 text-[#212121] shadow-md md:w-96">
+      <h1 className="mx-auto w-fit text-2xl font-bold text-blue-400">Login Form</h1>
 
-    return (
-        <form className="w-80 md:w-96 h-fit mx-auto my-32 text-[#212121] border-blue-200 border-2 rounded-md p-8 space-y-4">
-            <div>
-                <Link></Link>
-                <Link></Link>
-            </div>
-            {/* Form Group */}
-            {/* Email */}
-            <div className="flex flex-col space-y-2">
-                <label htmlFor="email" className="font-bold">Email</label>
-                <input
-                    name="email"
-                    id="email"
-                    className="p-1 border-blue-200 border-b-2 outline-none active:border-blue-300"
-                    type="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-            </div>
-            {/* Password */}
-            <div className="flex flex-col space-y-2">
-                <label htmlFor="password" className="font-bold">Password</label>
-                <div className="flex w-full space-x-1 border-b-2 border-blue-200 active:border-blue-300 outline-blue-400">
-                    <input
-                        name="password"
-                        id="password"
-                        className="p-1 flex-1 outline-none"
-                        type={passwordHidden ? "text" : "password"}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    {!passwordHidden ? (
-                        <EyeIcon
-                            className="h-auto w-8 px-1 cursor-pointer text-neutral-400"
-                            onClick={() => togglePasswordHidden(true)}
-                        />
-                    ) : (
-                        <EyeSlashIcon
-                            className="h-auto w-8 px-1 cursor-pointer text-neutral-400"
-                            onClick={() => togglePasswordHidden(false)}
-                        />
-                    )}
-                </div>
-                {/* Role Selection */}
-                <div className="space-y-2 py-4">
-                    <label htmlFor="role-type" className="font-bold">Login as a</label>
-                    <div className="flex space-x-4">
-                        <div className="space-x-2">
-                            <input
-                                type="radio"
-                                id="teacher"
-                                name="role-type"
-                                value="teacher"
-                                onChange={(e) => setRole(e.target.value)}
-                            />
-                            <label htmlFor="teacher">Teacher</label>
-                        </div>
-                        <div className="space-x-2">
-                            <input
-                                type="radio"
-                                id="student"
-                                name="role-type"
-                                value="student"
-                                onChange={(e) => setRole(e.target.value)}
-                            />
-                            <label htmlFor="student">Student</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* Login */}
-            <button className="w-full rounded-md text-white bg-blue-400 p-1 font-bold" onClick={handleLogin}>Login</button>
-        </form>
-    );
+      {/* Form Group */}
+      <form className="mb-4 mt-8 space-y-4">
+        {/* Email Input Group */}
+        <div className="flex flex-col space-y-2">
+          <div className="flex w-full border-b-2 border-blue-300 hover:border-blue-400">
+            <EnvelopeIcon className="h-auto w-8 rounded-l-sm border-blue-300 px-1 text-blue-400" />
+            <input
+              name="email"
+              id="email"
+              placeholder="Enter your email"
+              className="text-md flex-1 border-none bg-transparent p-1 indent-1 text-neutral-600 outline-none"
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* Password Input Group */}
+        <div className="flex flex-col space-y-2">
+          <div className="flex w-full border-b-2 border-blue-300 hover:border-blue-400">
+            <LockClosedIcon className="h-auto w-8 rounded-l-sm border-blue-300 px-1 text-blue-400" />
+            <input
+              name="password"
+              id="password"
+              placeholder="Enter your password"
+              className="text-md flex-1 border-none p-1 indent-1 text-neutral-600 outline-none ring-0 focus:ring-0"
+              type={passwordHidden ? "text" : "password"}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {!passwordHidden ? (
+              <MotionComponent
+                as={EyeIcon}
+                className="h-auto w-8 cursor-pointer px-1 text-blue-400 outline-none active:ring-0"
+                onClick={() => togglePasswordHidden(true)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              />
+            ) : (
+              <MotionComponent
+                as={EyeSlashIcon}
+                className="h-auto w-8 cursor-pointer px-1 text-blue-200 outline-none active:ring-0"
+                onClick={() => togglePasswordHidden(false)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              />
+            )}
+          </div>
+          <p className="text-xs font-semibold text-red-400">{error}</p>
+        </div>
+
+        <div>
+          <p className="text-sm font-bold text-blue-400">I'm logging in as a</p>
+          <div className="mt-2 grid h-fit w-full grid-cols-2 rounded-md">
+            <motion.label
+              className={`place-items-center p-4 font-bold transition duration-200 ${role === "teacher" ? "rounded-l-sm bg-blue-400 text-white" : "rounded-l-md bg-white text-blue-400 opacity-50 hover:opacity-100"}`}
+            >
+              <input
+                type="radio"
+                name="role"
+                value="teacher"
+                checked={role === "teacher"}
+                onChange={() => setRole("teacher")}
+                className="hidden"
+              />
+              <MotionComponent
+                as={BriefcaseIcon}
+                className="h-auto w-16 outline-none"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              />
+              Teacher
+            </motion.label>
+            <motion.label
+              type="button"
+              className={`place-items-center p-4 font-bold transition duration-200 ${role === "student" ? "rounded-r-sm bg-blue-400 text-white" : "rounded-r-md bg-white text-blue-400 opacity-50 hover:opacity-100"}`}
+              transition={{ duration: 0.2 }}
+            >
+              <input
+                type="radio"
+                name="role"
+                value="student"
+                checked={role === "student"}
+                onChange={() => setRole("student")}
+                className="hidden"
+              />
+              <MotionComponent
+                as={AcademicCapIcon}
+                className="h-auto w-16 outline-none"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              />
+              Student
+            </motion.label>
+          </div>
+        </div>
+
+        {/* Login Submit Button */}
+        <motion.button
+          type="button"
+          className="w-full rounded-md bg-blue-400 p-1 font-bold text-white"
+          onClick={handleLogin}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Login
+        </motion.button>
+      </form>
+      <p className="text-xs text-neutral-400">
+        Don't have an account?{" "}
+        <Link to="/signup" className="text-blue-400 hover:text-blue-500 hover:drop-shadow-md active:text-blue-200">
+          Sign up now.
+        </Link>
+      </p>
+    </section>
+  )
 }
