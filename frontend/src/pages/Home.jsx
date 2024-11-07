@@ -18,7 +18,7 @@ export default function HomePage() {
           <MotionComponent
             as={Link}
             to="/signup"
-            className="hidden rounded-lg bg-white px-16 py-2 text-2xl font-bold text-blue-400 shadow-sm hover:bg-blue-300 hover:text-white hover:drop-shadow-md active:bg-blue-400 md:block"
+            className="rounded-lg bg-white px-16 py-2 text-2xl font-bold text-blue-400 shadow-sm hover:bg-blue-300 hover:text-white hover:drop-shadow-md active:bg-blue-400"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

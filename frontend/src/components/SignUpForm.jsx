@@ -76,7 +76,7 @@ export default function SignUpForm() {
     <section className="mx-auto h-fit rounded-md border-2 border-blue-400 bg-white p-8 text-[#212121] shadow-md">
       {/* Title and Close Button Container */}
       <div className="flex justify-between">
-        <h1 className="w-fit text-3xl font-bold text-blue-400">Sign Up Form</h1>
+        <h1 className="w-fit text-2xl font-bold text-blue-400">Sign Up Form</h1>
         <Link to="/">
           <MotionComponent
             as={XMarkIcon}

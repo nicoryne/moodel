@@ -1,7 +1,3 @@
-/**
- * The `TeacherDetails` class implements the `UserDetails` interface in Java for handling teacher user
- * details in a Spring Security context.
- */
 package com.g1appdev.Moodel.security;
 
 import java.util.Collection;
@@ -20,7 +16,7 @@ public class TeacherDetails implements UserDetails {
     public TeacherDetails(Teacher teacher) {
         this.teacher = teacher;
     }
-
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority("ROLE_TEACHER"));

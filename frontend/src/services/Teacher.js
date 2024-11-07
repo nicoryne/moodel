@@ -11,9 +11,7 @@ async function teacherGenerateToken(formData) {
   })
 
   if (!res.ok) {
-    throw new Error(
-      `🔴 ERROR: Failed to generate teacher token. Status: ${res.status}`,
-    )
+    throw new Error(`🔴 ERROR: Failed to generate teacher token. Status: ${res.status}`)
   }
 
   const data = await res.json()
@@ -21,9 +19,7 @@ async function teacherGenerateToken(formData) {
 }
 
 async function teacherGetByEmail(email) {
-  let res = await fetch(
-    `http://localhost:3000/api/teacher/getTeacherByEmail?email=${email}`,
-  )
+  let res = await fetch(`http://localhost:3000/api/teacher/getTeacherByEmail?email=${email}`)
 
   if (!res.ok) {
     throw new Error(`🔴 ERROR: Request failed with status ${res.status}`)
@@ -39,40 +35,30 @@ async function teacherGetByEmail(email) {
 }
 
 async function teacherDeleteById(id) {
-  const res = await fetch(
-    `http://localhost:3000/api/teacher/deleteTeacherDetails/${id}`,
-    {
-      method: "DELETE",
-    },
-  )
+  const res = await fetch(`http://localhost:3000/api/teacher/deleteTeacherDetails/${id}`, {
+    method: "DELETE",
+  })
 
   if (!res.ok) {
-    throw new Error(
-      `🔴 ERROR: Failed to delete teacher with ID ${id}. Status: ${res.status}`,
-    )
+    throw new Error(`🔴 ERROR: Failed to delete teacher with ID ${id}. Status: ${res.status}`)
   }
 
   const data = await res.text()
   return data
 }
 
-async function teacherPostRecord(formData) {
+async function teacherRegister(formData) {
   const headers = new Headers()
   headers.append("Content-Type", "application/json")
 
-  const res = await fetch(
-    `http://localhost:3000/api/teacher/postTeacherRecord`,
-    {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: headers,
-    },
-  )
+  const res = await fetch(`http://localhost:3000/api/teacher/register`, {
+    method: "POST",
+    body: JSON.stringify(formData),
+    headers: headers,
+  })
 
   if (!res.ok) {
-    throw new Error(
-      `🔴 ERROR: Failed to create teacher record. Status: ${res.status}`,
-    )
+    throw new Error(`🔴 ERROR: Failed to create teacher record. Status: ${res.status}`)
   }
 
   const data = await res.text()
@@ -90,10 +76,4 @@ async function teacherTestConnection() {
   return data
 }
 
-export {
-  teacherGenerateToken,
-  teacherGetByEmail,
-  teacherDeleteById,
-  teacherPostRecord,
-  teacherTestConnection,
-}
+export { teacherGenerateToken, teacherGetByEmail, teacherDeleteById, teacherRegister, teacherTestConnection }

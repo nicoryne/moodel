@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.g1appdev.Moodel.entity.Teacher;
+import com.g1appdev.Moodel.security.AuthRequest;
+import com.g1appdev.Moodel.security.TeacherDetails;
+import com.g1appdev.Moodel.security.TeacherDetailsService;
 import com.g1appdev.Moodel.service.TeacherService;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -149,9 +152,26 @@ public class TeacherController {
     //#################
 
     @PostMapping("/register")
-    public ResponseEntity<Teacher> newTeacher(@RequestBody() Teacher teacher) {
+    public ResponseEntity<Teacher> newTeacher(@RequestBody Teacher teacher) {
         Teacher newTeacher = tserv.postTeacherRecord(teacher);
         return ResponseEntity.status(HttpStatus.CREATED).body(newTeacher);
     }
     
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest) {
+        String username = authRequest.getUsername();
+        String password = authRequest.getPassword();
+
+        if (username == null || password == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("🔴 ERROR: Missing username or password");
+        }
+    
+        boolean isAuthenticated = tserv.authenticateTeacher(username, password);
+        if (!isAuthenticated) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("🔴 ERROR: Invalid credentials");
+        }
+
+        String token = tserv.generateTokenForTeacher(username);
+        return ResponseEntity.ok(token);
+    }
 }

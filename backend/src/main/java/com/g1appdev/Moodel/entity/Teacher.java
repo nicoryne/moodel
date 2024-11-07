@@ -40,7 +40,6 @@ public class Teacher {
     private String phoneNumber;
     private String address;
     private Date hireDate;
-    private String roles = "ROLE_USER";
    
 
     @OneToMany(mappedBy = "teacher")
@@ -161,7 +160,4 @@ public class Teacher {
         this.ownedCourses = ownedCourses;
     }
 
-    public String getRoles() {
-        return this.roles;
-    }
 }

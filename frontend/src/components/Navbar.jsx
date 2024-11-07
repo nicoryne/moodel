@@ -7,7 +7,7 @@ import { Bars4Icon } from "@heroicons/react/20/solid"
 import { MotionComponent } from "./MotionComponent"
 
 const navLinks = [
-  { text: "Login", href: "/auth" },
+  { text: "Login", href: "/login" },
   { text: "Home", href: "/" },
   { text: "About", href: "/about" },
   { text: "Contact", href: "/contact" },
