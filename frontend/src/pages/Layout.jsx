@@ -6,9 +6,9 @@ export default function Layout() {
   const location = useLocation()
 
   return (
-    <>
+    <div className="overflow-y-hidden">
       <Navbar />
-      <main className="mt-16 h-full">
+      <main className="h-full overflow-y-auto">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={location.key}
@@ -20,6 +20,6 @@ export default function Layout() {
           </motion.div>
         </AnimatePresence>
       </main>
-    </>
+    </div>
   )
 }
