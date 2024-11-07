@@ -6,15 +6,15 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.g1appdev.Moodel.details.TeacherDetails;
 import com.g1appdev.Moodel.entity.Teacher;
 import com.g1appdev.Moodel.respository.CourseRepo;
 import com.g1appdev.Moodel.respository.TeacherRepo;
 
 @Service
-public class TeacherService implements UserDetailsService {
+public class TeacherService {
     
     @Autowired
     TeacherRepo trepo;
@@ -22,8 +22,13 @@ public class TeacherService implements UserDetailsService {
     @Autowired
     CourseRepo crepo;
 
-    public TeacherService() {
-        super();
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+  
+    public TeacherService(TeacherRepo trepo, CourseRepo crepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.trepo = trepo;
+        this.crepo = crepo;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
 
@@ -32,6 +37,9 @@ public class TeacherService implements UserDetailsService {
         if(trepo.findByEmail(teacher.getEmail()) != null) {
             throw new RuntimeException ("🔴 ERROR: Teacher record with email " + teacher.getEmail() + " already exists.");
         }
+
+        // Encrpyt password when user is added
+        teacher.setPassword(bCryptPasswordEncoder.encode(teacher.getPassword()));
         return trepo.save(teacher);
     }
 
@@ -75,18 +83,5 @@ public class TeacherService implements UserDetailsService {
 
         trepo.deleteById(id);
         return "✅ SUCCESS: Teacher record with ID " + id + " has been successfully deleted.";  
-    }
-
-
-    // AUTH
-    @Override
-    public TeacherDetails loadUserByUsername(String username) {
-        Teacher teacher = trepo.findByEmail(username);
-
-        if(teacher == null) {
-            throw new UsernameNotFoundException("🔴 ERROR: Teacher record with email " + username + " was NOT found.");
-        }
-
-        return new TeacherDetails(teacher);
     }
 }

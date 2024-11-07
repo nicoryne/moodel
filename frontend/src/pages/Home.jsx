@@ -27,6 +27,7 @@ export default function HomePage() {
         </div>
       </section>
       <section className="relative h-screen w-full">
+        {/* Gradient overlay div */}
         <div className="absolute inset-0 bg-gradient-to-b from-blue-100 to-blue-50 opacity-60" />
       </section>
     </>

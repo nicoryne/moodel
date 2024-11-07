@@ -2,11 +2,10 @@
  * The `TeacherDetails` class implements the `UserDetails` interface in Java for handling teacher user
  * details in a Spring Security context.
  */
-package com.g1appdev.Moodel.details;
+package com.g1appdev.Moodel.security;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,34 +15,25 @@ import com.g1appdev.Moodel.entity.Teacher;
 
 public class TeacherDetails implements UserDetails {
 
-    private String username;
-    
-    private String password;
-
-    private List<GrantedAuthority> authorities;
+    private Teacher teacher;
 
     public TeacherDetails(Teacher teacher) {
-        this.username = teacher.getEmail();
-        this.password = teacher.getPassword();
-        this.authorities = List.of(teacher.getRoles().split(", "))
-            .stream()
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toList());
+        this.teacher = teacher;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_TEACHER"));
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return teacher.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return teacher.getEmail();
     }
 
     @Override
