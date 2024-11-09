@@ -1,9 +1,7 @@
 import { motion } from "framer-motion"
 
-export const MotionComponent = ({ as, children, ...props }) => {
-  const ChildrenComponent = motion.create(as, {
-    forwardMotionProps: true,
-  })
+export const MotionComponent = ({ as: Component = "div", children, ...props }) => {
+  const MotionElement = motion.create(Component)
 
-  return <ChildrenComponent {...props}>{children}</ChildrenComponent>
+  return <MotionElement {...props}>{children}</MotionElement>
 }

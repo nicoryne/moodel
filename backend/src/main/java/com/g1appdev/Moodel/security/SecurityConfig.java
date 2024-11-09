@@ -14,11 +14,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 
 /*
  *  TODO: Added student side
@@ -30,6 +33,9 @@ public class SecurityConfig {
 
     @Autowired
     private CombinedUserDetailsService combinedUserDetailsService;
+
+    @Autowired
+    private JWTFilter jwtFilter;
 
     /*
      *  Creates an HTTP security filter chain which basically handles any external source
@@ -44,7 +50,7 @@ public class SecurityConfig {
      */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer:: disable)
+        http.csrf(customizer -> customizer.disable())
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
@@ -52,9 +58,10 @@ public class SecurityConfig {
                                 "/api/teacher/login"
                                 )
                                 .permitAll()
-                .requestMatchers("/api/teacher/**").hasRole("TEACHER")
                 .anyRequest().authenticated()
             )
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .httpBasic(Customizer.withDefaults()); 
             
         return http.build();

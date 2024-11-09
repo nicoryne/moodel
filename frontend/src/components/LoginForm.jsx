@@ -12,9 +12,11 @@ import {
 import { motion } from "framer-motion"
 import { login } from "../services/auth"
 import { MotionComponent } from "./MotionComponent"
+import { useAuth } from "../middleware/AuthProvider"
 
 export default function LoginForm() {
   const navigate = useNavigate()
+  const { setAuth } = useAuth()
   const [passwordHidden, togglePasswordHidden] = React.useState(false)
   const [email, setEmail] = React.useState(null)
   const [password, setPassword] = React.useState(null)
@@ -28,9 +30,9 @@ export default function LoginForm() {
     }
 
     try {
-      let data = await login(email, password, role)
-      if (data) {
-        localStorage.setItem("data", JSON.stringify(data))
+      let loginToken = await login(email, password, role)
+      if (loginToken) {
+        setAuth(loginToken, email, role)
         navigate(`/${role}/home`)
       }
     } catch (error) {

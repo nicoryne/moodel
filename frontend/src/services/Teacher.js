@@ -1,25 +1,48 @@
-async function teacherGenerateToken(formData) {
+async function teacherLogin(formData) {
   const headers = new Headers()
   headers.append("Content-Type", "application/json")
 
-  console.log(formData)
-
-  const res = await fetch(`http://localhost:3000/api/teacher/generateToken`, {
+  const res = await fetch(`http://localhost:8080/api/teacher/login`, {
     method: "POST",
     body: JSON.stringify(formData),
     headers: headers,
   })
 
   if (!res.ok) {
-    throw new Error(`🔴 ERROR: Failed to generate teacher token. Status: ${res.status}`)
+    throw new Error(`🔴 Login Failed: Invalid credentials`)
   }
 
-  const data = await res.json()
-  return data.token
+  const token = await res.text()
+
+  return token
 }
 
-async function teacherGetByEmail(email) {
-  let res = await fetch(`http://localhost:3000/api/teacher/getTeacherByEmail?email=${email}`)
+async function teacherRegister(formData) {
+  const headers = new Headers()
+  headers.append("Content-Type", "application/json")
+
+  const res = await fetch(`http://localhost:8080/api/teacher/register`, {
+    method: "POST",
+    body: JSON.stringify(formData),
+    headers: headers,
+  })
+
+  if (!res.ok) {
+    throw new Error(`🔴 ERROR: Failed to register. Status: ${res.status}`)
+  }
+
+  const data = await res.text()
+  return data
+}
+
+async function teacherGetByEmail(email, token) {
+  let res = await fetch(`http://localhost:8080/api/teacher/getTeacherByEmail?email=${email}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
 
   if (!res.ok) {
     throw new Error(`🔴 ERROR: Request failed with status ${res.status}`)
@@ -35,7 +58,7 @@ async function teacherGetByEmail(email) {
 }
 
 async function teacherDeleteById(id) {
-  const res = await fetch(`http://localhost:3000/api/teacher/deleteTeacherDetails/${id}`, {
+  const res = await fetch(`http://localhost:8080/api/teacher/deleteTeacherDetails/${id}`, {
     method: "DELETE",
   })
 
@@ -47,26 +70,8 @@ async function teacherDeleteById(id) {
   return data
 }
 
-async function teacherRegister(formData) {
-  const headers = new Headers()
-  headers.append("Content-Type", "application/json")
-
-  const res = await fetch(`http://localhost:3000/api/teacher/register`, {
-    method: "POST",
-    body: JSON.stringify(formData),
-    headers: headers,
-  })
-
-  if (!res.ok) {
-    throw new Error(`🔴 ERROR: Failed to create teacher record. Status: ${res.status}`)
-  }
-
-  const data = await res.text()
-  return data
-}
-
 async function teacherTestConnection() {
-  const res = await fetch("http://localhost:3000/api/teacher/testConnection")
+  const res = await fetch("http://localhost:8080/api/teacher/testConnection")
 
   if (!res.ok) {
     throw new Error(`🔴 ERROR: Connection test failed. Status: ${res.status}`)
@@ -76,4 +81,4 @@ async function teacherTestConnection() {
   return data
 }
 
-export { teacherGenerateToken, teacherGetByEmail, teacherDeleteById, teacherRegister, teacherTestConnection }
+export { teacherLogin, teacherRegister, teacherGetByEmail, teacherDeleteById, teacherTestConnection }

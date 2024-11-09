@@ -13,13 +13,16 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          {/* General Routes */}
+          {/* Navbar Routes */}
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
           </Route>
 
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
+          {/* Non-navbar Routes */}
+          <Route>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+          </Route>
 
           {/* Private Routes */}
           <Route element={<PrivateRoutes />}>

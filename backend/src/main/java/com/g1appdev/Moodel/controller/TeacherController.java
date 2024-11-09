@@ -35,7 +35,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 // `@RequestMapping(method = RequestMethod.GET, path="/api/teacher")` in the `TeacherController` class
 // are used to define the behavior of the controller in a Java Spring application.
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(method = RequestMethod.GET,path="/api/teacher")
 
 /**

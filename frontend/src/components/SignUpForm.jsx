@@ -65,10 +65,20 @@ export default function SignUpForm() {
     }
   }, [confirmPassword, password, setErrorConfirmPassword])
 
+  // Signup function
   const handleSignUp = async () => {
     if (!email || !password || !role) {
       setErrorConfirmPassword("All fields are required.")
       return
+    }
+
+    try {
+      let data = await signup(email, password, role, firstName, lastName, birthDate)
+      if (data) {
+        navigate(`/${role}/home`)
+      }
+    } catch (error) {
+      setErrorConfirmPassword(error.message || "Login failed. Please try again.")
     }
   }
 
