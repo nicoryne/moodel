@@ -27,7 +27,7 @@ public class GroupSubmissions {
     private String feedback;
     private String fileUrl;
     private String description;
-    private int accumilatedPoints;
+    private int accumulatedPoints;
 
     @OneToMany(mappedBy = "groupSubmissions")
     private List<Projects> projects;
@@ -40,8 +40,8 @@ public class GroupSubmissions {
     public GroupSubmissions() {        
     }
 
-    public GroupSubmissions(int accumilatedPoints, String description, String feedback, String fileUrl, Group group, List<Projects> projects, Date submissionDate, int submissionId) {
-        this.accumilatedPoints = accumilatedPoints;
+    public GroupSubmissions(int accumulatedPoints, String description, String feedback, String fileUrl, Group group, List<Projects> projects, Date submissionDate, int submissionId) {
+        this.accumulatedPoints = accumulatedPoints;
         this.description = description;
         this.feedback = feedback;
         this.fileUrl = fileUrl;
@@ -91,12 +91,12 @@ public class GroupSubmissions {
         this.description = description;
     }
 
-    public int getAccumilatedPoints() {
-        return accumilatedPoints;
+    public int getAccumulatedPoints() {
+        return accumulatedPoints;
     }
 
-    public void setAccumilatedPoints(int accumilatedPoints) {
-        this.accumilatedPoints = accumilatedPoints;
+    public void setAccumulatedPoints(int accumulatedPoints) {
+        this.accumulatedPoints = accumulatedPoints;
     }
 
     public List<Projects> getProjects() {

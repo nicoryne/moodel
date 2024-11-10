@@ -41,16 +41,16 @@ public class GroupController {
     }
 
     //UPDATE
-    @PutMapping("/updateGroupDetails")
-    public Group updateGroupDetails(@RequestParam int id, @RequestBody Group groupDetails) {
-        return gserv.updateGroupDetails(id, groupDetails);
+    @PutMapping("/updateGroupDetails/{group_id}")
+    public Group updateGroupDetails(@RequestParam int group_id, @RequestBody Group groupDetails) {
+        return gserv.updateGroupDetails(group_id, groupDetails);
     }
 
 
     //DELETE
-    @DeleteMapping("/deleteGroup/{id}")
-    public String deleteGroup(@PathVariable int id) {
-        return gserv.deleteGroup(id);
+    @DeleteMapping("/deleteGroup/{group_id}")
+    public String deleteGroup(@PathVariable int group_id) {
+        return gserv.deleteGroup(group_id);
     }
 
 }

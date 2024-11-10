@@ -6,7 +6,9 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.g1appdev.Moodel.entity.Group;
 import com.g1appdev.Moodel.entity.GroupSubmissions;
+import com.g1appdev.Moodel.respository.GroupRepo;
 import com.g1appdev.Moodel.respository.GroupSubmissionsRepo;
 
 @Service
@@ -15,12 +17,21 @@ public class GroupSubmissionsService {
     @Autowired
     GroupSubmissionsRepo gsrepo;
 
+    @Autowired
+    GroupRepo grepo;
+
     public GroupSubmissionsService() {
         super();
     }
 
     //CREATE
-    public GroupSubmissions postGroupSubmission(GroupSubmissions groupSubmission) {
+    /*public GroupSubmissions postGroupSubmission(GroupSubmissions groupSubmission) {
+        return gsrepo.save(groupSubmission);
+    }*/
+
+    public GroupSubmissions postGroupSubmission(int groupId, GroupSubmissions groupSubmission) {
+        Group group = grepo.findById(groupId).orElseThrow(() -> new NoSuchElementException("Group not found"));
+        groupSubmission.setGroup(group);  // Associate Group with GroupSubmission
         return gsrepo.save(groupSubmission);
     }
 
@@ -28,6 +39,10 @@ public class GroupSubmissionsService {
     //read all group submissions
     public List<GroupSubmissions> getAllGroupSubmissions() {
         return gsrepo.findAll();
+    }
+
+    public List<GroupSubmissions> getGroupSubmissionsByGroupId(int groupId) {
+        return gsrepo.findByGroup_GroupId(groupId);
     }
 
     /*
@@ -38,7 +53,7 @@ public class GroupSubmissionsService {
     */
 
     //UPDATE
-    @SuppressWarnings("finally")
+    /*@SuppressWarnings("finally")
     public GroupSubmissions putGroupSubmissionsDetails(int submissionId, GroupSubmissions newGroupSubmissionsDetails) {
         GroupSubmissions groupSubmissions = new GroupSubmissions();
         try {
@@ -48,13 +63,27 @@ public class GroupSubmissionsService {
             groupSubmissions.setFeedback(newGroupSubmissionsDetails.getFeedback());
             groupSubmissions.setFileUrl(newGroupSubmissionsDetails.getFileUrl());
             groupSubmissions.setDescription(newGroupSubmissionsDetails.getDescription());
-            groupSubmissions.setAccumilatedPoints(newGroupSubmissionsDetails.getAccumilatedPoints());
+            groupSubmissions.setAccumulatedPoints(newGroupSubmissionsDetails.getAccumulatedPoints());
             
         } catch (NoSuchElementException e) {
             throw new NoSuchElementException("Group Submission "+ submissionId + " not found");
         } finally {
             return gsrepo.save(groupSubmissions);
         }
+    }*/
+
+    public GroupSubmissions putGroupSubmissionsDetails(int submissionId, GroupSubmissions newDetails) {
+        GroupSubmissions existingSubmission = gsrepo.findById(submissionId)
+            .orElseThrow(() -> new NoSuchElementException("GroupSubmission not found"));
+    
+        existingSubmission.setSubmissionDate(newDetails.getSubmissionDate());
+        existingSubmission.setFeedback(newDetails.getFeedback());
+        existingSubmission.setFileUrl(newDetails.getFileUrl());
+        existingSubmission.setDescription(newDetails.getDescription());
+        existingSubmission.setAccumulatedPoints(newDetails.getAccumulatedPoints());
+        // Leave the associated group unchanged
+    
+        return gsrepo.save(existingSubmission);
     }
 
     //DELETE

@@ -31,15 +31,25 @@ public class GroupSubmissionsController {
     }
 
     //CREATE
-    @PostMapping("/postGroupSubmissionsRecord")
+    /*@PostMapping("/postGroupSubmissionsRecord")
     public GroupSubmissions GroupSubmissions(@RequestBody GroupSubmissions groupSubmissions) {
         return gsserv.postGroupSubmission(groupSubmissions);
-    }   
+    }*/
+    
+    @PostMapping("/postGroupSubmissionsRecord/{groupId}")
+    public GroupSubmissions postGroupSubmissions(@PathVariable int groupId, @RequestBody GroupSubmissions groupSubmissions) {
+        return gsserv.postGroupSubmission(groupId, groupSubmissions);
+    }
     
     //READ
     @GetMapping("/getAllGroupSubmissions")
     public List<GroupSubmissions> getAllGroupSubmissionses() {
         return gsserv.getAllGroupSubmissions();
+    }
+
+    @GetMapping("/getGroupSubmissionsByGroupId/{groupId}")
+    public List<GroupSubmissions> getGroupSubmissionsByGroupId(@PathVariable int groupId) {
+        return gsserv.getGroupSubmissionsByGroupId(groupId);
     }
 
     /*
@@ -53,14 +63,19 @@ public class GroupSubmissionsController {
     }*/
 
     //UPDATE
-    @PutMapping("/putGroupSubmissionsDetails")
+    /*@PutMapping("/putGroupSubmissionsDetails")
     public GroupSubmissions putGroupSubmissions (@RequestParam int id, @RequestBody GroupSubmissions newGroupSubmissions) {
         return gsserv.putGroupSubmissionsDetails(id, newGroupSubmissions);
+    }*/
+
+    @PutMapping("/updateGroupSubmissionDetails/{submissionId}")
+    public GroupSubmissions putGroupSubmission(@PathVariable int submissionId, @RequestBody GroupSubmissions newDetails) {
+        return gsserv.putGroupSubmissionsDetails(submissionId, newDetails);
     }
 
     //DELETE
     @DeleteMapping("/deleteGroupSubmissionsDetails/{submission_id}")
-    public String deleteGroupSubmissions(@PathVariable int submission_id) {
+    public String deleteGroupSubmission(@PathVariable int submission_id) {
         return gsserv.deleteGroupSubmission(submission_id);
     } 
 

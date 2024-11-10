@@ -46,13 +46,15 @@ public class GroupService {
     } 
 
     //DELETE
-    public String deleteGroup(int id) {
-        if(grepo.findById(id) == null) {
-            return "Group record with ID " + id + " was NOT found."; 
+    public String deleteGroup(int groupId) {
+        Group group = grepo.findById(groupId).orElseThrow(() -> new NoSuchElementException("Group not found"));
+    
+        if (!group.getGroupSubmissions().isEmpty()) {
+            return "Cannot delete Group with existing submissions.";
         }
-
-        grepo.deleteById(id);
-        return "Group record with ID " + id + " has been successfully deleted.";  
+    
+        grepo.delete(group);
+        return "Group successfully deleted.";
     }
 
 }
