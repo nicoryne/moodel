@@ -33,7 +33,7 @@ export default function LoginForm() {
       let loginToken = await login(email, password, role)
       if (loginToken) {
         setAuth(loginToken, email, role)
-        navigate(`/${role}/home`)
+        navigate(`/${role}`)
       }
     } catch (error) {
       setError(error.message || "Login failed. Please try again.")
