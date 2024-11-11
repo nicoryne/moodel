@@ -1,6 +1,5 @@
 import { teacherRegister, teacherLogin } from "./Teacher"
 import { getAge } from "../lib/utils/getAge"
-import { redirect } from "react-router-dom"
 
 async function login(email, password, roleType) {
   let loginToken = null
