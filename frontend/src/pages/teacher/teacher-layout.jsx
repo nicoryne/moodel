@@ -6,7 +6,7 @@ import TeacherSidebar from "../../components/Teacher/TeacherSidebar"
 export default function TeacherLayout() {
   const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
-
+  console.log(isAuthenticated)
   React.useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login")

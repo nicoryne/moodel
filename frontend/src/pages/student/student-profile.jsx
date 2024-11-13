@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
-const StudentProfile = () => {
+const StudentProfilePage = () => {
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
+      console.log(localStorage.getItem('authToken'))
       const token = localStorage.getItem('authToken');
       if (token) {
         try {
-          const response = await fetch('/api/student/getByEmail', {
+          const response = await fetch('/api/student/getAll', {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`,
@@ -68,4 +69,4 @@ const StudentProfile = () => {
   );
 };
 
-export default StudentProfile;
+export default StudentProfilePage;

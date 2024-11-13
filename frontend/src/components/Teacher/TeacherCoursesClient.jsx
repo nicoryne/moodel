@@ -27,10 +27,9 @@ export default function TeacherCoursesClient() {
       }
 
       setTeacherDetails(teacherDetails)
-      console.log(teacherDetails)
-    }
-  }, [isAuthenticated, navigate, user])
-
+    } console.log(teacherDetails)
+  }, [isAuthenticated, navigate, user, teacherDetails])
+      
   return (
     <>
       <h1 className="mb-8 text-center text-4xl font-bold text-blue-400">My Courses</h1>

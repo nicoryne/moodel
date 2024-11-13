@@ -22,6 +22,7 @@ public class StudentCourseEnrollmentController {
     // UTILITY FUNCTIONS
     //#################
 
+    
     @GetMapping("/test")
     public ResponseEntity<String> print() {
         return ResponseEntity.status(HttpStatus.OK).body("✅ SUCCESS: StudentCourseEnrollment API connected successfully!");
