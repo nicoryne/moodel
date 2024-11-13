@@ -14,27 +14,27 @@ export default function AboutPage() {
     {
       name: 'Brett Arda',
       image: BrettImage,
-      role: 'Lead Developer'
+      role: 'Hipster'
     },
     {
       name: 'Rigel Baltazar',
       image: RigelImage,
-      role: 'Backend Engineer'
+      role: 'Coder'
     },
     {
       name: 'Margaret Matunog',
       image: MargaImage,
-      role: 'Project Manager'
+      role: 'Designer'
     },
     {
       name: 'Nicolo Porter',
       image: PorterImage,
-      role: 'UX Designer'
+      role: 'Hacker'
     },
     {
       name: 'Gabe San Diego',
       image: GabeImage,
-      role: 'Backend Engineer'
+      role: 'Hustler'
     }
   ];
 
@@ -75,7 +75,7 @@ export default function AboutPage() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Join our community
+            Join our community!
           </MotionComponent>
         </div>
       </section>
