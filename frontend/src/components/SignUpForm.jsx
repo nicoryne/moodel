@@ -75,7 +75,7 @@ export default function SignUpForm() {
     try {
       let data = await signup(email, password, role, firstName, lastName, birthDate)
       if (data) {
-        navigate(`/${role}/home`)
+        navigate(`/${role}`)
       }
     } catch (error) {
       setErrorConfirmPassword(error.message || "Login failed. Please try again.")
