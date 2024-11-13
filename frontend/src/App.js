@@ -28,7 +28,7 @@ function App() {
           {/* Private Routes */}
           <Route element={<PrivateRoutes />}>
             {/* Student Routes */}
-            <Route path="/student">
+            <Route path="/student" element = {<StudentDashboard />}>
               <Route path="/student/home" element={<StudentDashboard />} />
             </Route>
 
