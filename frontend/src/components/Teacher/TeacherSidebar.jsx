@@ -2,7 +2,7 @@ import React from "react"
 import { TableCellsIcon, UserIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline"
 import { useAuth } from "../../middleware/AuthProvider"
 import { Link } from "react-router-dom"
-import logo from "../../assets/logo192.png"
+import logo from "../../assets/moodel logo.png"
 
 const sidebarLinks = [
   { text: "Profile", href: "/teacher/profile", icon: UserIcon },

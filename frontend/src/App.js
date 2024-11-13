@@ -9,6 +9,8 @@ import AdminLayout from "./pages/admin/admin-layout"
 import AdminTeachers from "./pages/admin/admin-teachers"
 import AdminStudents from "./pages/admin/admin-students"
 import TeacherCourses from "./pages/teacher/teacher-courses"
+import AboutPage from "./pages/about"
+import ContactPage from "./pages/contact"
 import LoginPage from "./pages/login"
 import { AuthProvider } from "./middleware/AuthProvider"
 import PrivateRoutes from "./middleware/ProtectedRoutes"
@@ -25,6 +27,8 @@ function App() {
           {/* Navbar Routes */}
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
           </Route>
 
           {/* Non-navbar Routes */}

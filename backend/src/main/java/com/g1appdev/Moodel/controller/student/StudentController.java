@@ -6,10 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 import com.g1appdev.Moodel.entity.student.Student;
 import com.g1appdev.Moodel.security.entities.AuthRequest;
+import com.g1appdev.Moodel.security.services.JWTService;
 import com.g1appdev.Moodel.service.student.StudentService;
 
 @RestController
@@ -19,6 +21,8 @@ public class StudentController {
     @Autowired
     private StudentService sserv;
 
+    @Autowired
+    private JWTService jwtService = new JWTService();
     //#################
     // UTILITY FUNCTIONS
     //#################
@@ -101,4 +105,5 @@ public class StudentController {
         String token = sserv.generateTokenForStudent(username);
         return ResponseEntity.ok(token);
     }
+        
 }

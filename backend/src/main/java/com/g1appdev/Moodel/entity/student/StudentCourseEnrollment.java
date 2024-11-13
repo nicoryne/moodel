@@ -1,9 +1,8 @@
 package com.g1appdev.Moodel.entity.student;
 
 import java.util.Date;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.g1appdev.Moodel.entity.course.Course;
-
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -21,12 +20,14 @@ public class StudentCourseEnrollment {
     @ManyToOne
     @MapsId("studentId")
     @JoinColumn(name = "student_id", referencedColumnName = "studentId")
-    private Student student;
+    @JsonIgnoreProperties({"courseEnrollments", "individualSubmissions"}) // Specify properties to be ignored during serialization
+    Student student;
 
     @ManyToOne
     @MapsId("courseId")
     @JoinColumn(name = "course_id", referencedColumnName = "courseId")
-    private Course course;
+    @JsonIgnoreProperties({"enrolledStudents", "ownedByTeachers"}) 
+    Course course;
 
     private Date createdAt;
 
@@ -39,7 +40,6 @@ public class StudentCourseEnrollment {
         this.course = course;
         this.createdAt = createdAt;
     }
-
 
     public StudentCourseEnrollmentKey getStudentCourseId() {
         return this.studentCourseId;
@@ -72,5 +72,4 @@ public class StudentCourseEnrollment {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-
 }

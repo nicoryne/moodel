@@ -1,17 +1,18 @@
-import React from "react";
-import { TableCellsIcon, UserIcon, ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
-import { useAuth } from "../../middleware/AuthProvider";
-import { Link } from "react-router-dom";
-import logo from "../../assets/logo192.png";
+import React from "react"
+import { TableCellsIcon, UserIcon, ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline"
+import { useAuth } from "../../middleware/AuthProvider"
+import { Link } from "react-router-dom"
+import logo from "../../assets/moodel logo.png"
 
+// Update the links for the student
 const sidebarLinks = [
-  { text: "Dashboard", href: "/student/dashboard", icon: TableCellsIcon },
+  { text: "Courses", href: "/student/courses", icon: TableCellsIcon },
   { text: "Profile", href: "/student/profile", icon: UserIcon },
-];
+]
 
 export default function StudentSidebar() {
-  const { removeAuth } = useAuth();
-  const [isMaximized, setIsMaximized] = React.useState(false);
+  const { removeAuth } = useAuth()
+  const [isMaximized, setIsMaximized] = React.useState(false)
 
   return (
     <aside
@@ -24,12 +25,10 @@ export default function StudentSidebar() {
       {/* Wrapper */}
       <nav className="flex h-full min-w-full flex-col place-items-start space-y-4">
         {/* Header */}
-        <Link to="/student/dashboard" className="ml-3 mt-4 flex place-items-center">
+        <Link to="/student" className="ml-3 mt-4 flex place-items-center">
           <img className="h-auto w-10" src={logo} alt="Logo" />
           <h1
-            className={`duration-400 ease ml-2 transform font-bold text-neutral-100 transition-opacity ${
-              isMaximized ? "hidden opacity-0 md:block md:opacity-100" : "hidden opacity-0"
-            }`}
+            className={`duration-400 ease ml-2 transform font-bold text-neutral-100 transition-opacity ${isMaximized ? "hidden opacity-0 md:block md:opacity-100" : "hidden opacity-0"}`}
           >
             Dashboard
           </h1>
@@ -39,7 +38,7 @@ export default function StudentSidebar() {
         <section className="min-w-full border-b-2 border-blue-300 py-4">
           <ul className="space-y-4">
             {sidebarLinks.map((sideLink, index) => {
-              const IconComponent = sideLink.icon;
+              const IconComponent = sideLink.icon
 
               return (
                 <li
@@ -50,15 +49,13 @@ export default function StudentSidebar() {
                     <IconComponent className="h-auto w-6" aria-hidden="true" />
 
                     <span
-                      className={`duration-400 ease ml-2 transform text-xs transition-opacity ${
-                        isMaximized ? "hidden opacity-0 md:block md:opacity-100" : "hidden opacity-0"
-                      }`}
+                      className={`duration-400 ease ml-2 transform text-xs transition-opacity ${isMaximized ? "hidden opacity-0 md:block md:opacity-100" : "hidden opacity-0"}`}
                     >
                       {sideLink.text}
                     </span>
                   </Link>
                 </li>
-              );
+              )
             })}
           </ul>
         </section>
@@ -69,14 +66,12 @@ export default function StudentSidebar() {
         >
           <ArrowRightOnRectangleIcon className="h-auto w-6" />
           <span
-            className={`duration-400 ease ml-2 transform text-xs transition-opacity ${
-              isMaximized ? "hidden opacity-0 md:block md:opacity-100" : "hidden opacity-0"
-            }`}
+            className={`duration-400 ease ml-2 transform text-xs transition-opacity ${isMaximized ? "hidden opacity-0 md:block md:opacity-100" : "hidden opacity-0"}`}
           >
             Logout
           </span>
         </button>
       </nav>
     </aside>
-  );
+  )
 }
