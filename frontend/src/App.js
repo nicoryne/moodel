@@ -12,6 +12,7 @@ import SignUpPage from "./pages/signup"
 import StudentProfilePage from "./pages/student/student-profile"
 import StudentLayout from "./pages/student/student-layout"
 import StudentCourses from "./pages/student/student-layout"
+import AboutPage from "./pages/about"
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           {/* Navbar Routes */}
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
           </Route>
 
           {/* Non-navbar Routes */}

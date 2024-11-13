@@ -14,7 +14,7 @@ export default function HomePage() {
         <div className="relative z-10 flex h-full w-full flex-col place-items-center justify-center space-y-8 p-8">
           <div className="text-center relative">
             {/* Adjust positioning for the image */}
-            <img className="mx-auto -mb- w-32 h-auto" src={logo} alt="Logo" />
+            <img className="mx-auto -mb-10 w-32 h-auto" src={logo} alt="Logo" />
             <h1 className="text-6xl font-black text-blue-400">Moodel</h1>
             <p className="text-neutral-400">An easy project and document management system for students and teachers</p>
           </div>
