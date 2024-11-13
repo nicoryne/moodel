@@ -3,11 +3,8 @@ package com.g1appdev.Moodel.entity.student;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.g1appdev.Moodel.entity.submissions.IndividualSubmissions;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,11 +34,11 @@ public class Student {
     private String address;
     private Date createdAt;
 
-    @OneToMany(mappedBy="student")
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("student")
     private Set<StudentCourseEnrollment> courseEnrollments = new HashSet<>();
 
-    @OneToMany(mappedBy="ownedByStudent", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "ownedByStudent", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("ownedByStudent")
     private Set<IndividualSubmissions> individualSubmissions = new HashSet<>();
 

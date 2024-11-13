@@ -1,12 +1,13 @@
 import React from "react"
 import { Outlet, useNavigate } from "react-router-dom"
 import { useAuth } from "../../middleware/AuthProvider"
-import TeacherSidebar from "../../components/Teacher/TeacherSidebar"
+import StudentSidebar from "../../components/Student/StudentSidebar"
 
-export default function TeacherLayout() {
+export default function StudentLayout() {
   const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
   console.log(isAuthenticated)
+
   React.useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login")
@@ -15,7 +16,7 @@ export default function TeacherLayout() {
 
   return (
     <div className="flex">
-      <TeacherSidebar />
+      <StudentSidebar />
 
       <main className="mt-16 w-full overflow-x-hidden p-8">
         <Outlet />

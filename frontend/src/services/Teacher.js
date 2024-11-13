@@ -36,7 +36,7 @@ async function teacherRegister(formData) {
 }
 
 async function teacherGetByEmail(email, token) {
-  let res = await fetch(`http://localhost:8080/api/teacher/getTeacherByEmail?email=${email}`, {
+  let res = await fetch(`http://localhost:8080/api/teacher/getByEmail?email=${email}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,

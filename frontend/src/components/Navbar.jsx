@@ -2,7 +2,7 @@ import React from "react"
 import { motion } from "framer-motion"
 
 import { Link } from "react-router-dom"
-import logo from "../assets/logo192.png"
+import logo from "../assets/moodel logo.png"
 import { Bars4Icon } from "@heroicons/react/20/solid"
 import { MotionComponent } from "./MotionComponent"
 

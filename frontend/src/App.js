@@ -10,6 +10,8 @@ import { AuthProvider } from "./middleware/AuthProvider"
 import PrivateRoutes from "./middleware/ProtectedRoutes"
 import SignUpPage from "./pages/signup"
 import StudentProfilePage from "./pages/student/student-profile"
+import StudentLayout from "./pages/student/student-layout"
+import StudentCourses from "./pages/student/student-layout"
 
 function App() {
   return (
@@ -30,8 +32,8 @@ function App() {
           {/* Private Routes */}
           <Route element={<PrivateRoutes />}>
             {/* Student Routes */}
-            <Route path="/student" element = {<StudentDashboard />}>
-              <Route path="/student/dashboard" element = {<StudentDashboard />} />
+            <Route path="/student" element={<StudentLayout />}>
+              <Route path="/student/courses" element={<StudentCourses />} />
               <Route path="/student/profile" element={<StudentProfilePage />} />
             </Route>
 
