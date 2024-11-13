@@ -2,12 +2,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import HomePage from "./pages/home"
 import Layout from "./pages/layout"
 import StudentDashboard from "./pages/student/student-dashboard"
+import StudentProfile from "./pages/student/student-profile"
 import TeacherLayout from "./pages/teacher/teacher-layout"
 import TeacherCourses from "./pages/teacher/teacher-courses"
 import LoginPage from "./pages/login"
 import { AuthProvider } from "./middleware/AuthProvider"
 import PrivateRoutes from "./middleware/ProtectedRoutes"
 import SignUpPage from "./pages/signup"
+import StudentProfilePage from "./pages/student/student-profile"
 
 function App() {
   return (
@@ -29,7 +31,8 @@ function App() {
           <Route element={<PrivateRoutes />}>
             {/* Student Routes */}
             <Route path="/student" element = {<StudentDashboard />}>
-              <Route path="/student/home" element={<StudentDashboard />} />
+              <Route path="/student/dashboard" element = {<StudentDashboard />} />
+              <Route path="/student/profile" element={<StudentProfilePage />} />
             </Route>
 
             {/* Teacher Routes */}

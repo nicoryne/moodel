@@ -34,5 +34,28 @@ async function studentLogin(formData) {
     return data;
   }
   
+  export async function fetchStudentProfile() {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('🔴 ERROR: No authentication token found.');
+    }
+  
+    const response = await fetch('/api/student/getByEmail', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+  
+    if (!response.ok) {
+      throw new Error(`🔴 ERROR: Request failed with status ${response.status}`);
+    }
+  
+    const data = await response.json();
+    return data;
+  }
+  
+
   export { studentLogin, studentRegister };
   
