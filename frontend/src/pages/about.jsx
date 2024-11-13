@@ -45,7 +45,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-blue-100 to-blue-50 opacity-70"></div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center space-y-12 py-16 px-8">
+        <div className="relative z-10 flex flex-col items-center justify-center space-y-12 py-16 px-8 max-h-full overflow-y-auto">
           <img className="mx-auto w-32 h-auto -mb-10" src={logo} alt="Logo" />
           <h1 className="text-5xl font-bold text-blue-400">About Moodel</h1>
           <p className="text-lg text-center text-neutral-600 max-w-4xl">
@@ -82,7 +82,7 @@ export default function AboutPage() {
 
         {/* Team Section */}
     <section className="relative min-h-screen w-full bg-blue-50 py-16 px-8">
-        <div className="relative z-10 flex flex-col items-center space-y-12">
+        <div className="relative z-10 flex flex-col items-center space-y-12 overflow-y-auto">
             <h2 className="text-4xl font-bold text-blue-400">Meet the Team</h2>
             <div className="flex space-x-4 overflow-x-auto">
             {/* Team Members */}
