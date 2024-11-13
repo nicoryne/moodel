@@ -3,6 +3,7 @@ import HomePage from "./pages/home"
 import Layout from "./pages/layout"
 import StudentDashboard from "./pages/student/student-dashboard"
 import StudentProfile from "./pages/student/student-profile"
+import StudentLayout from "./pages/student/student-layout"
 import TeacherLayout from "./pages/teacher/teacher-layout"
 import TeacherProfile from "./pages/teacher/teacher-profile"
 import AdminLayout from "./pages/admin/admin-layout"
@@ -41,7 +42,7 @@ function App() {
           {/* Private Routes */}
           <Route element={<PrivateRoutes />}>
             {/* Student Routes */}
-            <Route path="/student" element={<StudentDashboard />}>
+            <Route path="/student" element={<StudentLayout />}>
               <Route path="/student/dashboard" element={<StudentDashboard />} />
               <Route path="/student/profile" element={<StudentProfilePage />} />
             </Route>
