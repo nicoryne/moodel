@@ -2,7 +2,8 @@ import React from "react"
 import { motion } from "framer-motion"
 
 import { Link } from "react-router-dom"
-import logo from "../assets/moodel logo.png"
+import dark_logo from "../assets/moodel-logo-dark.png"
+import light_logo from "../assets/moodel-logo-light.png"
 import { Bars4Icon } from "@heroicons/react/20/solid"
 import { MotionComponent } from "./MotionComponent"
 
@@ -42,7 +43,7 @@ export default function Navbar() {
       <section className="mx-auto flex h-full w-full place-items-center justify-between px-4 md:w-[800px]">
         <div className="flex place-items-center space-x-8">
           {/* Image Logo */}
-          <img src={logo} className="h-auto w-8" alt="Moodel Logo" />
+          <img src={!isScrolled ? dark_logo : light_logo} className="h-auto w-8" alt="Moodel Logo" />
           {/* Desktop: Nav Links */}
           <nav className="hidden md:block">
             <ul className="flex space-x-4">

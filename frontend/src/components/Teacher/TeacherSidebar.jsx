@@ -2,7 +2,7 @@ import React from "react"
 import { TableCellsIcon, UserIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline"
 import { useAuth } from "../../middleware/AuthProvider"
 import { Link } from "react-router-dom"
-import logo from "../../assets/moodel logo.png"
+import light_logo from "../../assets/moodel-logo-light.png"
 
 const sidebarLinks = [
   { text: "Profile", href: "/teacher/profile", icon: UserIcon },
@@ -25,7 +25,7 @@ export default function TeacherSidebar() {
       <nav className="flex h-full min-w-full flex-col place-items-start space-y-4">
         {/* Header */}
         <Link to="/teacher" className="ml-3 mt-4 flex place-items-center">
-          <img className="h-auto w-10" src={logo} alt="Logo" />
+          <img className="h-auto w-10" src={light_logo} alt="Logo" />
           <h1
             className={`duration-400 ease ml-2 transform font-bold text-neutral-100 transition-opacity ${isMaximized ? "hidden opacity-0 md:block md:opacity-100" : "hidden opacity-0"}`}
           >

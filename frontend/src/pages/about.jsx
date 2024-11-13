@@ -1,42 +1,42 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import logo from "../assets/moodel logo.png";
-import BrettImage from "../assets/Brett.jpg";
-import RigelImage from "../assets/Rigel.jpg";
-import MargaImage from "../assets/Marga.jpg";
-import PorterImage from "../assets/Porter.jpg";
-import GabeImage from "../assets/Gabe.jpg";
-import { MotionComponent } from "../components/MotionComponent";
+import React from "react"
+import { Link } from "react-router-dom"
+import dark_logo from "../assets/moodel-logo-dark.png"
+import BrettImage from "../assets/Brett.jpg"
+import RigelImage from "../assets/Rigel.jpg"
+import MargaImage from "../assets/Marga.jpg"
+import PorterImage from "../assets/Porter.jpg"
+import GabeImage from "../assets/Gabe.jpg"
+import { MotionComponent } from "../components/MotionComponent"
 
 export default function AboutPage() {
   // Array of team members with their names, image URLs, and roles
   const teamMembers = [
     {
-      name: 'Brett Arda',
+      name: "Brett Arda",
       image: BrettImage,
-      role: 'Hipster'
+      role: "Hipster",
     },
     {
-      name: 'Rigel Baltazar',
+      name: "Rigel Baltazar",
       image: RigelImage,
-      role: 'Coder'
+      role: "Coder",
     },
     {
-      name: 'Margaret Matunog',
+      name: "Margaret Matunog",
       image: MargaImage,
-      role: 'Designer'
+      role: "Designer",
     },
     {
-      name: 'Nicolo Porter',
+      name: "Nicolo Porter",
       image: PorterImage,
-      role: 'Hacker'
+      role: "Hacker",
     },
     {
-      name: 'Gabe San Diego',
+      name: "Gabe San Diego",
       image: GabeImage,
-      role: 'Hustler'
-    }
-  ];
+      role: "Hustler",
+    },
+  ]
 
   return (
     <>
@@ -45,25 +45,29 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-blue-100 to-blue-50 opacity-70"></div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center space-y-12 py-16 px-8 max-h-full overflow-y-auto">
-          <img className="mx-auto w-32 h-auto -mb-10" src={logo} alt="Logo" />
+        <div className="relative z-10 flex max-h-full flex-col items-center justify-center space-y-12 overflow-y-auto px-8 py-16">
+          <img className="mx-auto -mb-10 h-auto w-32" src={dark_logo} alt="Logo" />
           <h1 className="text-5xl font-bold text-blue-400">About Moodel</h1>
-          <p className="text-lg text-center text-neutral-600 max-w-4xl">
-            Moodel is a project and document management platform specifically tailored for students and teachers. Our mission is to simplify and streamline the educational process by offering user-friendly tools for organization, collaboration, and productivity.
+          <p className="max-w-4xl text-center text-lg text-neutral-600">
+            Moodel is a project and document management platform specifically tailored for students and teachers. Our
+            mission is to simplify and streamline the educational process by offering user-friendly tools for
+            organization, collaboration, and productivity.
           </p>
 
           <div className="flex flex-wrap justify-center gap-8 pt-12">
-            <div className="w-full md:w-1/3 p-6 bg-white shadow-lg rounded-lg transition-transform transform hover:scale-105">
-              <h2 className="text-2xl font-semibold text-blue-400 mb-4">Our Vision</h2>
+            <div className="w-full transform rounded-lg bg-white p-6 shadow-lg transition-transform hover:scale-105 md:w-1/3">
+              <h2 className="mb-4 text-2xl font-semibold text-blue-400">Our Vision</h2>
               <p className="text-neutral-600">
-                To revolutionize how students and educators interact, making learning and teaching more efficient, accessible, and engaging.
+                To revolutionize how students and educators interact, making learning and teaching more efficient,
+                accessible, and engaging.
               </p>
             </div>
-    
-            <div className="w-full md:w-1/3 p-6 bg-white shadow-lg rounded-lg transition-transform transform hover:scale-105">
-              <h2 className="text-2xl font-semibold text-blue-400 mb-4">Our Mission</h2>
+
+            <div className="w-full transform rounded-lg bg-white p-6 shadow-lg transition-transform hover:scale-105 md:w-1/3">
+              <h2 className="mb-4 text-2xl font-semibold text-blue-400">Our Mission</h2>
               <p className="text-neutral-600">
-                Providing intuitive solutions that bridge the gap between academic challenges and technology, fostering collaboration and success in the academic world.
+                Providing intuitive solutions that bridge the gap between academic challenges and technology, fostering
+                collaboration and success in the academic world.
               </p>
             </div>
           </div>
@@ -80,30 +84,30 @@ export default function AboutPage() {
         </div>
       </section>
 
-        {/* Team Section */}
-    <section className="relative min-h-screen w-full bg-blue-50 py-16 px-8">
+      {/* Team Section */}
+      <section className="relative min-h-screen w-full bg-blue-50 px-8 py-16">
         <div className="relative z-10 flex flex-col items-center space-y-12 overflow-y-auto">
-            <h2 className="text-4xl font-bold text-blue-400">Meet the Team</h2>
-            <div className="flex space-x-4 overflow-x-auto">
+          <h2 className="text-4xl font-bold text-blue-400">Meet the Team</h2>
+          <div className="flex space-x-4 overflow-x-auto">
             {/* Team Members */}
             {teamMembers.map((member, index) => (
-                <div
+              <div
                 key={index}
-                className="bg-white p-4 shadow-lg rounded-lg flex-none"
-                style={{ minWidth: '220px', maxWidth: '220px', minHeight: '230px' }}
-                >
+                className="flex-none rounded-lg bg-white p-4 shadow-lg"
+                style={{ minWidth: "220px", maxWidth: "220px", minHeight: "230px" }}
+              >
                 <img
-                    src={member.image}
-                    alt={`${member.name}`}
-                    className="w-32 h-32 mx-auto rounded-full mb-4 object-cover"
+                  src={member.image}
+                  alt={`${member.name}`}
+                  className="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
                 />
-                <h3 className="text-lg font-bold text-center">{member.name}</h3>
-                <p className="text-neutral-600 text-center">{member.role}</p>
-                </div>
+                <h3 className="text-center text-lg font-bold">{member.name}</h3>
+                <p className="text-center text-neutral-600">{member.role}</p>
+              </div>
             ))}
-            </div>
+          </div>
         </div>
-    </section>
+      </section>
     </>
-  );
+  )
 }

@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.g1appdev.Moodel.entity.admin.Admin;
-import com.g1appdev.Moodel.entity.teacher.Teacher;
 import com.g1appdev.Moodel.security.entities.AuthRequest;
 import com.g1appdev.Moodel.service.admin.AdminService;
 

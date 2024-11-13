@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import logo from "../assets/moodel logo.png";
-import { MotionComponent } from "../components/MotionComponent";
+import React from "react"
+import { Link } from "react-router-dom"
+import dark_logo from "../assets/moodel-logo-dark.png"
+import { MotionComponent } from "../components/MotionComponent"
 
 export default function ContactPage() {
   return (
@@ -11,38 +11,38 @@ export default function ContactPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-blue-100 to-blue-50 opacity-70"></div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center space-y-12 py-16 px-8">
-          <img className="mx-auto w-32 h-auto -mb-10" src={logo} alt="Logo" />
+        <div className="relative z-10 flex flex-col items-center justify-center space-y-12 px-8 py-16">
+          <img className="mx-auto -mb-10 h-auto w-32" src={dark_logo} alt="Logo" />
           <h1 className="text-5xl font-bold text-blue-400">Contact Us</h1>
-          <p className="text-lg text-center text-neutral-600 max-w-4xl">
+          <p className="max-w-4xl text-center text-lg text-neutral-600">
             We value your feedback and are always happy to hear from you! Feel free to reach out with any questions.
           </p>
 
           {/* Contact Form */}
-          <form className="w-full max-w-md bg-white p-8 shadow-lg rounded-lg space-y-6">
+          <form className="w-full max-w-md space-y-6 rounded-lg bg-white p-8 shadow-lg">
             <div className="flex flex-col space-y-2">
-              <label className="text-blue-400 font-semibold">Name</label>
+              <label className="font-semibold text-blue-400">Name</label>
               <input
                 type="text"
                 placeholder="Your name"
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
 
             <div className="flex flex-col space-y-2">
-              <label className="text-blue-400 font-semibold">Email</label>
+              <label className="font-semibold text-blue-400">Email</label>
               <input
                 type="email"
                 placeholder="Your email"
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
 
             <div className="flex flex-col space-y-2">
-              <label className="text-blue-400 font-semibold">Message</label>
+              <label className="font-semibold text-blue-400">Message</label>
               <textarea
                 placeholder="Your message"
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 rows="5"
               ></textarea>
             </div>
@@ -50,7 +50,7 @@ export default function ContactPage() {
             <MotionComponent
               as="button"
               type="submit"
-              className="w-full rounded-md bg-blue-400 px-4 py-2 text-white font-bold shadow hover:bg-blue-500"
+              className="w-full rounded-md bg-blue-400 px-4 py-2 font-bold text-white shadow hover:bg-blue-500"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -62,7 +62,7 @@ export default function ContactPage() {
           <MotionComponent
             as={Link}
             to="/"
-            className="mt-4 text-blue-400 hover:text-blue-500 font-bold"
+            className="mt-4 font-bold text-blue-400 hover:text-blue-500"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -71,5 +71,5 @@ export default function ContactPage() {
         </div>
       </section>
     </>
-  );
+  )
 }
