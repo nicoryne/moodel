@@ -1,15 +1,22 @@
 import React from "react"
-import { TableCellsIcon, UserIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline"
+import {
+  TableCellsIcon,
+  UserIcon,
+  ArrowRightStartOnRectangleIcon,
+  BriefcaseIcon,
+  AcademicCapIcon,
+} from "@heroicons/react/24/outline"
 import { useAuth } from "../../middleware/AuthProvider"
 import { Link } from "react-router-dom"
 import logo from "../../assets/logo192.png"
 
 const sidebarLinks = [
-  { text: "Profile", href: "/teacher/profile", icon: UserIcon },
-  { text: "Courses", href: "/teacher/courses", icon: TableCellsIcon },
+  { text: "Courses", href: "/admin/courses", icon: TableCellsIcon },
+  { text: "Teachers", href: "/admin/teachers", icon: BriefcaseIcon },
+  { text: "Students", href: "/admin/students", icon: AcademicCapIcon },
 ]
 
-export default function TeacherSidebar() {
+export default function AdminSidebar() {
   const { removeAuth } = useAuth()
   const [isMaximized, setIsMaximized] = React.useState(false)
 

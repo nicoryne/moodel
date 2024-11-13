@@ -27,9 +27,8 @@ export default function TeacherCoursesClient() {
       }
 
       setTeacherDetails(teacherDetails)
-      console.log(teacherDetails)
     }
-  }, [isAuthenticated, navigate, user])
+  }, [isAuthenticated, navigate, user, teacherDetails])
 
   return (
     <>

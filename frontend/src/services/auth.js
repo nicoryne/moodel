@@ -1,44 +1,54 @@
-import { teacherRegister, teacherLogin } from "./Teacher";
-import { studentRegister, studentLogin } from "./Student";
-import { getAge } from "../lib/utils/getAge";
+import * as AuthServices from "./index"
+import { getAge } from "../lib/utils/getAge"
 
 async function login(email, password, roleType) {
-  let loginToken = null;
+  let loginToken = null
 
   switch (roleType) {
     case "teacher":
-      const teacherPrefix = ".nC1G`89;y.";
-      let teacherUsername = teacherPrefix.concat(email);
+      const teacherPrefix = ".nC1G`89;y."
+      let teacherUsername = teacherPrefix.concat(email)
 
       let teacherFormData = {
         username: teacherUsername,
         password: password,
-      };
+      }
 
-      loginToken = await teacherLogin(teacherFormData);
-      break;
+      loginToken = await AuthServices.teacherLogin(teacherFormData)
+      break
 
     case "student":
-      const studentPrefix = ".uQY0b28$m.";
-      let studentUsername = studentPrefix.concat(email);
+      const studentPrefix = ".uQY0b28$m."
+      let studentUsername = studentPrefix.concat(email)
 
       let studentFormData = {
         username: studentUsername,
         password: password,
-      };
+      }
 
-      loginToken = await studentLogin(studentFormData);
-      break;
+      loginToken = await AuthServices.studentLogin(studentFormData)
+      break
 
+    case "admin":
+      const adminPrefix = ".W4bPM0:2Hk."
+      let adminUsername = adminPrefix.concat(email)
+
+      let adminFormData = {
+        username: adminUsername,
+        password: password,
+      }
+
+      loginToken = await AuthServices.adminLogin(adminFormData)
+      break
     default:
-      throw new Error("🔴 ERROR: Invalid role type.");
+      throw new Error("🔴 ERROR: Invalid role type.")
   }
 
-  return loginToken;
+  return loginToken
 }
 
 async function signup(email, password, roleType, fname, lname, birthdate) {
-  let data = null;
+  let data = null
 
   switch (roleType) {
     case "teacher":
@@ -51,11 +61,11 @@ async function signup(email, password, roleType, fname, lname, birthdate) {
         email: email,
         address: "",
         phoneNumber: "",
-        hireDate: new Date().toLocaleDateString("en-CA"),
-      };
+        createdAt: new Date().toLocaleDateString("en-CA"),
+      }
 
-      data = await teacherRegister(teacherFormData);
-      break;
+      data = await AuthServices.teacherRegister(teacherFormData)
+      break
 
     case "student":
       let studentFormData = {
@@ -67,21 +77,21 @@ async function signup(email, password, roleType, fname, lname, birthdate) {
         email: email,
         address: "",
         phoneNumber: "",
-        enrollmentDate: new Date().toLocaleDateString("en-CA"),
-      };
+        createdAt: new Date().toLocaleDateString("en-CA"),
+      }
 
-      data = await studentRegister(studentFormData);
-      break;
+      data = await AuthServices.studentRegister(studentFormData)
+      break
 
     default:
-      throw new Error("🔴 ERROR: Invalid role type.");
+      throw new Error("🔴 ERROR: Invalid role type.")
   }
 
   if (!data) {
-    throw new Error("🔴 ERROR: Failed to register.");
+    throw new Error("🔴 ERROR: Failed to register.")
   }
 
-  return data;
+  return data
 }
 
-export { login, signup };
+export { login, signup }

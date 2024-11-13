@@ -1,5 +1,5 @@
 import React from "react"
-import { teacherGetByEmail } from "../services/Teacher"
+import * as AuthServices from "../services/index"
 
 const AuthContext = React.createContext()
 
@@ -12,10 +12,16 @@ export const AuthProvider = ({ children }) => {
 
     switch (role) {
       case "teacher":
-        let teacher = await teacherGetByEmail(username, userToken)
+        let teacher = await AuthServices.teacherGetByEmail(username, userToken)
         setUser(teacher)
         break
       case "student":
+        let student = await AuthServices.studentGetByEmail(username, userToken)
+        setUser(student)
+        break
+      case "admin":
+        let admin = await AuthServices.adminGetByEmail(username, userToken)
+        setUser(admin)
         break
       default:
         throw new Error("🔴 ERROR: Invalid role type.")
@@ -29,7 +35,11 @@ export const AuthProvider = ({ children }) => {
 
   const isAuthenticated = !!token
 
-  return <AuthContext.Provider value={{ isAuthenticated, setAuth, removeAuth, user }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, setAuth, removeAuth, user, token }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
 
 export const useAuth = () => {
