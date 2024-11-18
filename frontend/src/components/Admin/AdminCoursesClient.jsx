@@ -7,7 +7,7 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid"
 export default function AdminCoursesClient() {
   const navigate = useNavigate()
   const [coursesList, setCoursesList] = React.useState([])
-  const { user, token, isAuthenticated } = useAuth()
+  const { cookies, isAuthenticated } = useAuth()
 
   const headers = [
     { name: "Title", key: "title" },
@@ -21,7 +21,7 @@ export default function AdminCoursesClient() {
   React.useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const courses = await getAllCourses(token)
+        const courses = await getAllCourses(cookies.token)
         setCoursesList(courses)
       } catch (error) {
         console.log(error)
@@ -29,7 +29,7 @@ export default function AdminCoursesClient() {
     }
 
     fetchCourses()
-  }, [token])
+  }, [cookies])
 
   const handleDelete = (courseId) => {
     // TODO: delete

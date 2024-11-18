@@ -1,27 +1,27 @@
 import React from "react"
 import * as AuthServices from "../services/index"
+import { useCookies } from 'react-cookie';
 
 const AuthContext = React.createContext()
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = React.useState(null)
-  const [user, setUser] = React.useState(null)
+  const [cookies, setCookies, removeCookie] = useCookies(['user'], ['token']);
 
   const setAuth = async (userToken, username, role) => {
-    setToken(userToken)
+    setCookies('token', userToken)
 
     switch (role) {
       case "teacher":
         let teacher = await AuthServices.teacherGetByEmail(username, userToken)
-        setUser(teacher)
+        setCookies('user', teacher)
         break
       case "student":
         let student = await AuthServices.studentGetByEmail(username, userToken)
-        setUser(student)
+        setCookies('user', student)
         break
       case "admin":
         let admin = await AuthServices.adminGetByEmail(username, userToken)
-        setUser(admin)
+        setCookies('user', admin)
         break
       default:
         throw new Error("🔴 ERROR: Invalid role type.")
@@ -29,15 +29,14 @@ export const AuthProvider = ({ children }) => {
   }
 
   const removeAuth = () => {
-    setToken(null)
-    localStorage.removeItem('token')
-    setUser(null)
+    removeCookie('user')
+    removeCookie('token')
   }
 
-  const isAuthenticated = !!token
+  const isAuthenticated = !!cookies.token
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setAuth, removeAuth, user, token }}>
+    <AuthContext.Provider value={{ isAuthenticated, cookies, removeAuth, setAuth }}>
       {children}
     </AuthContext.Provider>
   )

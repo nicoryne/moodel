@@ -109,9 +109,13 @@ async function updateTeacher(formData) {
   return data
 }
 
-async function teacherDeleteById(id) {
+async function teacherDeleteById(id, token) {
   const res = await fetch(`http://localhost:8080/api/teacher/delete?id=${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
   })
 
   if (!res.ok) {
