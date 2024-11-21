@@ -5,6 +5,8 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.g1appdev.Moodel.entity.course.Course;
+import com.g1appdev.Moodel.entity.project.Projects;
 import com.g1appdev.Moodel.entity.submissions.GroupSubmissions;
 
 import jakarta.persistence.CascadeType;
@@ -12,6 +14,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -29,13 +33,16 @@ public class Group {
     @JsonIgnoreProperties("ownedByGroup")
     private Set<GroupSubmissions> groupSubmissions = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name="project_id", referencedColumnName = "projectId")
+    private Projects groupProject;
+
     public Group() {}
 
     public Group(int groupId, int groupNumber) {
         this.groupId = groupId;
         this.groupNumber = groupNumber;
     }
-
 
     public int getGroupId() {
         return this.groupId;
@@ -59,5 +66,13 @@ public class Group {
 
     public void setGroupSubmissions(Set<GroupSubmissions> groupSubmissions) {
         this.groupSubmissions = groupSubmissions;
+    }
+
+    public Projects getGroupProject() {
+        return this.groupProject;
+    }
+
+    public void setGroupProject(Projects project) {
+        this.groupProject = project;
     }
 }

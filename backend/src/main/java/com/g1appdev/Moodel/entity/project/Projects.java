@@ -44,6 +44,10 @@ public class Projects {
     @JsonIgnoreProperties("assignedToProject")
     private Set<Submissions> submissions = new HashSet<>();
 
+    @OneToMany(mappedBy = "groupProject", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("groupProject")
+    private Set<Group> groups = new HashSet<>();
+
     public Projects() {}
 
     public Projects(Course course, String description, boolean isActive, boolean isGroupProject, int projectId, Date submissionDeadline, String title, int totalPoints) {
@@ -120,4 +124,8 @@ public class Projects {
     public Set<Submissions> getSubmissions() {
         return submissions;
     }
-}
+
+    public Set<Group> getGroups() {
+        return this.groups;
+    }
+ }
