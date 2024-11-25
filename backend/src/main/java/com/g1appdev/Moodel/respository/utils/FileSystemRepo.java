@@ -25,7 +25,7 @@ public class FileSystemRepo {
             
     }
 
-    FileSystemResource findInFileSystem(String location) {
+    public FileSystemResource findInFileSystem(String location) {
         try {
             return new FileSystemResource(Paths.get(location));
         } catch (Exception e) {

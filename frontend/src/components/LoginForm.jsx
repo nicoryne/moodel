@@ -32,7 +32,6 @@ export default function LoginForm() {
     try {
       let loginToken = await login(email, password, role);
       if (loginToken) {
-        localStorage.setItem('authToken', loginToken);
         setAuth(loginToken, email, role);
         navigate(`/${role}`);
       }
