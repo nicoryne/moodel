@@ -25,20 +25,20 @@ export default function LoginForm() {
 
   const handleLogin = async () => {
     if (!email || !password || !role) {
-      setError("All fields are required.");
-      return;
+      setError("All fields are required.")
+      return
     }
-  
+
     try {
-      let loginToken = await login(email, password, role);
+      let loginToken = await login(email, password, role)
       if (loginToken) {
-        setAuth(loginToken, email, role);
-        navigate(`/${role}`);
+        setAuth(loginToken, email, role)
+        navigate(`/${role}`)
       }
     } catch (error) {
-      setError(error.message || "Login failed. Please try again.");
+      setError(error.message || "Login failed. Please try again.")
     }
-  };
+  }
 
   return (
     <section className="mx-auto h-fit rounded-md border-2 border-blue-400 bg-white p-8 text-[#212121] shadow-md md:w-96">

@@ -1,24 +1,27 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import HomePage from "./pages/home"
+import { AuthProvider } from "./middleware/AuthProvider"
+
+import Landing from "./pages/landing"
 import Layout from "./pages/layout"
-import StudentDashboard from "./pages/student/student-dashboard"
-import StudentProfile from "./pages/student/student-profile"
+import LoginPage from "./pages/login"
+import SignUpPage from "./pages/signup"
+import Unauthorized from "./pages/unauthorized"
+
+import StudentCourses from "./pages/student/student-courses"
 import StudentLayout from "./pages/student/student-layout"
+import StudentProfilePage from "./pages/student/student-profile"
+
 import TeacherLayout from "./pages/teacher/teacher-layout"
 import TeacherProfile from "./pages/teacher/teacher-profile"
+import TeacherCourses from "./pages/teacher/teacher-courses"
+
 import AdminLayout from "./pages/admin/admin-layout"
 import AdminTeachers from "./pages/admin/admin-teachers"
 import AdminStudents from "./pages/admin/admin-students"
-import TeacherCourses from "./pages/teacher/teacher-courses"
-import AboutPage from "./pages/about"
-import ContactPage from "./pages/contact"
-import LoginPage from "./pages/login"
-import { AuthProvider } from "./middleware/AuthProvider"
-import PrivateRoutes from "./middleware/ProtectedRoutes"
-import SignUpPage from "./pages/signup"
-import StudentProfilePage from "./pages/student/student-profile"
 import AdminLoginPage from "./pages/admin-login"
 import AdminCourses from "./pages/admin/admin-courses"
+
+import PrivateRoutes from "./middleware/ProtectedRoutes"
 
 function App() {
   return (
@@ -27,9 +30,7 @@ function App() {
         <Routes>
           {/* Navbar Routes */}
           <Route path="/" element={<Layout />}>
-            <Route index element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
+            <Route index element={<Landing />} />
           </Route>
 
           {/* Non-navbar Routes */}
@@ -37,27 +38,32 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/admin-login" element={<AdminLoginPage />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
           </Route>
 
           {/* Private Routes */}
-          <Route element={<PrivateRoutes />}>
-            {/* Student Routes */}
+          {/* Student Routes */}
+          <Route element={<PrivateRoutes allowedRoles={["student"]} />}>
             <Route path="/student" element={<StudentLayout />}>
-              <Route path="/student/dashboard" element={<StudentDashboard />} />
-              <Route path="/student/profile" element={<StudentProfilePage />} />
+              <Route path="courses" element={<StudentCourses />} />
+              <Route path="profile" element={<StudentProfilePage />} />
             </Route>
+          </Route>
 
-            {/* Teacher Routes */}
+          {/* Teacher Routes */}
+          <Route element={<PrivateRoutes allowedRoles={["teacher"]} />}>
             <Route path="/teacher" element={<TeacherLayout />}>
-              <Route path="/teacher/courses" element={<TeacherCourses />} />
-              <Route path="/teacher/profile" element={<TeacherProfile />} />
+              <Route path="courses" element={<TeacherCourses />} />
+              <Route path="profile" element={<TeacherProfile />} />
             </Route>
+          </Route>
 
-            {/* Admin Routes */}
+          {/* Admin Routes */}
+          <Route element={<PrivateRoutes allowedRoles={["admin"]} />}>
             <Route path="/admin" element={<AdminLayout />}>
-              <Route path="/admin/teachers" element={<AdminTeachers />} />
-              <Route path="/admin/students" element={<AdminStudents />} />
-              <Route path="/admin/courses" element={<AdminCourses />} />
+              <Route path="teachers" element={<AdminTeachers />} />
+              <Route path="students" element={<AdminStudents />} />
+              <Route path="courses" element={<AdminCourses />} />
             </Route>
           </Route>
         </Routes>
