@@ -1,43 +1,75 @@
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./pages/layout";
-import Home from "./pages/home";
-import StudentDashboard from "./pages/student/student-dashboard";
-import TeacherDashboard from "./pages/teacher/teacher-dashboard";
-import Login from "./pages/login";
-import SignUp from "./pages/signup";
-import Test from "./pages/teacher/test";
-import { AuthProvider } from "./middleware/AuthProvider";
-import PrivateRoutes from "./middleware/ProtectedRoutes";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { AuthProvider } from "./middleware/AuthProvider"
+
+import Landing from "./pages/landing"
+import Layout from "./pages/layout"
+import LoginPage from "./pages/login"
+import SignUpPage from "./pages/signup"
+import Unauthorized from "./pages/unauthorized"
+
+import StudentCourses from "./pages/student/student-courses"
+import StudentLayout from "./pages/student/student-layout"
+import StudentProfilePage from "./pages/student/student-profile"
+
+import TeacherLayout from "./pages/teacher/teacher-layout"
+import TeacherProfile from "./pages/teacher/teacher-profile"
+import TeacherCourses from "./pages/teacher/teacher-courses"
+
+import AdminLayout from "./pages/admin/admin-layout"
+import AdminTeachers from "./pages/admin/admin-teachers"
+import AdminStudents from "./pages/admin/admin-students"
+import AdminLoginPage from "./pages/admin-login"
+import AdminCourses from "./pages/admin/admin-courses"
+
+import PrivateRoutes from "./middleware/ProtectedRoutes"
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          {/* General Routes */}
+          {/* Navbar Routes */}
           <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            {/* Student Routes */}
-            <Route path="/student">
-              <Route path="/student/home" element={<StudentDashboard />} />
-            </Route>
+            <Route index element={<Landing />} />
+          </Route>
 
-            {/* Teacher Routes */}
-            <Route path="/teacher">
-              <Route path="/teacher/home" element={<TeacherDashboard />} />
-              <Route path="/teacher/testConnection" element={<Test />} />
-            </Route>
+          {/* Non-navbar Routes */}
+          <Route>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/admin-login" element={<AdminLoginPage />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
           </Route>
 
           {/* Private Routes */}
-          <Route element={<PrivateRoutes />}></Route>
+          {/* Student Routes */}
+          <Route element={<PrivateRoutes allowedRoles={["student"]} />}>
+            <Route path="/student" element={<StudentLayout />}>
+              <Route path="courses" element={<StudentCourses />} />
+              <Route path="profile" element={<StudentProfilePage />} />
+            </Route>
+          </Route>
+
+          {/* Teacher Routes */}
+          <Route element={<PrivateRoutes allowedRoles={["teacher"]} />}>
+            <Route path="/teacher" element={<TeacherLayout />}>
+              <Route path="courses" element={<TeacherCourses />} />
+              <Route path="profile" element={<TeacherProfile />} />
+            </Route>
+          </Route>
+
+          {/* Admin Routes */}
+          <Route element={<PrivateRoutes allowedRoles={["admin"]} />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route path="teachers" element={<AdminTeachers />} />
+              <Route path="students" element={<AdminStudents />} />
+              <Route path="courses" element={<AdminCourses />} />
+            </Route>
+          </Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App

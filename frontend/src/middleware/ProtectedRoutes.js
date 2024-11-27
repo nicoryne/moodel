@@ -1,8 +1,17 @@
-import { Outlet, Navigate } from "react-router-dom";
-import { useAuth } from "./AuthProvider";
+import { Outlet, Navigate } from "react-router-dom"
+import { useAuth } from "./AuthProvider"
 
-export default function PrivateRoutes() {
-  const { isAuthenticated } = useAuth();
+export default function PrivateRoutes({ allowedRoles }) {
+  const { isAuthenticated, cookies } = useAuth()
+  const userRole = cookies.role
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />
+  }
+
+  if (allowedRoles && !allowedRoles.includes(userRole)) {
+    return <Navigate to="/unauthorized" />
+  }
+
+  return <Outlet />
 }
