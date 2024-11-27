@@ -5,8 +5,8 @@ import { Link } from "react-router-dom"
 import light_logo from "../../assets/moodel-logo-light.png"
 
 const sidebarLinks = [
-  { text: "Profile", href: "/teacher/profile", icon: UserIcon },
-  { text: "Courses", href: "/teacher/courses", icon: TableCellsIcon },
+  { text: "Profile", href: "/teacher/#profile", icon: UserIcon },
+  { text: "Courses", href: "/teacher/#courses", icon: TableCellsIcon },
 ]
 
 export default function TeacherSidebar() {
@@ -15,14 +15,14 @@ export default function TeacherSidebar() {
 
   return (
     <aside
-      className={`transition-width inset-y-0 left-0 z-50 h-screen border-r-2 border-blue-300 bg-blue-400 shadow-md duration-200 ${
+      className={`transition-width inset-y-0 left-0 z-50 min-h-screen border-r-2 border-blue-300 bg-blue-400 shadow-md duration-200 ${
         isMaximized ? "w-16 md:w-48" : "w-16"
       }`}
       onMouseEnter={() => setIsMaximized(true)}
       onMouseLeave={() => setIsMaximized(false)}
     >
       {/* Wrapper */}
-      <nav className="flex h-full min-w-full flex-col place-items-start space-y-4">
+      <nav className="flex h-full min-w-full flex-col place-items-start justify-center space-y-4 md:justify-start">
         {/* Header */}
         <Link to="/teacher" className="ml-3 mt-4 flex place-items-center">
           <img className="h-auto w-10" src={light_logo} alt="Logo" />

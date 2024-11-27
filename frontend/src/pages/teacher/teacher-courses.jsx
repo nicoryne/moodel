@@ -1,15 +1,17 @@
-import React, { useContext } from "react"
+import React from "react"
 import { TeacherContext } from "./teacher-layout"
 import { MotionComponent } from "../../components/MotionComponent"
 
 export default function TeacherCourses() {
-  const userDetails = useContext(TeacherContext)
+  const userDetails = React.useContext(TeacherContext)
 
   if (!userDetails) return <div>Loading...</div>
 
   return (
-    <>
-      <h1 className="mb-8 text-center text-4xl font-bold text-blue-400">My Courses</h1>
+    <section id="courses" className="space-y-8 p-8">
+      <header>
+        <h1 className="w-fit text-2xl font-bold text-blue-400">Your Courses</h1>
+      </header>
       {/* Displaying Courses */}
       {userDetails.courses && userDetails.courses.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -37,6 +39,6 @@ export default function TeacherCourses() {
       ) : (
         <p className="mt-6 text-center text-gray-600">No courses found.</p>
       )}
-    </>
+    </section>
   )
 }

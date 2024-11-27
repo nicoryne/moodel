@@ -2,6 +2,8 @@ import React from "react"
 import { Outlet, useNavigate } from "react-router-dom"
 import { useAuth } from "../../middleware/AuthProvider"
 import TeacherSidebar from "../../components/Teacher/TeacherSidebar"
+import TeacherProfile from "./teacher-profile"
+import TeacherCourses from "./teacher-courses"
 
 export const TeacherContext = React.createContext(null)
 
@@ -38,8 +40,9 @@ export default function TeacherLayout() {
     <TeacherContext.Provider value={userDetails}>
       <div className="flex">
         <TeacherSidebar />
-        <main className="mt-16 w-full overflow-x-hidden p-8">
-          <Outlet />
+        <main className="mt-16 w-full overflow-x-hidden">
+          <TeacherProfile />
+          <TeacherCourses />
         </main>
       </div>
     </TeacherContext.Provider>

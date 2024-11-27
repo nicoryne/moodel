@@ -1,11 +1,19 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { PencilSquareIcon } from "@heroicons/react/20/solid"
+import moodel_dark from "../../assets/moodel-logo-dark.png"
+import { PencilSquareIcon, UserCircleIcon, EnvelopeIcon, CakeIcon } from "@heroicons/react/20/solid"
 import { TeacherContext } from "./teacher-layout"
+import { motion } from "framer-motion"
 
 export default function TeacherProfile() {
   const navigate = useNavigate()
   const userDetails = React.useContext(TeacherContext)
+  const [isChanged, setChanged] = React.useState(false)
+
+  const [firstName, setFirstName] = React.useState(userDetails.fname)
+  const [lastName, setLastName] = React.useState(userDetails.lname)
+  const [email, setEmail] = React.useState(userDetails.email)
+  const [birthDate, setBirthDate] = React.useState(new Date(userDetails.birthdate).toLocaleDateString("en-CA"))
 
   const handleEditProfile = () => {
     navigate("/teacher/edit")
@@ -14,59 +22,111 @@ export default function TeacherProfile() {
   if (!userDetails) return <div>Loading...</div>
 
   return (
-    <div className="flex flex-col items-center py-10">
-      <h1 className="mb-8 text-center text-4xl font-bold text-blue-500">Teacher Profile</h1>
-      <div className="w-full max-w-lg rounded-lg border border-gray-200 bg-white p-6 shadow-lg">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            {userDetails.fname} {userDetails.lname}
-          </h2>
-          <button onClick={handleEditProfile} className="flex items-center text-blue-500 hover:text-blue-700">
-            <PencilSquareIcon className="mr-1 h-5 w-5" />
-            Edit Profile
-          </button>
-        </div>
-        <hr className="my-4" />
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-sm font-medium text-gray-500">Email</h3>
-            <p className="text-lg text-gray-700">{userDetails.email}</p>
+    <section id="profile" className="space-y-8 p-8">
+      <header>
+        <h1 className="w-fit text-2xl font-bold text-blue-400">Hello, {userDetails.fname}</h1>
+      </header>
+      <div className="rounded-lg border-2 border-blue-50 p-8 shadow-md md:place-items-start">
+        <form className="flex flex-col justify-between gap-8 md:flex-row md:place-items-start">
+          <div className="mx-auto h-auto w-64 rounded-full bg-blue-50 hover:cursor-pointer hover:opacity-20 md:mx-0">
+            <img src={moodel_dark} alt="Placeholder Profile" />
           </div>
-          <div>
-            <h3 className="text-sm font-medium text-gray-500">Phone</h3>
-            <p className="text-lg text-gray-700">{userDetails.phoneNumber}</p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Age</h3>
-              <p className="text-lg text-gray-700">{userDetails.age}</p>
+          <div className="mt-4 space-y-4 md:mt-2">
+            {/* Name Group */}
+            <div className="gap-8 space-y-4 md:flex md:space-y-0">
+              {/* First Name */}
+              <div>
+                <div className="flex border-b-2 border-blue-300 hover:border-blue-400">
+                  <UserCircleIcon className="h-auto w-8 fill-blue-400" />
+                  <input
+                    name="fname"
+                    id="fname"
+                    value={firstName}
+                    className="text-md border-none bg-transparent p-1 font-semibold text-neutral-500 outline-none ring-0 focus:ring-0"
+                    type="text"
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                </div>
+                <label for="fname" className="text-xs text-neutral-400">
+                  First Name
+                </label>
+              </div>
+              {/* Last Name */}
+              <div>
+                <div className="flex border-b-2 border-blue-300 hover:border-blue-400">
+                  <input
+                    name="lname"
+                    id="lname"
+                    value={lastName}
+                    className="text-md border-none bg-transparent p-1 font-semibold text-neutral-500 outline-none ring-0 focus:ring-0"
+                    type="text"
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </div>
+                <label for="lname" className="text-xs text-neutral-400">
+                  Last Name
+                </label>
+              </div>
             </div>
+            {/* Email */}
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Hire Date</h3>
-              <p className="text-lg text-gray-700">{new Date(userDetails.hireDate).toLocaleDateString()}</p>
+              <div className="flex border-b-2 border-blue-300 hover:border-blue-400">
+                <EnvelopeIcon className="h-auto w-8 fill-blue-400" />
+                <input
+                  name="email"
+                  id="email"
+                  value={email}
+                  className="text-md border-none bg-transparent p-1 font-semibold text-neutral-500 outline-none ring-0 focus:ring-0"
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <label for="email" className="text-xs text-neutral-400">
+                Email Address
+              </label>
             </div>
-          </div>
-          <div>
-            <h3 className="text-sm font-medium text-gray-500">Address</h3>
-            <p className="text-lg text-gray-700">{userDetails.address}</p>
-          </div>
-        </div>
-        <hr className="my-6" />
-        <div>
-          <h3 className="text-xl font-semibold text-gray-800">Courses Owned</h3>
-          <ul className="mt-2 list-inside list-disc text-gray-700">
-            {userDetails.courses && userDetails.courses.length > 0 ? (
-              userDetails.courses.map((course, index) => (
-                <li key={index} className="text-base">
-                  {course.title}
-                </li>
-              ))
-            ) : (
-              <li className="text-base">No courses assigned.</li>
+            {/* Birthdate */}
+            <div>
+              <div className="flex border-b-2 border-blue-300 hover:border-blue-400">
+                <CakeIcon className="h-auto w-8 fill-blue-400" />
+                <input
+                  name="birthdate"
+                  id="birthdate"
+                  value={birthDate}
+                  className="text-md border-none bg-transparent p-1 font-semibold text-neutral-500 outline-none ring-0 focus:ring-0"
+                  type="date"
+                  onChange={(e) => setBirthDate(e.target.value)}
+                />
+              </div>
+              <label for="birthdate" className="text-xs text-neutral-400">
+                Birthdate
+              </label>
+            </div>
+            {/* Buttons */}
+            {isChanged && (
+              <div className="flex gap-4">
+                <motion.button
+                  type="button"
+                  className="col-span-2 rounded-md bg-neutral-400 p-1 px-8 py-2 font-bold text-white"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  type="button"
+                  className="col-span-2 rounded-md bg-blue-400 px-16 py-2 font-bold text-white"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Update Details
+                </motion.button>
+              </div>
             )}
-          </ul>
-        </div>
+          </div>
+        </form>
+        <div></div>
       </div>
-    </div>
+    </section>
   )
 }
