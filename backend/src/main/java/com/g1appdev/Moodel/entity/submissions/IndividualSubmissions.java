@@ -24,9 +24,13 @@ public class IndividualSubmissions extends Submissions {
 
     public IndividualSubmissions() {}
 
-    public IndividualSubmissions(Date submissionDate, String feedback, String fileURL, String description, int accumulatedPoints, Student student, Projects project) {
-        super(submissionDate, feedback, fileURL, description, accumulatedPoints, project);
-        this.ownedByStudent = student;
+    public IndividualSubmissions(Student ownedByStudent) {
+        this.ownedByStudent = ownedByStudent;
+    }
+
+    public IndividualSubmissions(Student ownedByStudent, int accumulatedPoints, Projects assignedToProject, String description, String feedback, String fileURL, Date submissionDate, int submissionId) {
+        super(accumulatedPoints, assignedToProject, description, feedback, fileURL, submissionDate, submissionId);
+        this.ownedByStudent = ownedByStudent;
     }
 
     public Student getOwnedByStudent() {

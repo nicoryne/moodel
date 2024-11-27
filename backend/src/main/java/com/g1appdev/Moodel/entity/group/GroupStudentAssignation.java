@@ -41,7 +41,7 @@ public class GroupStudentAssignation {
     }
 
     public GroupStudentAssignationKey getGroupStudentId() {
-        return groupStudentId;
+        return this.groupStudentId;
     }
 
     public void setGroupStudentId(GroupStudentAssignationKey groupStudentId) {
@@ -49,7 +49,7 @@ public class GroupStudentAssignation {
     }
 
     public Student getStudent() {
-        return student;
+        return this.student;
     }
 
     public void setStudent(Student student) {
@@ -57,7 +57,7 @@ public class GroupStudentAssignation {
     }
 
     public Group getGroup() {
-        return group;
+        return this.group;
     }
 
     public void setGroup(Group group) {
@@ -65,7 +65,7 @@ public class GroupStudentAssignation {
     }
 
     public Date getAssignedDate() {
-        return assignedDate;
+        return this.assignedDate;
     }
 
     public void setAssignedDate(Date assignedDate) {

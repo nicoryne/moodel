@@ -3,9 +3,7 @@ package com.g1appdev.Moodel.entity.group;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.g1appdev.Moodel.entity.course.Course;
 import com.g1appdev.Moodel.entity.project.Projects;
 import com.g1appdev.Moodel.entity.submissions.GroupSubmissions;
 
@@ -39,9 +37,10 @@ public class Group {
 
     public Group() {}
 
-    public Group(int groupId, int groupNumber) {
+    public Group(int groupId, int groupNumber, Projects groupProject) {
         this.groupId = groupId;
         this.groupNumber = groupNumber;
+        this.groupProject = groupProject;
     }
 
     public int getGroupId() {

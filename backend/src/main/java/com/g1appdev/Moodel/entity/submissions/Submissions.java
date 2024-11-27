@@ -5,6 +5,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.g1appdev.Moodel.entity.project.Projects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,20 +33,20 @@ public class Submissions {
     private int accumulatedPoints;
 
     @ManyToOne
-    @MapsId("projectId")
     @JoinColumn(name = "project_id", referencedColumnName="projectId")
-    @JsonIgnoreProperties("submissions")
     private Projects assignedToProject;
 
     public Submissions() {}
 
-    public Submissions(Date submissionDate, String feedback, String fileURL, String description, int accumulatedPoints, Projects assignedToProject) {
-        this.submissionDate = submissionDate;
-        this.feedback = feedback;
-        this.fileURL = fileURL;
-        this.description = description;
+ 
+    public Submissions(int accumulatedPoints, Projects assignedToProject, String description, String feedback, String fileURL, Date submissionDate, int submissionId) {
         this.accumulatedPoints = accumulatedPoints;
         this.assignedToProject = assignedToProject;
+        this.description = description;
+        this.feedback = feedback;
+        this.fileURL = fileURL;
+        this.submissionDate = submissionDate;
+        this.submissionId = submissionId;
     }
 
 
@@ -92,4 +93,16 @@ public class Submissions {
     public void setAccumulatedPoints(int accumulatedPoints) {
         this.accumulatedPoints = accumulatedPoints;
     }    
+
+    public Projects getAssignedToProject() {
+        return this.assignedToProject;
+    }
+
+    public void setAssignedToProject(Projects assignedToProject) {
+        this.assignedToProject = assignedToProject;
+    }
+
+    public void setSubmissionId(int submissionId) {
+        this.submissionId = submissionId;
+    }
 }

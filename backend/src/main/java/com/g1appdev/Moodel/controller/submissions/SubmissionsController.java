@@ -6,7 +6,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.g1appdev.Moodel.entity.submissions.GroupSubmissions;
 import com.g1appdev.Moodel.entity.submissions.IndividualSubmissions;
@@ -39,11 +46,24 @@ public class SubmissionsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newSubmission);
     }
 
+    /*
     @PostMapping("/createGroup")
     public ResponseEntity<GroupSubmissions> createGroupSubmission(@RequestBody GroupSubmissions groupSubmission) {
         GroupSubmissions newGroupSubmission = sserv.createGroupSubmission(groupSubmission);
         return ResponseEntity.status(HttpStatus.CREATED).body(newGroupSubmission);
     }
+    */
+
+    @PostMapping("/createGroup")
+    public ResponseEntity<GroupSubmissions> createGroupSubmission(@RequestBody GroupSubmissions groupSubmission) {
+        if (groupSubmission.getAssignedToProject() == null || groupSubmission.getAssignedToProject().getProjectId() == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(null); // Respond with a clear error message if project data is missing.
+        }
+        GroupSubmissions savedSubmission = sserv.createGroupSubmission(groupSubmission);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedSubmission);
+    }
+
 
     @PostMapping("/createIndividual")
     public ResponseEntity<IndividualSubmissions> createIndividualSubmission(@RequestBody IndividualSubmissions individualSubmission) {

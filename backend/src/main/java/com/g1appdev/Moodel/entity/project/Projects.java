@@ -7,7 +7,6 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.g1appdev.Moodel.entity.course.Course;
 import com.g1appdev.Moodel.entity.group.Group;
-import com.g1appdev.Moodel.entity.student.Student;
 import com.g1appdev.Moodel.entity.submissions.Submissions;
 
 import jakarta.persistence.CascadeType;
@@ -50,23 +49,27 @@ public class Projects {
 
     public Projects() {}
 
-    public Projects(Course course, String description, boolean isActive, boolean isGroupProject, int projectId, Date submissionDeadline, String title, int totalPoints) {
-        this.course = course;
-        this.description = description;
-        this.isActive = isActive;
-        this.isGroupProject = isGroupProject;
+    
+    public Projects(int projectId, String title, String description, Date submissionDeadline, int totalPoints,
+            boolean isGroupProject, boolean isActive, Course course, Set<Submissions> submissions, Set<Group> groups) {
         this.projectId = projectId;
-        this.submissionDeadline = submissionDeadline;
         this.title = title;
+        this.description = description;
+        this.submissionDeadline = submissionDeadline;
         this.totalPoints = totalPoints;
+        this.isGroupProject = isGroupProject;
+        this.isActive = isActive;
+        this.course = course;
+        this.submissions = submissions;
+        this.groups = groups;
     }
 
     public int getProjectId() {
-        return projectId;
+        return this.projectId;
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {
@@ -74,7 +77,7 @@ public class Projects {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -82,7 +85,7 @@ public class Projects {
     }
 
     public Date getSubmissionDeadline() {
-        return submissionDeadline;
+        return this.submissionDeadline;
     }
 
     public void setSubmissionDeadline(Date submissionDeadline) {
@@ -90,7 +93,7 @@ public class Projects {
     }
 
     public int getTotalPoints() {
-        return totalPoints;
+        return this.totalPoints;
     }
 
     public void setTotalPoints(int totalPoints) {
@@ -98,23 +101,23 @@ public class Projects {
     }
 
     public boolean isGroupProject() {
-        return isGroupProject;
+        return this.isGroupProject;
     }
 
     public void setGroupProject(boolean groupProject) {
-        isGroupProject = groupProject;
+        this.isGroupProject = groupProject;
     }
 
     public boolean isActive() {
-        return isActive;
+        return this.isActive;
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.isActive = active;
     }
 
     public Course getCourse() {
-        return course;
+        return this.course;
     }
 
     public void setCourse(Course course) {
@@ -122,10 +125,38 @@ public class Projects {
     }
 
     public Set<Submissions> getSubmissions() {
-        return submissions;
+        return this.submissions;
     }
 
     public Set<Group> getGroups() {
         return this.groups;
+    }
+
+    public boolean isIsGroupProject() {
+        return this.isGroupProject;
+    }
+
+    public void setIsGroupProject(boolean isGroupProject) {
+        this.isGroupProject = isGroupProject;
+    }
+
+    public boolean isIsActive() {
+        return this.isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
+    public void setSubmissions(Set<Submissions> submissions) {
+        this.submissions = submissions;
+    }  
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
  }

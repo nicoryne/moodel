@@ -23,7 +23,7 @@ public class GroupStudentAssignationKey implements Serializable{
     }
 
     public int getStudentId() {
-        return studentId;
+        return this.studentId;
     }
 
     public void setStudentId(int studentId) {
@@ -31,7 +31,7 @@ public class GroupStudentAssignationKey implements Serializable{
     }
 
     public int getGroupId() {
-        return groupId;
+        return this.groupId;
     }
 
     public void setGroupId(int groupId) {
@@ -43,7 +43,7 @@ public class GroupStudentAssignationKey implements Serializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GroupStudentAssignationKey that = (GroupStudentAssignationKey) o;
-        return groupId == that.groupId && studentId == that.studentId;
+        return this.groupId == that.groupId && this.studentId == that.studentId;
     }
 
     @Override

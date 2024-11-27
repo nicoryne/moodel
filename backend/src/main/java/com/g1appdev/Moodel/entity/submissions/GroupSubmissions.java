@@ -24,16 +24,24 @@ public class GroupSubmissions extends Submissions {
 
     public GroupSubmissions() {}
 
-    public GroupSubmissions(Date submissionDate, String feedback, String fileURL, String description, int accumulatedPoints, Group group, Projects project) {
-        super(submissionDate, feedback, fileURL, description, accumulatedPoints, project);
-        this.ownedByGroup = group;
+    public GroupSubmissions(Group ownedByGroup, Projects assignedToProject) {
+        this.ownedByGroup = ownedByGroup;
+        this.setAssignedToProject(assignedToProject);
+    }
+    
+    public GroupSubmissions(Group ownedByGroup, int accumulatedPoints, Projects assignedToProject, String description, String feedback, String fileURL, Date submissionDate, int submissionId) {
+        super(accumulatedPoints, assignedToProject, description, feedback, fileURL, submissionDate, submissionId);
+        this.ownedByGroup = ownedByGroup;
+    }   
+
+    public Group getOwnedByGroup() {
+        return ownedByGroup;
     }
 
-    public Group getGroup() {
-        return this.ownedByGroup;
+    public void setOwnedByGroup(Group ownedByGroup) {
+        this.ownedByGroup = ownedByGroup;
     }
 
-    public void setGroup(Group group) {
-        this.ownedByGroup = group;
-    }  
+    
+    
 }
