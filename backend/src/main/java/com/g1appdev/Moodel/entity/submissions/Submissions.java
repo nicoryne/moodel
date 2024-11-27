@@ -32,7 +32,6 @@ public class Submissions {
     private int accumulatedPoints;
 
     @ManyToOne
-    @MapsId("projectId")
     @JoinColumn(name = "project_id", referencedColumnName="projectId")
     @JsonIgnoreProperties("submissions")
     private Projects assignedToProject;
@@ -91,5 +90,14 @@ public class Submissions {
 
     public void setAccumulatedPoints(int accumulatedPoints) {
         this.accumulatedPoints = accumulatedPoints;
-    }    
+    }
+
+    public Projects getAssignedToProject() {
+        return this.assignedToProject;
+    }
+
+    public void setAssignedToProject(Projects assignedToProject) {
+        this.assignedToProject = assignedToProject;
+    }
+
 }

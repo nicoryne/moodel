@@ -11,6 +11,9 @@ import com.g1appdev.Moodel.entity.student.Student;
 import com.g1appdev.Moodel.respository.submissions.GroupSubmissionsRepo;
 import com.g1appdev.Moodel.respository.submissions.IndividualSubmissionsRepo;
 import com.g1appdev.Moodel.respository.submissions.SubmissionsRepo;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import com.g1appdev.Moodel.respository.group.GroupRepo;
 import com.g1appdev.Moodel.respository.project.ProjectsRepo;
 import com.g1appdev.Moodel.respository.student.StudentRepo;
@@ -39,6 +42,11 @@ public class SubmissionsService {
     //#################
 
     private Submissions saveSubmissionDetails(Submissions submission) {
+        int projectId = submission.getAssignedToProject().getProjectId();
+        Projects projects = projectsRepo.findById(projectId)
+            .orElseThrow(() -> new EntityNotFoundException("🔴 ERROR: Project record with ID " + projectId + " was NOT found."));
+
+        submission.setAssignedToProject(projects);
         return srepo.save(submission);
     }
 
