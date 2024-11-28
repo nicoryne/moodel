@@ -1,19 +1,37 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import moodel_dark from "../../assets/moodel-logo-dark.png"
-import { PencilSquareIcon, UserCircleIcon, EnvelopeIcon, CakeIcon } from "@heroicons/react/20/solid"
+import { PencilSquareIcon, UserCircleIcon, EnvelopeIcon, CakeIcon, BriefcaseIcon } from "@heroicons/react/20/solid"
 import { TeacherContext } from "./teacher-layout"
 import { motion } from "framer-motion"
 
 export default function TeacherProfile() {
   const navigate = useNavigate()
   const userDetails = React.useContext(TeacherContext)
-  const [isChanged, setChanged] = React.useState(false)
+  const [isDefaultFields, setIsDefaultFields] = React.useState(false)
 
   const [firstName, setFirstName] = React.useState(userDetails.fname)
   const [lastName, setLastName] = React.useState(userDetails.lname)
   const [email, setEmail] = React.useState(userDetails.email)
-  const [birthDate, setBirthDate] = React.useState(new Date(userDetails.birthdate).toLocaleDateString("en-CA"))
+  const [birthdate, setBirthDate] = React.useState(userDetails.birthdate)
+
+  const fields = [firstName, lastName, email, birthdate]
+  const details = [userDetails.fname, userDetails.lname, userDetails.email, userDetails.birthdate]
+
+  React.useEffect(() => {
+    setIsDefaultFields(
+      fields.every((field, index) => {
+        return field === details[index]
+      }),
+    )
+  }, [firstName, lastName, email, birthdate])
+
+  const cancelUpdateDetails = () => {
+    setFirstName(userDetails.fname)
+    setLastName(userDetails.lname)
+    setEmail(userDetails.email)
+    setBirthDate(userDetails.birthdate)
+  }
 
   const handleEditProfile = () => {
     navigate("/teacher/edit")
@@ -47,7 +65,7 @@ export default function TeacherProfile() {
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
-                <label for="fname" className="text-xs text-neutral-400">
+                <label htmlFor="fname" className="text-xs text-neutral-400">
                   First Name
                 </label>
               </div>
@@ -63,7 +81,7 @@ export default function TeacherProfile() {
                     onChange={(e) => setLastName(e.target.value)}
                   />
                 </div>
-                <label for="lname" className="text-xs text-neutral-400">
+                <label htmlFor="lname" className="text-xs text-neutral-400">
                   Last Name
                 </label>
               </div>
@@ -81,35 +99,52 @@ export default function TeacherProfile() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <label for="email" className="text-xs text-neutral-400">
+              <label htmlFor="email" className="text-xs text-neutral-400">
                 Email Address
               </label>
             </div>
-            {/* Birthdate */}
-            <div>
-              <div className="flex border-b-2 border-blue-300 hover:border-blue-400">
-                <CakeIcon className="h-auto w-8 fill-blue-400" />
-                <input
-                  name="birthdate"
-                  id="birthdate"
-                  value={birthDate}
-                  className="text-md border-none bg-transparent p-1 font-semibold text-neutral-500 outline-none ring-0 focus:ring-0"
-                  type="date"
-                  onChange={(e) => setBirthDate(e.target.value)}
-                />
+
+            <div className="gap-8 space-y-4 md:flex md:space-y-0">
+              {/* Birthdate */}
+              <div className="flex-1">
+                <div className="flex border-b-2 border-blue-300 hover:border-blue-400">
+                  <CakeIcon className="h-auto w-8 fill-blue-400" />
+                  <input
+                    name="birthdate"
+                    id="birthdate"
+                    value={birthdate}
+                    className="text-md w-full border-none bg-transparent p-1 font-semibold text-neutral-500 outline-none ring-0 focus:ring-0"
+                    type="date"
+                    onChange={(e) => setBirthDate(e.target.value)}
+                  />
+                </div>
+                <label htmlFor="birthdate" className="text-xs text-neutral-400">
+                  Birthdate
+                </label>
               </div>
-              <label for="birthdate" className="text-xs text-neutral-400">
-                Birthdate
-              </label>
+
+              {/* Hired Date */}
+              <div className="flex-1">
+                <div className="flex border-b-2 border-blue-300 hover:border-blue-400">
+                  <BriefcaseIcon className="h-auto w-8 fill-blue-400" />
+                  <time className="text-md mt-0.5 select-none border-none bg-transparent p-1 font-semibold text-neutral-500 outline-none ring-0 focus:ring-0">
+                    {userDetails.createdAt}
+                  </time>
+                </div>
+                <label htmlFor="birthdate" className="text-xs text-neutral-400">
+                  Hired Date
+                </label>
+              </div>
             </div>
             {/* Buttons */}
-            {isChanged && (
+            {!isDefaultFields && (
               <div className="flex gap-4">
                 <motion.button
                   type="button"
                   className="col-span-2 rounded-md bg-neutral-400 p-1 px-8 py-2 font-bold text-white"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={cancelUpdateDetails}
                 >
                   Cancel
                 </motion.button>
