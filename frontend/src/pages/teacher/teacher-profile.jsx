@@ -4,10 +4,12 @@ import moodel_dark from "../../assets/moodel-logo-dark.png"
 import { PencilSquareIcon, UserCircleIcon, EnvelopeIcon, CakeIcon, BriefcaseIcon } from "@heroicons/react/20/solid"
 import { TeacherContext } from "./teacher-layout"
 import { motion } from "framer-motion"
+import { Maps } from "../../components/Maps"
 
 export default function TeacherProfile() {
   const navigate = useNavigate()
   const userDetails = React.useContext(TeacherContext)
+
   const [isDefaultFields, setIsDefaultFields] = React.useState(false)
 
   const [firstName, setFirstName] = React.useState(userDetails.fname)
@@ -45,7 +47,7 @@ export default function TeacherProfile() {
         <h1 className="w-fit text-2xl font-bold text-blue-400">Hello, {userDetails.fname}</h1>
       </header>
       <div className="rounded-lg border-2 border-blue-50 p-8 shadow-md md:place-items-start">
-        <form className="flex flex-col justify-between gap-8 md:flex-row md:place-items-start">
+        <form className="flex flex-col gap-8 md:flex-row md:place-items-start">
           <div className="mx-auto h-auto w-64 rounded-full bg-blue-50 hover:cursor-pointer hover:opacity-20 md:mx-0">
             <img src={moodel_dark} alt="Placeholder Profile" />
           </div>
@@ -159,6 +161,7 @@ export default function TeacherProfile() {
               </div>
             )}
           </div>
+          <Maps />
         </form>
         <div></div>
       </div>

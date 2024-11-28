@@ -15,7 +15,6 @@ export default function StudentProfilePage() {
     }
 
     if (user) {
-      console
       setStudentDetails(user)
     }
   }, [isAuthenticated, navigate, user, token])
