@@ -1,2 +1,5 @@
 .vscode
 .vscode/
+
+### Application Properties ###
+backend\src\main\resources\application.properties
