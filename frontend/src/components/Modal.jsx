@@ -2,9 +2,8 @@ import React from "react"
 import { motion } from "framer-motion"
 
 export default function Modal({ ModalProps }) {
-  const { title, message, type, onCancel, onConfirm } = ModalProps
+  const { title, message, type, onCancel, onConfirm, children } = ModalProps
 
-  // Define modal styles and buttons dynamically based on type
   const modalStyles = {
     info: {
       borderColor: "border-blue-400",
@@ -28,12 +27,12 @@ export default function Modal({ ModalProps }) {
     },
   }
 
-  const currentStyle = modalStyles[type] || modalStyles.info // Default to 'info'
+  const currentStyle = modalStyles[type] || modalStyles.info
 
   return (
     <aside className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <motion.div
-        className={`grid w-full max-w-lg grid-cols-3 grid-rows-4 border-2 bg-white ${currentStyle.borderColor} rounded-md shadow-lg`}
+        className={`ml-20 grid w-80 max-w-lg grid-cols-3 grid-rows-4 border-2 bg-white md:ml-0 md:w-full ${currentStyle.borderColor} rounded-md shadow-lg`}
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
@@ -45,11 +44,14 @@ export default function Modal({ ModalProps }) {
         </div>
 
         {/* Body */}
-        <p className="col-span-3 row-span-2 p-4 text-gray-700">{message}</p>
+        <div className="col-span-3 row-span-2 p-4 text-gray-700">
+          {message && <p>{message}</p>}
+          {children && <div>{children}</div>}
+        </div>
 
         {/* Footer Buttons */}
-        <div className="col-span-3 row-span-1 flex justify-end gap-4 p-4">
-          {type === "OK" && (
+        <div className="col-span-3 row-span-1 flex justify-end gap-4 p-6">
+          {(type === "OK" || type === "warning") && (
             <>
               <button
                 className="rounded-md border border-gray-300 px-4 py-2 text-gray-600 hover:bg-gray-200"
@@ -57,13 +59,19 @@ export default function Modal({ ModalProps }) {
               >
                 Cancel
               </button>
-              <button className="rounded-md bg-blue-400 px-4 py-2 text-white hover:bg-blue-500" onClick={onConfirm}>
+              <button
+                className="rounded-md bg-blue-400 px-8 py-2 font-bold text-white hover:bg-blue-500"
+                onClick={onConfirm}
+              >
                 Okay
               </button>
             </>
           )}
           {type === "error" && (
-            <button className="rounded-md bg-red-400 px-4 py-2 text-white hover:bg-red-500" onClick={onCancel}>
+            <button
+              className="rounded-md bg-red-400 px-4 py-2 font-bold text-white hover:bg-red-500"
+              onClick={onCancel}
+            >
               Dismiss
             </button>
           )}

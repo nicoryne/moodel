@@ -48,10 +48,23 @@ export const AuthProvider = ({ children }) => {
     removeCookie("role", options)
   }
 
+  const updateUser = (user) => {
+    const options = {
+      path: "/",
+      secure: true,
+      sameSite: "strict",
+      maxAge: 60 * 60 * 24 * 7,
+    }
+
+    setCookie("user", JSON.stringify(user), options)
+  }
+
   const isAuthenticated = !!cookies.token
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, cookies, removeAuth, setAuth }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ isAuthenticated, cookies, removeAuth, setAuth, updateUser }}>
+      {children}
+    </AuthContext.Provider>
   )
 }
 
