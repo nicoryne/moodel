@@ -23,12 +23,12 @@ export default function TeacherLayout() {
       let userDetails = {
         fname: user.fname,
         lname: user.lname,
-        birthdate: user.birthDate,
+        birthdate: new Date(user.birthDate).toLocaleDateString("en-CA"),
         age: user.age,
         email: user.email,
         phoneNumber: user.phoneNumber,
         address: user.address,
-        createdAt: user.createdAt,
+        createdAt: new Date(user.createdAt).toLocaleDateString("en-CA"),
         courses: user.ownedCourses,
       }
 
@@ -41,8 +41,12 @@ export default function TeacherLayout() {
       <div className="flex">
         <TeacherSidebar />
         <main className="mt-16 w-full overflow-x-hidden">
-          <TeacherProfile />
-          <TeacherCourses />
+          {userDetails && (
+            <>
+              <TeacherProfile />
+              <TeacherCourses />
+            </>
+          )}
         </main>
       </div>
     </TeacherContext.Provider>
