@@ -1,27 +1,28 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { AuthProvider } from "./middleware/AuthProvider"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./middleware/AuthProvider";
 
-import Landing from "./pages/landing"
-import Layout from "./pages/layout"
-import LoginPage from "./pages/login"
-import SignUpPage from "./pages/signup"
-import Unauthorized from "./pages/unauthorized"
+import Landing from "./pages/landing";
+import Layout from "./pages/layout";
+import LoginPage from "./pages/login";
+import SignUpPage from "./pages/signup";
+import Unauthorized from "./pages/unauthorized";
 
-import StudentCourses from "./pages/student/student-courses"
-import StudentLayout from "./pages/student/student-layout"
-import StudentProfilePage from "./pages/student/student-profile"
+import StudentCourses from "./pages/student/student-courses";
+import StudentLayout from "./pages/student/student-layout";
+import StudentProfilePage from "./pages/student/student-profile";
+import StudentProjects from "./pages/student/student-projects"; // Import the Projects Page
 
-import TeacherLayout from "./pages/teacher/teacher-layout"
-import TeacherProfile from "./pages/teacher/teacher-profile"
-import TeacherCourses from "./pages/teacher/teacher-courses"
+import TeacherLayout from "./pages/teacher/teacher-layout";
+import TeacherProfile from "./pages/teacher/teacher-profile";
+import TeacherCourses from "./pages/teacher/teacher-courses";
 
-import AdminLayout from "./pages/admin/admin-layout"
-import AdminTeachers from "./pages/admin/admin-teachers"
-import AdminStudents from "./pages/admin/admin-students"
-import AdminLoginPage from "./pages/admin-login"
-import AdminCourses from "./pages/admin/admin-courses"
+import AdminLayout from "./pages/admin/admin-layout";
+import AdminTeachers from "./pages/admin/admin-teachers";
+import AdminStudents from "./pages/admin/admin-students";
+import AdminLoginPage from "./pages/admin-login";
+import AdminCourses from "./pages/admin/admin-courses";
 
-import PrivateRoutes from "./middleware/ProtectedRoutes"
+import PrivateRoutes from "./middleware/ProtectedRoutes";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
           <Route element={<PrivateRoutes allowedRoles={["student"]} />}>
             <Route path="/student" element={<StudentLayout />}>
               <Route path="courses" element={<StudentCourses />} />
+              <Route path="courses/:courseId/projects" element={<StudentProjects />} />
               <Route path="profile" element={<StudentProfilePage />} />
             </Route>
           </Route>
@@ -69,7 +71,7 @@ function App() {
         </Routes>
       </AuthProvider>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
