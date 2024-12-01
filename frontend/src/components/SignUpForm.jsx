@@ -40,7 +40,7 @@ export default function SignUpForm() {
 
     // Tests if email length is greater than 3, and against the regex pattern
     // if it matches
-    if (email.length > 3 && !regexEmailPattern.test(email)) {
+    if (email.length > 5 && !regexEmailPattern.test(email)) {
       setErrorEmail("Error: Please enter a valid email.")
     } else {
       setErrorEmail("")

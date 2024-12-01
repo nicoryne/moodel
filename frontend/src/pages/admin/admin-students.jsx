@@ -1,12 +1,15 @@
 import React from "react"
-import { useNavigate } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import { useAuth } from "../../middleware/AuthProvider"
 import { studentGetAll, studentDeleteById, updateStudent } from "../../services"
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid"
+import Modal from "../../components/Modal"
 
 export default function AdminStudents() {
   const navigate = useNavigate()
   const [studentsList, setStudentsList] = React.useState([])
+  const [modalProps, setModalProps] = React.useState(null)
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
   const { cookies, isAuthenticated } = useAuth()
 
   const headers = [
@@ -34,11 +37,42 @@ export default function AdminStudents() {
   }, [cookies])
 
   const handleDelete = (studentId) => {
-    // TODO: delete
+    setModalProps({
+      title: "Delete Student",
+      message: "Are you sure you want to delete this student?",
+      type: "OK",
+      onConfirm: async () => {
+        try {
+          await studentDeleteById(studentId, cookies.token)
+          setStudentsList((prev) => prev.filter((student) => student.studentId !== studentId))
+          setIsModalOpen(false)
+        } catch (error) {
+          console.error(error)
+        }
+      },
+      onCancel: () => setIsModalOpen(false),
+    })
+    setIsModalOpen(true)
   }
 
   const handleEdit = (studentId) => {
-    // TODO: Edit
+    const student = studentsList.find((s) => s.studentId === studentId)
+    setModalProps({
+      title: "Edit Student",
+      message: `Edit details for ${student.fname} ${student.lname}.`,
+      type: "Edit",
+      onConfirm: async (updatedData) => {
+        try {
+          await updateStudent(studentId, updatedData, cookies.token)
+          setIsModalOpen(false)
+        } catch (error) {
+          console.error(error)
+        }
+      },
+      onCancel: () => setIsModalOpen(false),
+      student, // Pass student data for editing
+    })
+    setIsModalOpen(true)
   }
 
   return (
@@ -92,6 +126,8 @@ export default function AdminStudents() {
           </div>
         </div>
       </div>
+      {/* Render Modal */}
+      {isModalOpen && <Modal ModalProps={modalProps} />}
     </>
   )
 }

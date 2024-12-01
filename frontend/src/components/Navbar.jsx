@@ -9,9 +9,10 @@ import { MotionComponent } from "./MotionComponent"
 
 const navLinks = [
   { text: "Login", href: "/login" },
-  { text: "Home", href: "/" },
-  { text: "About", href: "/about" },
-  { text: "Contact", href: "/contact" },
+  { text: "Home", href: "/#home" },
+  { text: "About", href: "/#about" },
+  { text: "Team", href: "/#team" },
+  { text: "Contact", href: "/#contact" },
 ]
 
 export default function Navbar() {
@@ -51,12 +52,12 @@ export default function Navbar() {
                 .filter((link) => link.text !== "Login")
                 .map((link, index) => (
                   <li key={index}>
-                    <Link
-                      to={link.href}
+                    <a
+                      href={link.href}
                       className={`text-sm font-extrabold transition-colors duration-300 hover:drop-shadow-sm ${isScrolled ? "text-[#F3F3F3] hover:text-[#FFFF]" : "text-blue-400 hover:text-blue-500"}`}
                     >
                       {link.text}
-                    </Link>
+                    </a>
                   </li>
                 ))}
             </ul>

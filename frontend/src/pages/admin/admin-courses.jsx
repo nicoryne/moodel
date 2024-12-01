@@ -1,12 +1,15 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../middleware/AuthProvider"
-import { getAllCourses, courseDeleteById, updateCourse } from "../../services"
+import { getAllCourses, deleteCourse, updateCourse } from "../../services"
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid"
+import Modal from "../../components/Modal"
 
 export default function AdminCourses() {
   const navigate = useNavigate()
   const [coursesList, setCoursesList] = React.useState([])
+  const [modalProps, setModalProps] = React.useState(null)
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
   const { cookies, isAuthenticated } = useAuth()
 
   const headers = [
@@ -32,11 +35,42 @@ export default function AdminCourses() {
   }, [cookies])
 
   const handleDelete = (courseId) => {
-    // TODO: delete
+    setModalProps({
+      title: "Delete Course",
+      message: "Are you sure you want to delete this course?",
+      type: "OK",
+      onConfirm: async () => {
+        try {
+          await deleteCourse(courseId, cookies.token)
+          setCoursesList((prev) => prev.filter((course) => course.courseId !== courseId))
+          setIsModalOpen(false)
+        } catch (error) {
+          console.error(error)
+        }
+      },
+      onCancel: () => setIsModalOpen(false),
+    })
+    setIsModalOpen(true)
   }
 
   const handleEdit = (courseId) => {
-    // TODO: Edit
+    const course = coursesList.find((c) => c.courseId === courseId)
+    setModalProps({
+      title: "Edit Course",
+      message: `Edit details for ${course.title}.`,
+      type: "Edit",
+      onConfirm: async (updatedData) => {
+        try {
+          await updateCourse(courseId, updatedData, cookies.token)
+          setIsModalOpen(false)
+        } catch (error) {
+          console.error(error)
+        }
+      },
+      onCancel: () => setIsModalOpen(false),
+      course, // Pass course data for editing
+    })
+    setIsModalOpen(true)
   }
 
   return (
@@ -86,6 +120,8 @@ export default function AdminCourses() {
           </div>
         </div>
       </div>
+      {/* Render Modal */}
+      {isModalOpen && <Modal ModalProps={modalProps} />}
     </>
   )
 }

@@ -91,14 +91,14 @@ async function teacherGetAll(token) {
   return data
 }
 
-async function updateTeacher(formData) {
-  const headers = new Headers()
-  headers.append("Content-Type", "application/json")
-
+async function updateTeacher(formData, token) {
   const res = await fetch("http://localhost:8080/api/teacher/update", {
     method: "PUT",
     body: JSON.stringify(formData),
-    headers: headers,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
   })
 
   if (!res.ok) {

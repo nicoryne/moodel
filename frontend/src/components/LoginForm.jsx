@@ -107,7 +107,7 @@ export default function LoginForm() {
           <p className="text-sm font-bold text-blue-400">I'm logging in as a</p>
           <div className="mt-2 grid h-fit w-full grid-cols-2 rounded-md">
             <motion.label
-              className={`place-items-center p-4 font-bold transition duration-200 ${role === "teacher" ? "rounded-l-sm bg-blue-400 text-white" : "rounded-l-md bg-white text-blue-400 opacity-50 hover:opacity-100"}`}
+              className={`p-4 text-center font-bold transition duration-200 ${role === "teacher" ? "rounded-l-sm bg-blue-400 text-white" : "rounded-l-md bg-white text-blue-400 opacity-50 hover:opacity-100"}`}
             >
               <input
                 type="radio"
@@ -119,7 +119,7 @@ export default function LoginForm() {
               />
               <MotionComponent
                 as={BriefcaseIcon}
-                className="h-auto w-16 outline-none"
+                className="mx-auto h-auto w-16 outline-none"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               />
@@ -127,7 +127,7 @@ export default function LoginForm() {
             </motion.label>
             <motion.label
               type="button"
-              className={`place-items-center p-4 font-bold transition duration-200 ${role === "student" ? "rounded-r-sm bg-blue-400 text-white" : "rounded-r-md bg-white text-blue-400 opacity-50 hover:opacity-100"}`}
+              className={`p-4 text-center font-bold transition duration-200 ${role === "student" ? "rounded-r-sm bg-blue-400 text-white" : "rounded-r-md bg-white text-blue-400 opacity-50 hover:opacity-100"}`}
               transition={{ duration: 0.2 }}
             >
               <input
@@ -140,7 +140,7 @@ export default function LoginForm() {
               />
               <MotionComponent
                 as={AcademicCapIcon}
-                className="h-auto w-16 outline-none"
+                className="mx-auto h-auto w-16 outline-none"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               />
