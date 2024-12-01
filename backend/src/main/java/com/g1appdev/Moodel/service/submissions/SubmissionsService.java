@@ -53,7 +53,6 @@ public class SubmissionsService {
     //#################
 
     /*
-    /*
     public GroupSubmissions createGroupSubmission(GroupSubmissions groupSubmission) {
         Group group = groupRepo.findById(groupSubmission.getGroup().getGroupId())
             .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Group not found"));
@@ -84,25 +83,6 @@ public class SubmissionsService {
     
         groupSubmission.setAssignedToProject(project);
     
-        return (GroupSubmissions) saveSubmissionDetails(groupSubmission);
-    }
-    */
-
-    public GroupSubmissions createGroupSubmission(GroupSubmissions groupSubmission) {
-        // Validate Group existence
-        Group group = groupRepo.findById(groupSubmission.getOwnedByGroup().getGroupId())
-            .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Group not found"));
-        groupSubmission.setOwnedByGroup(group);
-    
-        // Validate and set assignedToProject
-        if (groupSubmission.getAssignedToProject() == null || groupSubmission.getAssignedToProject().getProjectId() == 0) {
-            throw new IllegalArgumentException("🔴 ERROR: Project must be assigned to the submission.");
-        }
-        Projects project = projectsRepo.findById(groupSubmission.getAssignedToProject().getProjectId())
-            .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Project not found"));
-        groupSubmission.setAssignedToProject(project);
-    
-        // Save the group submission
         return (GroupSubmissions) saveSubmissionDetails(groupSubmission);
     }
     
