@@ -14,7 +14,6 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 
 @Entity
@@ -38,8 +37,13 @@ public class Submissions {
 
     public Submissions() {}
 
- 
-    public Submissions(int accumulatedPoints, Projects assignedToProject, String description, String feedback, String fileURL, Date submissionDate, int submissionId) {
+    public Submissions(int submissionId, Date submissionDate, String feedback, String fileURL, String description,
+            int accumulatedPoints, Projects assignedToProject) {
+        this.submissionId = submissionId;
+        this.submissionDate = submissionDate;
+        this.feedback = feedback;
+        this.fileURL = fileURL;
+        this.description = description;
         this.accumulatedPoints = accumulatedPoints;
         this.assignedToProject = assignedToProject;
         this.description = description;
@@ -48,7 +52,6 @@ public class Submissions {
         this.submissionDate = submissionDate;
         this.submissionId = submissionId;
     }
-
 
     public int getSubmissionId() {
         return this.submissionId;
@@ -105,4 +108,5 @@ public class Submissions {
     public void setSubmissionId(int submissionId) {
         this.submissionId = submissionId;
     }
+
 }

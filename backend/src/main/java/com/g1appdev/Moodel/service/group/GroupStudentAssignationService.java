@@ -6,9 +6,15 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.g1appdev.Moodel.entity.group.Group;
 import com.g1appdev.Moodel.entity.group.GroupStudentAssignation;
 import com.g1appdev.Moodel.entity.group.GroupStudentAssignationKey;
+import com.g1appdev.Moodel.entity.student.Student;
+import com.g1appdev.Moodel.respository.group.GroupRepo;
 import com.g1appdev.Moodel.respository.group.GroupStudentAssignationRepo;
+import com.g1appdev.Moodel.respository.student.StudentRepo;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class GroupStudentAssignationService {
@@ -16,12 +22,30 @@ public class GroupStudentAssignationService {
     @Autowired
     private GroupStudentAssignationRepo gsarepo;
 
+    @Autowired
+    private GroupRepo grepo;
+
+    @Autowired
+    private StudentRepo srepo;
+
     //#################
     // CREATE FUNCTIONS
     //#################
 
-    public GroupStudentAssignation postGroupStudentAssignation(GroupStudentAssignation assignation) {
-        return gsarepo.save(assignation);
+    public GroupStudentAssignation postGroupStudentAssignation(GroupStudentAssignation groupStudentAssignation) {
+        int groupId = groupStudentAssignation.getGroupStudentId().getGroupId();
+        int studentId = groupStudentAssignation.getGroupStudentId().getStudentId();
+
+        Group group = grepo.findById(groupId)
+            .orElseThrow(() -> new EntityNotFoundException("🔴 ERROR: Group record with ID " + groupId + " was NOT found."));
+        
+        Student student = srepo.findById(studentId)
+            .orElseThrow(() -> new EntityNotFoundException("🔴 ERROR: Student record with ID " + studentId + " was NOT found."));
+
+        groupStudentAssignation.setGroup(group);
+        groupStudentAssignation.setStudent(student);
+
+        return gsarepo.save(groupStudentAssignation);
     }
 
     //#################

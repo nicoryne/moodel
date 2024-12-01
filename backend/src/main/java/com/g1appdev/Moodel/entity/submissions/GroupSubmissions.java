@@ -18,21 +18,19 @@ public class GroupSubmissions extends Submissions {
 
     @ManyToOne
     @MapsId("groupId")
-    @JoinColumn(name = "group_id", referencedColumnName="groupId")
+    @JoinColumn(name = "group_id", referencedColumnName="groupId", nullable = false)
     @JsonIgnoreProperties("groupSubmissions")
     private Group ownedByGroup;
 
     public GroupSubmissions() {}
 
-    public GroupSubmissions(Group ownedByGroup, Projects assignedToProject) {
+
+
+    public GroupSubmissions(int submissionId, Date submissionDate, String feedback, String fileURL, String description,
+            int accumulatedPoints, Projects assignedToProject, Group ownedByGroup) {
+        super(submissionId, submissionDate, feedback, fileURL, description, accumulatedPoints, assignedToProject);
         this.ownedByGroup = ownedByGroup;
-        this.setAssignedToProject(assignedToProject);
     }
-    
-    public GroupSubmissions(Group ownedByGroup, int accumulatedPoints, Projects assignedToProject, String description, String feedback, String fileURL, Date submissionDate, int submissionId) {
-        super(accumulatedPoints, assignedToProject, description, feedback, fileURL, submissionDate, submissionId);
-        this.ownedByGroup = ownedByGroup;
-    }   
 
     public Group getOwnedByGroup() {
         return ownedByGroup;
@@ -40,8 +38,5 @@ public class GroupSubmissions extends Submissions {
 
     public void setOwnedByGroup(Group ownedByGroup) {
         this.ownedByGroup = ownedByGroup;
-    }
-
-    
-    
+    }  
 }

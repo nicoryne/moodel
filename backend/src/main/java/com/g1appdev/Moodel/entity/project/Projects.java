@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.g1appdev.Moodel.entity.course.Course;
 import com.g1appdev.Moodel.entity.group.Group;
 import com.g1appdev.Moodel.entity.submissions.Submissions;
@@ -49,7 +50,6 @@ public class Projects {
 
     public Projects() {}
 
-    
     public Projects(int projectId, String title, String description, Date submissionDeadline, int totalPoints,
             boolean isGroupProject, boolean isActive, Course course, Set<Submissions> submissions, Set<Group> groups) {
         this.projectId = projectId;

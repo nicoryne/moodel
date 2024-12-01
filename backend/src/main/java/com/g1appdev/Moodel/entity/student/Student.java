@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.g1appdev.Moodel.entity.group.GroupStudentAssignation;
 import com.g1appdev.Moodel.entity.submissions.IndividualSubmissions;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -36,6 +37,10 @@ public class Student {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("student")
+    private Set<GroupStudentAssignation> groupAssigned = new HashSet<>();
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("student")
     private Set<StudentCourseEnrollment> courseEnrollments = new HashSet<>();
 
     @OneToMany(mappedBy = "ownedByStudent", cascade = CascadeType.ALL)
@@ -43,20 +48,36 @@ public class Student {
     private Set<IndividualSubmissions> individualSubmissions = new HashSet<>();
 
     public Student() {}
-
-    public Student(String lname, String fname, Date birthDate, int age, String password, 
-                   String email, String phoneNumber, Date createdAt, String address) {
+    
+    public Student(int studentId, String email, String lname, String fname, Date birthDate, int age, String password,
+            String phoneNumber, String address, Date createdAt, Set<GroupStudentAssignation> groupAssigned,
+            Set<StudentCourseEnrollment> courseEnrollments, Set<IndividualSubmissions> individualSubmissions) {
+        this.studentId = studentId;
+        this.email = email;
         this.lname = lname;
         this.fname = fname;
         this.birthDate = birthDate;
         this.age = age;
         this.password = password;
-        this.email = email;
         this.phoneNumber = phoneNumber;
-        this.createdAt = createdAt;
         this.address = address;
+        this.createdAt = createdAt;
+        this.groupAssigned = groupAssigned;
+        this.courseEnrollments = courseEnrollments;
+        this.individualSubmissions = individualSubmissions;
     }
 
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
+    }
+
+    public Set<GroupStudentAssignation> getGroupAssigned() {
+        return groupAssigned;
+    }
+
+    public void setGroupAssigned(Set<GroupStudentAssignation> groupAssigned) {
+        this.groupAssigned = groupAssigned;
+    }
 
     public int getStudentId() {
         return this.studentId;

@@ -27,24 +27,32 @@ public class Group {
 
     private int groupNumber;
 
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("group")
+    private Set<GroupStudentAssignation> studentsAssigned = new HashSet<>();
+
     @OneToMany(mappedBy = "ownedByGroup", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("ownedByGroup")
     private Set<GroupSubmissions> groupSubmissions = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name="project_id", referencedColumnName = "projectId")
+    @JsonIgnoreProperties("groups")
     private Projects groupProject;
 
     public Group() {}
 
-    public Group(int groupId, int groupNumber, Projects groupProject) {
+    public Group(int groupId, int groupNumber, Set<GroupStudentAssignation> studentsAssigned,
+            Set<GroupSubmissions> groupSubmissions, Projects groupProject) {
         this.groupId = groupId;
         this.groupNumber = groupNumber;
+        this.studentsAssigned = studentsAssigned;
+        this.groupSubmissions = groupSubmissions;
         this.groupProject = groupProject;
     }
 
     public int getGroupId() {
-        return this.groupId;
+        return groupId;
     }
 
     public void setGroupId(int groupId) {
@@ -52,15 +60,23 @@ public class Group {
     }
 
     public int getGroupNumber() {
-        return this.groupNumber;
+        return groupNumber;
     }
 
     public void setGroupNumber(int groupNumber) {
         this.groupNumber = groupNumber;
     }
 
+    public Set<GroupStudentAssignation> getStudentsAssigned() {
+        return studentsAssigned;
+    }
+
+    public void setStudentsAssigned(Set<GroupStudentAssignation> studentsAssigned) {
+        this.studentsAssigned = studentsAssigned;
+    }
+
     public Set<GroupSubmissions> getGroupSubmissions() {
-        return this.groupSubmissions;
+        return groupSubmissions;
     }
 
     public void setGroupSubmissions(Set<GroupSubmissions> groupSubmissions) {
@@ -68,10 +84,11 @@ public class Group {
     }
 
     public Projects getGroupProject() {
-        return this.groupProject;
+        return groupProject;
     }
 
-    public void setGroupProject(Projects project) {
-        this.groupProject = project;
-    }
+    public void setGroupProject(Projects groupProject) {
+        this.groupProject = groupProject;
+    }  
+
 }

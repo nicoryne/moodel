@@ -2,6 +2,7 @@ package com.g1appdev.Moodel.entity.group;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.g1appdev.Moodel.entity.student.Student;
 
 import jakarta.persistence.EmbeddedId;
@@ -21,11 +22,13 @@ public class GroupStudentAssignation {
     @ManyToOne
     @MapsId("studentId")
     @JoinColumn(name = "student_id", referencedColumnName = "studentId")
+    @JsonIgnoreProperties("groupAssigned")
     private Student student;
 
     @ManyToOne
     @MapsId("groupId")
     @JoinColumn(name = "group_id", referencedColumnName = "groupId")
+    @JsonIgnoreProperties("studentsAssigned")
     private Group group;
 
     private Date assignedDate;

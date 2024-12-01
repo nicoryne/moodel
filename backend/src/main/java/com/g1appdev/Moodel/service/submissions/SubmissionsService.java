@@ -1,26 +1,24 @@
 package com.g1appdev.Moodel.service.submissions;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.g1appdev.Moodel.entity.submissions.GroupSubmissions;
-import com.g1appdev.Moodel.entity.submissions.IndividualSubmissions;
-import com.g1appdev.Moodel.entity.submissions.Submissions;
-import com.g1appdev.Moodel.entity.group.Group;
-import com.g1appdev.Moodel.entity.project.Projects;
-import com.g1appdev.Moodel.entity.student.Student;
-import com.g1appdev.Moodel.respository.submissions.GroupSubmissionsRepo;
-import com.g1appdev.Moodel.respository.submissions.IndividualSubmissionsRepo;
-import com.g1appdev.Moodel.respository.submissions.SubmissionsRepo;
-
-import jakarta.persistence.EntityNotFoundException;
-
-import com.g1appdev.Moodel.respository.group.GroupRepo;
-import com.g1appdev.Moodel.respository.project.ProjectsRepo;
-import com.g1appdev.Moodel.respository.student.StudentRepo;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.g1appdev.Moodel.entity.group.Group;
+import com.g1appdev.Moodel.entity.project.Projects;
+import com.g1appdev.Moodel.entity.student.Student;
+import com.g1appdev.Moodel.entity.submissions.GroupSubmissions;
+import com.g1appdev.Moodel.entity.submissions.IndividualSubmissions;
+import com.g1appdev.Moodel.entity.submissions.Submissions;
+import com.g1appdev.Moodel.respository.group.GroupRepo;
+import com.g1appdev.Moodel.respository.project.ProjectsRepo;
+import com.g1appdev.Moodel.respository.student.StudentRepo;
+import com.g1appdev.Moodel.respository.submissions.SubmissionsRepo;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class SubmissionsService {
@@ -41,7 +39,7 @@ public class SubmissionsService {
     // CREATE HELPER METHOD
     //#################
 
-    private Submissions saveSubmissionDetails(Submissions submission) {
+    public Submissions saveSubmissionDetails(Submissions submission) {
         int projectId = submission.getAssignedToProject().getProjectId();
         Projects projects = projectsRepo.findById(projectId)
             .orElseThrow(() -> new EntityNotFoundException("🔴 ERROR: Project record with ID " + projectId + " was NOT found."));
@@ -55,6 +53,7 @@ public class SubmissionsService {
     //#################
 
     /*
+    /*
     public GroupSubmissions createGroupSubmission(GroupSubmissions groupSubmission) {
         Group group = groupRepo.findById(groupSubmission.getGroup().getGroupId())
             .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Group not found"));
@@ -62,6 +61,29 @@ public class SubmissionsService {
         groupSubmission.setGroup(group);
 
 
+        return (GroupSubmissions) saveSubmissionDetails(groupSubmission);
+    }
+    */
+    
+    public GroupSubmissions createGroupSubmission(GroupSubmissions groupSubmission) {
+        if (groupSubmission.getOwnedByGroup() == null || groupSubmission.getOwnedByGroup().getGroupId() <= 0) {
+            throw new IllegalArgumentException("🔴 ERROR: Group is missing or invalid.");
+        }
+    
+        Group group = groupRepo.findById(groupSubmission.getOwnedByGroup().getGroupId())
+            .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Group with ID " + groupSubmission.getOwnedByGroup().getGroupId() + " was NOT found."));
+    
+        groupSubmission.setOwnedByGroup(group);
+    
+        if (groupSubmission.getAssignedToProject() == null || groupSubmission.getAssignedToProject().getProjectId() <= 0) {
+            throw new IllegalArgumentException("🔴 ERROR: Assigned project is missing or invalid.");
+        }
+    
+        Projects project = projectsRepo.findById(groupSubmission.getAssignedToProject().getProjectId())
+            .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Project with ID " + groupSubmission.getAssignedToProject().getProjectId() + " was NOT found."));
+    
+        groupSubmission.setAssignedToProject(project);
+    
         return (GroupSubmissions) saveSubmissionDetails(groupSubmission);
     }
     */
