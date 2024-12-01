@@ -13,8 +13,8 @@ export default function ContactSection() {
         <div className="absolute inset-0 bg-gradient-to-t from-blue-100 to-blue-50 opacity-60" />
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center justify-center space-y-12 px-8 py-16">
-          <img className="mx-auto -mb-10 h-auto w-32" src={dark_logo} alt="Logo" />
-          <h1 className="text-5xl font-bold text-blue-400">Contact Us</h1>
+          <img className="mx-auto -mb-20 h-auto w-32" src={dark_logo} alt="Logo" />
+          <h1 className="text-5xl font-black text-blue-400">Contact Us</h1>
           <p className="max-w-4xl text-center text-lg text-neutral-600">
             We value your feedback and are always happy to hear from you! Feel free to reach out with any questions.
           </p>

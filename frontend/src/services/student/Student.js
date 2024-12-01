@@ -34,6 +34,24 @@ async function studentRegister(formData) {
   return data
 }
 
+async function studentCreate(formData) {
+  const headers = new Headers()
+  headers.append("Content-Type", "application/json")
+
+  const res = await fetch("http://localhost:8080/api/student/create", {
+    method: "POST",
+    body: JSON.stringify(formData),
+    headers: headers,
+  })
+
+  if (!res.ok) {
+    throw new Error(`🔴 ERROR: Failed to create student. Status: ${res.status}`)
+  }
+
+  const data = await res.json()
+  return data
+}
+
 async function studentGetByEmail(email, token) {
   const res = await fetch(`http://localhost:8080/api/student/getByEmail?email=${email}`, {
     method: "GET",
@@ -73,6 +91,24 @@ async function studentGetAll(token) {
   return data
 }
 
+async function updateStudent(formData, token) {
+  const res = await fetch("http://localhost:8080/api/student/update", {
+    method: "PUT",
+    body: JSON.stringify(formData),
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`🔴 ERROR: Failed to update student. Status: ${res.status}`)
+  }
+
+  const data = await res.json()
+  return data
+}
+
 async function studentDeleteById(id, token) {
   const res = await fetch(`http://localhost:8080/api/student/delete?id=${id}`, {
     method: "DELETE",
@@ -101,4 +137,4 @@ async function studentTestConnection() {
   return data
 }
 
-export { studentLogin, studentRegister, studentGetByEmail, studentGetAll, studentDeleteById, studentTestConnection }
+export { studentLogin, studentRegister, studentCreate, studentGetByEmail, studentGetAll, updateStudent, studentDeleteById, studentTestConnection }
