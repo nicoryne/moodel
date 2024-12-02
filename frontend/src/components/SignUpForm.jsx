@@ -40,7 +40,7 @@ export default function SignUpForm() {
 
     // Tests if email length is greater than 3, and against the regex pattern
     // if it matches
-    if (email.length > 5 && !regexEmailPattern.test(email)) {
+    if (email.length > 6 && !regexEmailPattern.test(email)) {
       setErrorEmail("Error: Please enter a valid email.")
     } else {
       setErrorEmail("")
@@ -59,7 +59,7 @@ export default function SignUpForm() {
   // Confirm Password Validation
   React.useEffect(() => {
     if (confirmPassword.length > 0 && password.length > 0 && confirmPassword !== password) {
-      setErrorConfirmPassword("Error: passwords don't match!")
+      setErrorConfirmPassword("Error: Passwords don't match!")
     } else {
       setErrorConfirmPassword("")
     }
@@ -110,6 +110,9 @@ export default function SignUpForm() {
               onChange={(e) => setFirstName(e.target.value)}
             />
           </div>
+          <label htmlFor="fname" className="text-xs text-neutral-400">
+            First Name
+          </label>
         </div>
 
         {/* Last Name Group */}
@@ -124,6 +127,9 @@ export default function SignUpForm() {
               onChange={(e) => setLastName(e.target.value)}
             />
           </div>
+          <label htmlFor="lname" className="text-xs text-neutral-400">
+            Last Name
+          </label>
         </div>
 
         {/* Birth Date Group */}
@@ -139,11 +145,16 @@ export default function SignUpForm() {
               onChange={(e) => setBirthDate(e.target.value)}
             />
           </div>
+          <label htmlFor="birthdate" className="text-xs text-neutral-400">
+            Birthdate
+          </label>
         </div>
 
         {/* Email Input Group */}
         <div className="col-span-2 flex flex-col justify-end space-y-2">
-          <div className="flex w-full border-b-2 border-blue-300 hover:border-blue-400">
+          <div
+            className={`flex w-full border-b-2 transition-colors duration-100 ease-in-out ${errorEmail ? "border-red-300 hover:border-red-400" : "border-blue-300 hover:border-blue-400"}`}
+          >
             <EnvelopeIcon className="h-auto w-8 rounded-l-sm border-blue-300 px-1 text-blue-400" />
             <input
               name="email"
@@ -154,12 +165,19 @@ export default function SignUpForm() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          {errorEmail && <p className="text-xs font-semibold text-red-400">{errorEmail}</p>}
+          <div className="flex justify-between">
+            <label htmlFor="email" className="text-xs text-neutral-400">
+              Email Address
+            </label>
+            {errorEmail && <p className="text-xs font-semibold text-red-400">{errorEmail}</p>}
+          </div>
         </div>
 
         {/* Password Input Group */}
         <div className="col-span-2 flex flex-col justify-end space-y-2">
-          <div className="flex w-full border-b-2 border-blue-300 hover:border-blue-400">
+          <div
+            className={`flex w-full border-b-2 transition-colors duration-100 ease-in-out ${errorPassword ? "border-red-300 hover:border-red-400" : "border-blue-300 hover:border-blue-400"}`}
+          >
             <LockClosedIcon className="h-auto w-8 rounded-l-sm border-blue-300 px-1 text-blue-400" />
             <input
               name="password"
@@ -187,12 +205,19 @@ export default function SignUpForm() {
               />
             )}
           </div>
-          {errorPassword && <p className="text-xs font-semibold text-red-400">{errorPassword}</p>}
+          <div className="flex justify-between">
+            <label htmlFor="password" className="text-xs text-neutral-400">
+              Password
+            </label>
+            {errorPassword && <p className="text-xs font-semibold text-red-400">{errorPassword}</p>}
+          </div>
         </div>
 
         {/* Confirm Password Input Group */}
         <div className="col-span-2 flex flex-col justify-end space-y-2">
-          <div className="flex w-full border-b-2 border-blue-300 hover:border-blue-400">
+          <div
+            className={`flex w-full border-b-2 transition-colors duration-100 ease-in-out ${errorConfirmPassword ? "border-red-300 hover:border-red-400" : "border-blue-300 hover:border-blue-400"}`}
+          >
             <LockClosedIcon className="h-auto w-8 rounded-l-sm border-blue-300 px-1 text-blue-400" />
             <input
               name="confirmPassword"
@@ -220,7 +245,12 @@ export default function SignUpForm() {
               />
             )}
           </div>
-          {errorConfirmPassword && <p className="text-xs font-semibold text-red-400">{errorConfirmPassword}</p>}
+          <div className="flex justify-between">
+            <label htmlFor="confirmPassword" className="text-xs text-neutral-400">
+              Confirm Password
+            </label>
+            {errorConfirmPassword && <p className="text-xs font-semibold text-red-400">{errorConfirmPassword}</p>}
+          </div>
         </div>
 
         <div className="space-y-2">

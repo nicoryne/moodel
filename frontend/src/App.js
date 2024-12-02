@@ -11,9 +11,8 @@ import StudentCourses from "./pages/student/student-courses"
 import StudentLayout from "./pages/student/student-layout"
 import StudentProfilePage from "./pages/student/student-profile"
 
-import TeacherLayout from "./pages/teacher/teacher-layout"
-import TeacherProfile from "./pages/teacher/teacher-profile"
-import TeacherCourses from "./pages/teacher/teacher-courses"
+import TeacherLayout from "./pages/teacher/layout"
+import TeacherProfile from "./pages/teacher/profile"
 
 import AdminLayout from "./pages/admin/admin-layout"
 import AdminTeachers from "./pages/admin/admin-teachers"
@@ -22,6 +21,7 @@ import AdminLoginPage from "./pages/admin-login"
 import AdminCourses from "./pages/admin/admin-courses"
 
 import PrivateRoutes from "./middleware/ProtectedRoutes"
+import TeacherHome from "./pages/teacher/home"
 
 function App() {
   return (
@@ -53,7 +53,7 @@ function App() {
           {/* Teacher Routes */}
           <Route element={<PrivateRoutes allowedRoles={["teacher"]} />}>
             <Route path="/teacher" element={<TeacherLayout />}>
-              <Route path="courses" element={<TeacherCourses />} />
+              <Route path="" element={<TeacherHome />} />
               <Route path="profile" element={<TeacherProfile />} />
             </Route>
           </Route>

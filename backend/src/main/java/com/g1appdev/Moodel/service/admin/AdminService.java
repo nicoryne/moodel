@@ -71,20 +71,37 @@ public class AdminService {
     // UPDATE FUNCTIONS
     //#################
 
-    public Admin updateAdminDetails(int id, Admin newAdminDetails) {
+    public Admin putAdmin(int id, Admin newAdminDetails) {
         Admin admin = arepo.findById(id)
             .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Admin record with ID " + id + " was NOT found."));
-
-        admin.setEmail(newAdminDetails.getEmail());
-        admin.setLname(newAdminDetails.getLname());
-        admin.setFname(newAdminDetails.getFname());
-        admin.setBirthDate(newAdminDetails.getBirthDate());
+    
+        if (newAdminDetails.getEmail() != null && !newAdminDetails.getEmail().isEmpty()) {
+            admin.setEmail(newAdminDetails.getEmail());
+        }
+        if (newAdminDetails.getLname() != null && !newAdminDetails.getLname().isEmpty()) {
+            admin.setLname(newAdminDetails.getLname());
+        }
+        if (newAdminDetails.getFname() != null && !newAdminDetails.getFname().isEmpty()) {
+            admin.setFname(newAdminDetails.getFname());
+        }
+        if (newAdminDetails.getBirthDate() != null) {
+            admin.setBirthDate(newAdminDetails.getBirthDate());
+        }
+        if (newAdminDetails.getPassword() != null && !newAdminDetails.getPassword().isEmpty()) {
+            admin.setPassword(newAdminDetails.getPassword());
+        }
+        if (newAdminDetails.getPhoneNumber() != null && !newAdminDetails.getPhoneNumber().isEmpty()) {
+            admin.setPhoneNumber(newAdminDetails.getPhoneNumber());
+        }
+        if (newAdminDetails.getAddress() != null && !newAdminDetails.getAddress().isEmpty()) {
+            admin.setAddress(newAdminDetails.getAddress());
+        }
+        if (newAdminDetails.getCreatedAt() != null) {
+            admin.setCreatedAt(newAdminDetails.getCreatedAt());
+        }
+        
         admin.setAge(newAdminDetails.getAge());
-        admin.setPassword(newAdminDetails.getPassword());
-        admin.setPhoneNumber(newAdminDetails.getPhoneNumber());
-        admin.setAddress(newAdminDetails.getAddress());
-        admin.setCreatedAt(newAdminDetails.getCreatedAt());
-
+        
         return arepo.save(admin);
     }
 

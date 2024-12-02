@@ -70,17 +70,35 @@ public class TeacherService {
     //#################
 
     public Teacher putTeacher(int id, Teacher newTeacherDetails) {
+        // Fetch the teacher record by ID
         Teacher teacher = trepo.findById(id)
             .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Teacher record with ID " + id + " was NOT found."));
-
-        teacher.setFname(newTeacherDetails.getFname());
-        teacher.setLname(newTeacherDetails.getLname());
-        teacher.setBirthDate(newTeacherDetails.getBirthDate());
+    
+        // Update only the fields that are not null or empty
+        if (newTeacherDetails.getFname() != null && !newTeacherDetails.getFname().isEmpty()) {
+            teacher.setFname(newTeacherDetails.getFname());
+        }
+        if (newTeacherDetails.getLname() != null && !newTeacherDetails.getLname().isEmpty()) {
+            teacher.setLname(newTeacherDetails.getLname());
+        }
+        if (newTeacherDetails.getBirthDate() != null) {
+            teacher.setBirthDate(newTeacherDetails.getBirthDate());
+        }        
+        if (newTeacherDetails.getPassword() != null && !newTeacherDetails.getPassword().isEmpty()) {
+            teacher.setPassword(bCryptPasswordEncoder.encode(newTeacherDetails.getPassword()));
+        }
+        if (newTeacherDetails.getEmail() != null && !newTeacherDetails.getEmail().isEmpty()) {
+            teacher.setEmail(newTeacherDetails.getEmail());
+        }
+        if (newTeacherDetails.getPhoneNumber() != null) {
+            teacher.setPhoneNumber(newTeacherDetails.getPhoneNumber());
+        }
+        if (newTeacherDetails.getAddress() != null) {
+            teacher.setAddress(newTeacherDetails.getAddress());
+        }
+        
         teacher.setAge(newTeacherDetails.getAge());
-        teacher.setPassword(newTeacherDetails.getPassword());
-        teacher.setEmail(newTeacherDetails.getEmail());
-        teacher.setPhoneNumber(newTeacherDetails.getPhoneNumber());
-       
+
         return trepo.save(teacher);
     }
     
