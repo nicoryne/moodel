@@ -51,6 +51,25 @@ async function getStudentCourseEnrollmentsByStudentId(studentId, token) {
   return data
 }
 
+async function updateStudentCourseEnrollment(formData, token) {
+  const headers = new Headers()
+  headers.append("Content-Type", "application/json")
+  headers.append("Authorization", `Bearer ${token}`)
+
+  const res = await fetch("http://localhost:8080/api/studentCourseEnrollment/update", {
+    method: "PUT",
+    body: JSON.stringify(formData),
+    headers: headers,
+  })
+
+  if (!res.ok) {
+    throw new Error(`🔴 ERROR: Failed to update student course enrollment. Status: ${res.status}`)
+  }
+
+  const data = await res.json()
+  return data
+}
+
 async function getStudentCourseEnrollmentsByCourseId(courseId, token) {
   const res = await fetch(`http://localhost:8080/api/studentCourseEnrollment/getByCourseId?courseId=${courseId}`, {
     method: "GET",
@@ -101,6 +120,7 @@ async function testStudentCourseEnrollmentConnection() {
 export {
   createStudentCourseEnrollment,
   getAllStudentCourseEnrollments,
+  updateStudentCourseEnrollment,
   getStudentCourseEnrollmentsByStudentId,
   getStudentCourseEnrollmentsByCourseId,
   deleteStudentCourseEnrollment,

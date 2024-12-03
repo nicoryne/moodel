@@ -15,7 +15,7 @@ export default function TeacherCourseTab({ courseData }) {
         <p className="text-sm text-neutral-400">{courseData.course.description}</p>
       </div>
       <div className="mt-4 flex gap-8">
-        <span className="flex gap-1 text-xs text-neutral-600">
+        <span className="flex gap-1 text-xs text-neutral-400">
           <CalendarDaysIcon className="h-4 w-auto" /> Created at{" "}
           {new Date(courseData.createdAt).toLocaleDateString("en-US", {
             month: "short",
@@ -23,7 +23,7 @@ export default function TeacherCourseTab({ courseData }) {
             year: "numeric",
           })}
         </span>
-        <span className="flex gap-1 text-xs text-neutral-600">
+        <span className="flex gap-1 text-xs text-neutral-400">
           <UserGroupIcon className="h-4 w-auto" />
           {courseData.course.enrolledStudents.length}{" "}
           {courseData.course.enrolledStudents.length === 1 ? "student" : "students"}

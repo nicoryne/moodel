@@ -24,6 +24,7 @@ import {
   getStudentCourseEnrollmentsByCourseId,
 } from "../../services/index"
 import { encryptCourseId } from "../../lib/utils/courseEncryptor"
+import TeacherCourseRequest from "../../components/Teacher/TeacherCourseRequest"
 
 export default function TeacherHome() {
   const userDetails = React.useContext(TeacherContext)
@@ -44,6 +45,10 @@ export default function TeacherHome() {
     const fetchCourseRequests = async () => {
       let courses = userDetails.courses
 
+      if (!courses) {
+        return
+      }
+
       for (let course of courses) {
         let courseId = course.course.courseId
 
@@ -53,7 +58,12 @@ export default function TeacherHome() {
           if (!enrollment.isVerified) {
             let courseRequest = {
               courseId: enrollment.course.courseId,
+              courseTitle: enrollment.course.title,
               studentId: enrollment.student.studentId,
+              studentName: enrollment.student.fname + " " + enrollment.student.lname,
+              studentEmail: enrollment.student.email,
+              createdAt: enrollment.createdAt,
+              teacherEmail: userDetails.email,
             }
 
             setCourseRequests((prev) => new Set(prev).add(JSON.stringify(courseRequest)))
@@ -63,11 +73,15 @@ export default function TeacherHome() {
     }
 
     fetchCourseRequests()
-  }, [userDetails.courses, cookies])
+  }, [userDetails.courses, cookies, userDetails.email])
 
-  React.useEffect(() => {
-    console.log(courseRequests.size)
-  }, [courseRequests])
+  const handleRequest = (requestToRemove) => {
+    setCourseRequests((prevRequests) => {
+      const updatedRequests = new Set([...prevRequests])
+      updatedRequests.delete(JSON.stringify(requestToRemove))
+      return updatedRequests
+    })
+  }
 
   // Sorting
   React.useEffect(() => {
@@ -279,7 +293,7 @@ export default function TeacherHome() {
 
         {/* Details */}
         <section className="w-full">
-          {/* Course Requests Graph */}
+          {/* Course Requests  */}
           <div className="flex flex-col gap-3 border-b-2 py-6">
             <h2 className="text-lg font-bold text-neutral-600">Course Enrollment Requests</h2>
             {courseRequests?.size > 0 ? (
@@ -287,7 +301,12 @@ export default function TeacherHome() {
                 {[...courseRequests].map((request, index) => {
                   const parsedRequest = JSON.parse(request)
                   return (
-                    <p key={index}>{`Course ID: ${parsedRequest.courseId}, Student ID: ${parsedRequest.studentId}`}</p>
+                    <TeacherCourseRequest
+                      key={index}
+                      request={parsedRequest}
+                      token={cookies.token}
+                      onRequestHandled={() => handleRequest(parsedRequest)}
+                    />
                   )
                 })}
               </div>

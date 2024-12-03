@@ -212,7 +212,7 @@ export default function StudentHome() {
         </section>
 
         {/* Details */}
-        <section>
+        <section className="w-full">
           {/* Contribution Graph */}
           <div className="flex flex-col gap-3 border-b-2 py-6">
             <h2 className="text-lg font-bold text-neutral-600">Submissions in {submissionsYear}</h2>
@@ -270,7 +270,7 @@ export default function StudentHome() {
               <ul>
                 {renderCourses.length > 0 ? (
                   renderCourses.map((courseData, index) => (
-                    <StudentCourseTab courseData={courseData} index={index} token={cookies.token} />
+                    <StudentCourseTab courseData={courseData} key={index} token={cookies.token} />
                   ))
                 ) : (
                   <div className="mx-auto flex w-fit flex-col text-center">
