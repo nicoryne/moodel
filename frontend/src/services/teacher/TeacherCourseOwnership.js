@@ -17,8 +17,42 @@ async function createTeacherCourseOwnership(formData, token) {
   return data
 }
 
-async function getAllTeacherCourseOwnerships(token) {
+async function tcoGetAll(token) {
   const res = await fetch("http://localhost:8080/api/teacherCourseOwnership/getAll", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`🔴 ERROR: Request failed with status ${res.status}`)
+  }
+
+  const data = await res.json()
+  return data
+}
+
+async function tcoGetByTeacherId(teacherId, token) {
+  const res = await fetch(`http://localhost:8080/api/teacherCourseOwnership/getByTeacherId?teacherId=${teacherId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`🔴 ERROR: Request failed with status ${res.status}`)
+  }
+
+  const data = await res.json()
+  return data
+}
+
+async function tcoGetByCourseId(courseId, token) {
+  const res = await fetch(`http://localhost:8080/api/teacherCourseOwnership/getByCourseId?courseId=${courseId}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -85,7 +119,9 @@ async function testTeacherCourseOwnershipConnection() {
 
 export {
   createTeacherCourseOwnership,
-  getAllTeacherCourseOwnerships,
+  tcoGetAll,
+  tcoGetByTeacherId,
+  tcoGetByCourseId,
   updateTeacherCourseOwnership,
   deleteTeacherCourseOwnership,
   testTeacherCourseOwnershipConnection,

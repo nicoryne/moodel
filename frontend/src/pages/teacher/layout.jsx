@@ -20,12 +20,6 @@ export default function TeacherLayout() {
     if (cookies.user) {
       let user = cookies.user
 
-      let sortedCourses = user.ownedCourses.sort((a, b) => {
-        const dateA = new Date(a.createdAt)
-        const dateB = new Date(b.createdAt)
-        return dateB - dateA
-      })
-
       let userDetails = {
         fname: user.fname,
         lname: user.lname,
@@ -35,7 +29,7 @@ export default function TeacherLayout() {
         phoneNumber: user.phoneNumber,
         address: user.address,
         createdAt: new Date(user.createdAt).toLocaleDateString("en-CA"),
-        courses: sortedCourses,
+        courses: user.ownedCourses,
       }
 
       setUserDetails(userDetails)

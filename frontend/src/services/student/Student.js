@@ -56,6 +56,24 @@ async function studentGetByEmail(email, token) {
   return data
 }
 
+async function updateStudent(formData, token) {
+  const res = await fetch("http://localhost:8080/api/student/update", {
+    method: "PUT",
+    body: JSON.stringify(formData),
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`🔴 ERROR: Failed to update student. Status: ${res.status}`)
+  }
+
+  const data = await res.json()
+  return data
+}
+
 async function studentGetAll(token) {
   const res = await fetch("http://localhost:8080/api/student/getAll", {
     method: "GET",
@@ -101,4 +119,12 @@ async function studentTestConnection() {
   return data
 }
 
-export { studentLogin, studentRegister, studentGetByEmail, studentGetAll, studentDeleteById, studentTestConnection }
+export {
+  studentLogin,
+  studentRegister,
+  studentGetByEmail,
+  updateStudent,
+  studentGetAll,
+  studentDeleteById,
+  studentTestConnection,
+}

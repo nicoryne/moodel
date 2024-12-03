@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { TeacherContext } from "./layout"
+import { StudentContext } from "./layout"
 import dark_logo from "../../assets/moodel-logo-dark.png"
 import temp_image from "../../assets/team-members/porter.png"
 import Modal from "../../components/Modal"
@@ -12,17 +12,17 @@ import {
   PhoneIcon,
   CakeIcon,
   HomeIcon,
+  AcademicCapIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid"
 import { motion } from "framer-motion"
 import { useAuth } from "../../middleware/AuthProvider"
-import TeacherCourseTab from "../../components/Teacher/TeacherCourseTab"
-import { createCourse, teacherGetByEmail, createTeacherCourseOwnership } from "../../services/index"
-import { encryptCourseId, decryptJoinCode } from "../../lib/utils/courseEncryptor"
-import { enc } from "crypto-js"
+import StudentCourseTab from "../../components/Student/StudentCourseTab"
+import { decryptJoinCode } from "../../lib/utils/courseEncryptor"
+import { studentGetByEmail, createStudentCourseEnrollment, tcoGetByCourseId } from "../../services/index"
 
-export default function TeacherHome() {
-  const userDetails = React.useContext(TeacherContext)
+export default function StudentHome() {
+  const userDetails = React.useContext(StudentContext)
   const { cookies, updateUser } = useAuth()
 
   // Submissions Graph
@@ -38,153 +38,124 @@ export default function TeacherHome() {
     }))
   const [submissionsByMonth, setSubmissionsByMonth] = React.useState(getAllDaysGroupedByMonth(submissionsYear))
 
-  const [sortedCourses, setSortedCourses] = React.useState(null)
-  const [renderCourses, setRenderCourses] = React.useState(null)
+  // Courses Filter Rendering
+  const [renderCourses, setRenderCourses] = React.useState(userDetails.courses)
   const [courseFilter, setCourseFilter] = React.useState("")
 
-  // Sorting
-  React.useEffect(() => {
-    if (userDetails.courses) {
-      let sortedCourses = userDetails.courses.sort((a, b) => {
-        const dateA = new Date(a.createdAt)
-        const dateB = new Date(b.createdAt)
-
-        if (dateB - dateA !== 0) {
-          return dateB - dateA
-        }
-
-        const titleA = a.course.title.toLowerCase()
-        const titleB = b.course.title.toLowerCase()
-        return titleA.localeCompare(titleB)
-      })
-
-      setSortedCourses(sortedCourses)
-      setRenderCourses(sortedCourses)
-    }
-  }, [userDetails.courses])
-
-  // Search Filter
   React.useEffect(() => {
     if (courseFilter === "") {
-      setRenderCourses(sortedCourses)
+      setRenderCourses(userDetails.courses)
     } else {
-      const filteredCourses = sortedCourses.filter((courseData) =>
+      const filteredCourses = userDetails.courses.filter((courseData) =>
         courseData.course.title.toLowerCase().includes(courseFilter.toLowerCase()),
       )
       setRenderCourses(filteredCourses)
     }
-  }, [courseFilter, sortedCourses])
+  }, [courseFilter, userDetails.courses])
 
   // Modal
-  const [showCreateCourseModal, setShowCreateCourseModal] = React.useState(false)
+  const [showJoinCourseModal, setJoinCourseModal] = React.useState(false)
   const [modalProps, setModalProps] = React.useState(null)
 
-  // Create Course
-  const [courseTitle, setCourseTitle] = React.useState("")
-  const [courseDescription, setCourseDescription] = React.useState("")
+  // Join Course
+  const [joinCode, setJoinCode] = React.useState("")
 
-  const resetCreateCourse = () => {
-    setCourseTitle("")
-    setCourseDescription("")
-    setShowCreateCourseModal(false)
-    setModalProps(null)
+  const resetJoinCourse = () => {
+    setJoinCode("")
+    setJoinCourseModal(false)
+    setModalProps(false)
   }
 
-  const handleCourseCreation = () => {
-    if (courseTitle && courseDescription) {
-      let formData = {
-        title: courseTitle,
-        description: courseDescription,
-        createdAt: new Date().toLocaleDateString("en-CA"),
-      }
+  const handleJoinCourse = () => {
+    if (joinCode) {
+      try {
+        let courseId = decryptJoinCode(joinCode)
 
-      createCourse(formData, cookies.token)
-        .then((newCourse) => {
-          let ownershipData = {
-            teacherCourseId: {
-              teacherId: cookies.user.teacherId,
-              courseId: newCourse.courseId,
+        if (courseId) {
+          let formData = {
+            studentCourseId: {
+              studentId: cookies.user.studentId,
+              courseId: courseId,
             },
-            createdAt: formData.createdAt,
+            createdAt: new Date().toLocaleDateString("en-CA"),
           }
-          createTeacherCourseOwnership(ownershipData, cookies.token)
 
-          let encrypedCode = encryptCourseId(newCourse.courseId)
+          createStudentCourseEnrollment(formData, cookies.token)
+            .then(() => {
+              setModalProps({
+                title: "Success",
+                message: "Successfully enrolled in the course!",
+                type: "success",
+              })
 
-          console.log("Encryped Code: " + encrypedCode)
-
+              setTimeout(async () => {
+                let updatedStudent = await studentGetByEmail(userDetails.email, cookies.token)
+                updateUser(updatedStudent)
+                resetJoinCourse()
+              }, 2000)
+            })
+            .catch((error) => {
+              console.error("Error joining course:", error)
+              setModalProps({
+                title: "Error",
+                message: "Failed to join the course. Please try again.",
+                type: "error",
+                onCancel: () => resetJoinCourse(),
+              })
+            })
+        } else {
           setModalProps({
-            title: "Success",
-            message: "Course created successfully!",
-            type: "success",
-          })
-
-          setTimeout(async () => {
-            let newTeacher = await teacherGetByEmail(userDetails.email, cookies.token)
-            updateUser(newTeacher)
-            resetCreateCourse()
-          }, 2000)
-        })
-        .catch((error) => {
-          console.error("Error creating a course:", error)
-          setModalProps({
-            title: "Error",
-            message: "Failed to create a course. Please try again.",
+            title: "Invalid Code",
+            message: "The join code is invalid.",
             type: "error",
-            onCancel: () => resetCreateCourse(),
+            onCancel: () => resetJoinCourse(),
           })
+        }
+      } catch (error) {
+        console.error("Error processing join code:", error)
+        setModalProps({
+          title: "Error",
+          message: "An error occurred while processing the join code. Please try again.",
+          type: "error",
+          onCancel: () => resetJoinCourse(),
         })
+      }
     } else {
       setModalProps({
         title: "Invalid Input",
-        message: "Invalid fields.",
+        message: "Please enter a valid join code.",
         type: "error",
-        onCancel: () => resetCreateCourse(),
+        onCancel: () => resetJoinCourse(),
       })
     }
   }
 
   return (
     <>
-      {showCreateCourseModal && (
+      {showJoinCourseModal && (
         <Modal
           ModalProps={{
-            title: "Creating a Course",
+            title: "Joining a Course",
             type: "OK",
             children: (
               <form className="flex flex-col gap-8">
-                <div className="flex flex-col gap-4">
-                  <div className="flex flex-col gap-1">
-                    <label htmlFor="course-title" className="text-sm font-semibold text-neutral-500">
-                      Title
-                    </label>
-                    <input
-                      type="text"
-                      id="course-title"
-                      name="course-title"
-                      className="rounded border-2 p-2 text-neutral-600 focus:outline-blue-400"
-                      value={courseTitle}
-                      onChange={(e) => setCourseTitle(e.target.value)}
-                    ></input>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label htmlFor="course-description" className="text-sm font-semibold text-neutral-500">
-                      Description
-                    </label>
-                    <textarea
-                      id="course-description"
-                      name="course-description"
-                      rows="3"
-                      className="resize-none rounded border-2 p-2 text-neutral-600 focus:outline-blue-400"
-                      value={courseDescription}
-                      onChange={(e) => setCourseDescription(e.target.value)}
-                    ></textarea>
-                  </div>
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="join-code" className="text-sm font-semibold text-neutral-500">
+                    Enter code provided by your Teacher
+                  </label>
+                  <input
+                    type="text"
+                    id="join-code"
+                    name="join-code"
+                    className="rounded border-2 p-2 text-neutral-600 focus:outline-blue-400"
+                    value={joinCode}
+                    onChange={(e) => setJoinCode(e.target.value)}
+                  ></input>
                 </div>
               </form>
             ),
-            onCancel: () => resetCreateCourse(),
-            onConfirm: () => handleCourseCreation(),
+            onCancel: () => resetJoinCourse(),
+            onConfirm: () => handleJoinCourse(),
           }}
         />
       )}
@@ -207,9 +178,9 @@ export default function TeacherHome() {
             Edit Profile
           </Link>
           <div className="flex gap-1 text-sm">
-            <BriefcaseIcon className="h-auto w-4 text-blue-300" />
+            <AcademicCapIcon className="h-auto w-4 text-blue-300" />
             <span className="font-bold text-blue-400">{userDetails.courses?.length}</span>
-            <span className="text-blue-300">Courses Active</span>
+            <span className="text-blue-300">Courses Enrolled</span>
           </div>
           <div className="flex gap-1 border-b-2 pb-2 text-sm">
             <ClockIcon className="h-auto w-4 text-blue-300" />
@@ -299,16 +270,18 @@ export default function TeacherHome() {
                 type="button"
                 className="flex place-items-center gap-2 rounded-lg bg-blue-400 px-6 py-2 text-sm font-bold text-white hover:bg-blue-300"
                 onClick={(e) => {
-                  setShowCreateCourseModal(true)
+                  setJoinCourseModal(true)
                 }}
               >
-                <BookOpenIcon className="h-auto w-4" /> Create
+                <BookOpenIcon className="h-auto w-4" /> Join
               </button>
             </aside>
             <div>
               <ul>
-                {renderCourses?.length > 0 ? (
-                  renderCourses.map((courseData, index) => <TeacherCourseTab courseData={courseData} key={index} />)
+                {renderCourses.length > 0 ? (
+                  renderCourses.map((courseData, index) => (
+                    <StudentCourseTab courseData={courseData} index={index} token={cookies.token} />
+                  ))
                 ) : (
                   <div className="mx-auto flex w-fit flex-col text-center">
                     <img className="w-80 opacity-30" src={dark_logo} alt="Moodel Logo" width={256} height={256} />
