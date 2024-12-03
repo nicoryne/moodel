@@ -135,7 +135,7 @@ export default function StudentProfile() {
       return
     }
 
-    updateStudent({ teacherId: cookies.user.studentId, password: newPassword }, cookies.token)
+    updateStudent({ studentId: cookies.user.studentId, password: newPassword }, cookies.token)
       .then(() => {
         setModalProps({
           title: "Success",
@@ -192,7 +192,7 @@ export default function StudentProfile() {
                     name="firstName"
                     id="firstName"
                     className="rounded border-2 indent-2 text-neutral-600 focus:outline-blue-400"
-                    onChange={(e) => setLastName(e.target.value)}
+                    onChange={(e) => setFirstName(e.target.value)}
                   ></input>
                 </div>
                 {/* Last Name */}
