@@ -67,13 +67,14 @@ export default function StudentHome() {
               courseId: courseId,
             },
             createdAt: new Date().toLocaleDateString("en-CA"),
+            isVerified: false,
           }
 
           createStudentCourseEnrollment(formData, cookies.token)
             .then(() => {
               setModalProps({
                 title: "Success",
-                message: "Successfully enrolled in the course!",
+                message: "Please wait for the teacher to verify your enrollment.",
                 type: "success",
               })
 
@@ -161,7 +162,7 @@ export default function StudentHome() {
             <span className="text-base text-neutral-400">{userDetails.email}</span>
           </div>
           <Link
-            to="/teacher/profile"
+            to="/student/profile"
             className="rounded-md border-2 border-blue-200 bg-blue-400 p-1 text-center text-sm font-bold text-white hover:bg-blue-300"
           >
             Edit Profile

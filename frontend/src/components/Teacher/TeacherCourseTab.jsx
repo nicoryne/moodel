@@ -25,7 +25,8 @@ export default function TeacherCourseTab({ courseData }) {
         </span>
         <span className="flex gap-1 text-xs text-neutral-600">
           <UserGroupIcon className="h-4 w-auto" />
-          {courseData.course.enrolledStudents.length} students
+          {courseData.course.enrolledStudents.length}{" "}
+          {courseData.course.enrolledStudents.length === 1 ? "student" : "students"}
         </span>
       </div>
     </li>

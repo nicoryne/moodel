@@ -17,9 +17,13 @@ import {
 import { motion } from "framer-motion"
 import { useAuth } from "../../middleware/AuthProvider"
 import TeacherCourseTab from "../../components/Teacher/TeacherCourseTab"
-import { createCourse, teacherGetByEmail, createTeacherCourseOwnership } from "../../services/index"
-import { encryptCourseId, decryptJoinCode } from "../../lib/utils/courseEncryptor"
-import { enc } from "crypto-js"
+import {
+  createCourse,
+  teacherGetByEmail,
+  createTeacherCourseOwnership,
+  getStudentCourseEnrollmentsByCourseId,
+} from "../../services/index"
+import { encryptCourseId } from "../../lib/utils/courseEncryptor"
 
 export default function TeacherHome() {
   const userDetails = React.useContext(TeacherContext)
@@ -27,20 +31,43 @@ export default function TeacherHome() {
 
   // Submissions Graph
   const timeNow = new Date()
-  const [submissionsYear, setSubmissionsYear] = React.useState(timeNow.getFullYear())
-  const getAllDaysGroupedByMonth = (year) =>
-    Array.from({ length: 12 }, (_, month) => ({
-      month: new Date(year, month, 1).toLocaleString("en-US", { month: "short" }),
-      days: Array.from({ length: new Date(year, month + 1, 0).getDate() }, (_, day) => ({
-        date: new Date(year, month, day + 1),
-        submissions: Math.floor(Math.random() * 10),
-      })),
-    }))
-  const [submissionsByMonth, setSubmissionsByMonth] = React.useState(getAllDaysGroupedByMonth(submissionsYear))
 
   const [sortedCourses, setSortedCourses] = React.useState(null)
   const [renderCourses, setRenderCourses] = React.useState(null)
   const [courseFilter, setCourseFilter] = React.useState("")
+
+  // Course Requests
+
+  const [courseRequests, setCourseRequests] = React.useState(new Set())
+
+  React.useEffect(() => {
+    const fetchCourseRequests = async () => {
+      let courses = userDetails.courses
+
+      for (let course of courses) {
+        let courseId = course.course.courseId
+
+        let enrollments = await getStudentCourseEnrollmentsByCourseId(courseId, cookies.token)
+
+        enrollments.forEach((enrollment) => {
+          if (!enrollment.isVerified) {
+            let courseRequest = {
+              courseId: enrollment.course.courseId,
+              studentId: enrollment.student.studentId,
+            }
+
+            setCourseRequests((prev) => new Set(prev).add(JSON.stringify(courseRequest)))
+          }
+        })
+      }
+    }
+
+    fetchCourseRequests()
+  }, [userDetails.courses, cookies])
+
+  React.useEffect(() => {
+    console.log(courseRequests.size)
+  }, [courseRequests])
 
   // Sorting
   React.useEffect(() => {
@@ -251,38 +278,25 @@ export default function TeacherHome() {
         </section>
 
         {/* Details */}
-        <section>
-          {/* Contribution Graph */}
+        <section className="w-full">
+          {/* Course Requests Graph */}
           <div className="flex flex-col gap-3 border-b-2 py-6">
-            <h2 className="text-lg font-bold text-neutral-600">Submissions in {submissionsYear}</h2>
-            <div className="flex flex-col gap-1">
-              {/* Month Labels */}
-              <div className="flex items-center justify-between text-sm text-neutral-400">
-                {submissionsByMonth.map((monthData) => (
-                  <span key={monthData.month}>{monthData.month}</span>
-                ))}
+            <h2 className="text-lg font-bold text-neutral-600">Course Enrollment Requests</h2>
+            {courseRequests?.size > 0 ? (
+              <div>
+                {[...courseRequests].map((request, index) => {
+                  const parsedRequest = JSON.parse(request)
+                  return (
+                    <p key={index}>{`Course ID: ${parsedRequest.courseId}, Student ID: ${parsedRequest.studentId}`}</p>
+                  )
+                })}
               </div>
-              {/* Submissions Grid */}
-              <div className="grid grid-cols-12 gap-1">
-                {submissionsByMonth.map((monthData, monthIndex) => (
-                  <div key={monthIndex} className="grid grid-flow-col grid-rows-8 gap-1">
-                    {monthData.days.map((day, dayIndex) => (
-                      <div
-                        key={dayIndex}
-                        className="h-3 w-3 rounded"
-                        style={{
-                          backgroundColor:
-                            day.submissions > 0 // if no submissions then set to default grayish color
-                              ? `rgba(96, 165, 250, ${day.submissions / 10})`
-                              : "rgba(209, 213, 219, 1)",
-                        }}
-                        title={`${day.date.toDateString()} - ${day.submissions} submissions`}
-                      ></div>
-                    ))}
-                  </div>
-                ))}
+            ) : (
+              <div className="mx-auto flex w-fit flex-col text-center">
+                <img className="mx-auto w-32 opacity-30" src={dark_logo} alt="Moodel Logo" width={64} height={64} />
+                <p className="font-semibold text-neutral-400">No Course Enrollment Requests Found</p>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Courses */}
