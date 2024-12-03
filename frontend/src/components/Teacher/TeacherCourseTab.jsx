@@ -1,15 +1,16 @@
 import { CalendarDaysIcon, UserGroupIcon } from "@heroicons/react/24/outline"
-
+import { Link } from "react-router-dom"
 export default function TeacherCourseTab({ courseData }) {
   return (
     <li className="my-2 flex h-40 w-full flex-col justify-center gap-2 border-t-2 py-4">
       <h3>
-        <a
-          href="/"
+        <Link
+          to={`/teacher/course/${courseData.course.title.replace(/\s+/g, "-").toLowerCase()}`}
+          state={{ courseDetails: courseData }}
           className="cursor-pointer border-b-2 border-transparent text-xl font-bold text-blue-400 hover:border-blue-400"
         >
           {courseData.course.title}
-        </a>
+        </Link>
       </h3>
       <div className="">
         <p className="text-sm text-neutral-400">{courseData.course.description}</p>

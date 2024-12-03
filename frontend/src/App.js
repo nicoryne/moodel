@@ -1,11 +1,11 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./middleware/AuthProvider";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { AuthProvider } from "./middleware/AuthProvider"
 
-import Landing from "./pages/landing";
-import Layout from "./pages/layout";
-import LoginPage from "./pages/login";
-import SignUpPage from "./pages/signup";
-import Unauthorized from "./pages/unauthorized";
+import Landing from "./pages/landing"
+import Layout from "./pages/layout"
+import LoginPage from "./pages/login"
+import SignUpPage from "./pages/signup"
+import Unauthorized from "./pages/unauthorized"
 
 import StudentHome from "./pages/student/home"
 import StudentLayout from "./pages/student/layout"
@@ -14,14 +14,15 @@ import StudentProfile from "./pages/student/profile"
 import TeacherHome from "./pages/teacher/home"
 import TeacherLayout from "./pages/teacher/layout"
 import TeacherProfile from "./pages/teacher/profile"
+import TeacherCourseView from "./pages/teacher/course-view"
 
-import AdminLayout from "./pages/admin/admin-layout";
-import AdminTeachers from "./pages/admin/admin-teachers";
-import AdminStudents from "./pages/admin/admin-students";
-import AdminLoginPage from "./pages/admin-login";
-import AdminCourses from "./pages/admin/admin-courses";
+import AdminLayout from "./pages/admin/admin-layout"
+import AdminTeachers from "./pages/admin/admin-teachers"
+import AdminStudents from "./pages/admin/admin-students"
+import AdminLoginPage from "./pages/admin-login"
+import AdminCourses from "./pages/admin/admin-courses"
 
-import PrivateRoutes from "./middleware/ProtectedRoutes";
+import PrivateRoutes from "./middleware/ProtectedRoutes"
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
             <Route path="/teacher" element={<TeacherLayout />}>
               <Route path="" element={<TeacherHome />} />
               <Route path="profile" element={<TeacherProfile />} />
+              <Route path="course/:courseName" element={<TeacherCourseView />} />
             </Route>
           </Route>
 
@@ -69,7 +71,7 @@ function App() {
         </Routes>
       </AuthProvider>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App
