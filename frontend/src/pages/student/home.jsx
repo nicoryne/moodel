@@ -4,22 +4,11 @@ import { StudentContext } from "./layout"
 import dark_logo from "../../assets/moodel-logo-dark.png"
 import temp_image from "../../assets/team-members/porter.png"
 import Modal from "../../components/Modal"
-import {
-  BriefcaseIcon,
-  ClockIcon,
-  BookOpenIcon,
-  CalendarDaysIcon,
-  PhoneIcon,
-  CakeIcon,
-  HomeIcon,
-  AcademicCapIcon,
-  UserGroupIcon,
-} from "@heroicons/react/24/solid"
-import { motion } from "framer-motion"
+import { ClockIcon, BookOpenIcon, PhoneIcon, CakeIcon, HomeIcon, AcademicCapIcon } from "@heroicons/react/24/solid"
 import { useAuth } from "../../middleware/AuthProvider"
 import StudentCourseTab from "../../components/Student/StudentCourseTab"
 import { decryptJoinCode } from "../../lib/utils/courseEncryptor"
-import { studentGetByEmail, createStudentCourseEnrollment, tcoGetByCourseId } from "../../services/index"
+import { studentGetByEmail, createStudentCourseEnrollment } from "../../services/index"
 
 export default function StudentHome() {
   const userDetails = React.useContext(StudentContext)
@@ -36,7 +25,7 @@ export default function StudentHome() {
         submissions: Math.floor(Math.random() * 10),
       })),
     }))
-  const [submissionsByMonth, setSubmissionsByMonth] = React.useState(getAllDaysGroupedByMonth(submissionsYear))
+  const [submissionsByMonth] = React.useState(getAllDaysGroupedByMonth(submissionsYear))
 
   // Courses Filter Rendering
   const [renderCourses, setRenderCourses] = React.useState(userDetails.courses)

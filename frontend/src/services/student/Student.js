@@ -109,24 +109,6 @@ async function studentGetAll(token) {
   return data
 }
 
-async function updateStudent(formData, token) {
-  const res = await fetch("http://localhost:8080/api/student/update", {
-    method: "PUT",
-    body: JSON.stringify(formData),
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  })
-
-  if (!res.ok) {
-    throw new Error(`🔴 ERROR: Failed to update student. Status: ${res.status}`)
-  }
-
-  const data = await res.json()
-  return data
-}
-
 async function studentDeleteById(id, token) {
   const res = await fetch(`http://localhost:8080/api/student/delete?id=${id}`, {
     method: "DELETE",
