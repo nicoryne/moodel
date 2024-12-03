@@ -63,8 +63,8 @@ public class StudentController {
     //#################
 
     @PutMapping("/update")
-    public ResponseEntity<Student> update(@RequestParam int id, @RequestBody Student newStudentDetails) {
-        Student updatedStudent = sserv.putStudent(id, newStudentDetails);
+    public ResponseEntity<Student> update(@RequestBody Student newStudent) {
+        Student updatedStudent = sserv.putStudent(newStudent.getStudentId(), newStudent);
         return ResponseEntity.status(HttpStatus.OK).body(updatedStudent);
     }
 

@@ -83,7 +83,7 @@ public class StudentService {
             student.setBirthDate(newStudentDetails.getBirthDate());
         }
         if (newStudentDetails.getPassword() != null && !newStudentDetails.getPassword().isEmpty()) {
-            student.setPassword(newStudentDetails.getPassword());
+            student.setPassword(bCryptPasswordEncoder.encode(newStudentDetails.getPassword()));
         }
         if (newStudentDetails.getEmail() != null) {
             student.setEmail(newStudentDetails.getEmail());

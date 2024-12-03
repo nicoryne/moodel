@@ -31,14 +31,17 @@ public class StudentCourseEnrollment {
 
     private Date createdAt;
 
+    private boolean isVerified;
+
     public StudentCourseEnrollment() {}
 
     public StudentCourseEnrollment(StudentCourseEnrollmentKey studentCourseId, Student student, 
-                                   Course course, Date createdAt) {
+                                   Course course, Date createdAt, boolean isVerified) {
         this.studentCourseId = studentCourseId;
         this.student = student;
         this.course = course;
         this.createdAt = createdAt;
+        this.isVerified = isVerified;
     }
 
     public StudentCourseEnrollmentKey getStudentCourseId() {
@@ -72,4 +75,13 @@ public class StudentCourseEnrollment {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
+    public boolean getIsVerified() {
+        return this.isVerified;
+    }
+
+    public void setIsVerified(boolean isVerified) {
+        this.isVerified = isVerified;
+    }
+
 }

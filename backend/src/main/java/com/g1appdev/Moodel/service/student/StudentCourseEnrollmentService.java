@@ -79,6 +79,7 @@ public class StudentCourseEnrollmentService {
             .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Enrollment record with ID " + key + " was NOT found."));
 
         enrollment.setCreatedAt(newEnrollment.getCreatedAt());
+        enrollment.setIsVerified(newEnrollment.getIsVerified());
 
         return scerepo.save(enrollment);
     }

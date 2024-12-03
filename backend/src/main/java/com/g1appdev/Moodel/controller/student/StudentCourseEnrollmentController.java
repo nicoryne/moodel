@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.g1appdev.Moodel.entity.student.StudentCourseEnrollment;
 import com.g1appdev.Moodel.entity.student.StudentCourseEnrollmentKey;
+import com.g1appdev.Moodel.entity.teacher.TeacherCourseOwnership;
 import com.g1appdev.Moodel.service.student.StudentCourseEnrollmentService;
 
 @RestController
@@ -58,6 +59,15 @@ public class StudentCourseEnrollmentController {
     public ResponseEntity<List<StudentCourseEnrollment>> getByCourseId(@RequestParam int courseId) {
         List<StudentCourseEnrollment> enrollments = eserv.getEnrollmentsByCourseId(courseId);
         return ResponseEntity.status(HttpStatus.OK).body(enrollments);
+    }
+
+    //#################
+    // UPDATE FUNCTIONS
+    //#################
+    @PutMapping("/update")
+    public ResponseEntity<StudentCourseEnrollment> update(@RequestBody StudentCourseEnrollment newStudentCourseEnrollment) {
+        StudentCourseEnrollment updatedEnrollment = eserv.putStudentCourseEnrollment(newStudentCourseEnrollment);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedEnrollment);
     }
 
     //#################
