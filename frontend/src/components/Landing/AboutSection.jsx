@@ -13,8 +13,8 @@ export default function AboutSection() {
 
         {/* Content */}
         <div className="relative z-10 flex max-h-full flex-col items-center justify-center space-y-12 overflow-y-auto px-8 py-16">
-          <img className="mx-auto -mb-10 h-auto w-32" src={dark_logo} alt="Logo" />
-          <h1 className="text-5xl font-bold text-blue-400">About Moodel</h1>
+          <img className="mx-auto -mb-20 h-auto w-32" src={dark_logo} alt="Logo" />
+          <h1 className="text-5xl font-black text-blue-400">About Moodel</h1>
           <p className="max-w-4xl text-center text-lg text-neutral-600">
             Moodel is a project and document management platform specifically tailored for students and teachers. Our
             mission is to simplify and streamline the educational process by offering user-friendly tools for
@@ -48,6 +48,8 @@ export default function AboutSection() {
           >
             Join our community!
           </MotionComponent>
+          
+          
         </div>
       </section>
     </>

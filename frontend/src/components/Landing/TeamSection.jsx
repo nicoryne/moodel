@@ -42,6 +42,7 @@ export default function TeamSection() {
         </h2>
 
         {/* Team Members */}
+
         <div className="scrollbar-hide flex gap-4 overflow-x-auto pb-4">
           <div className="flex flex-nowrap gap-6">
             {teamMembers.map((member, index) => (
@@ -85,4 +86,6 @@ export default function TeamSection() {
       </div>
     </section>
   )
+}
+  );
 }
