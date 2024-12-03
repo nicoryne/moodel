@@ -7,13 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.g1appdev.Moodel.entity.course.Course;
-import com.g1appdev.Moodel.entity.group.Group;
 import com.g1appdev.Moodel.entity.project.Projects;
-import com.g1appdev.Moodel.entity.student.Student;
 import com.g1appdev.Moodel.respository.course.CourseRepo;
-import com.g1appdev.Moodel.respository.group.GroupRepo;
 import com.g1appdev.Moodel.respository.project.ProjectsRepo;
-import com.g1appdev.Moodel.respository.student.StudentRepo;
 
 import jakarta.persistence.EntityNotFoundException;
 

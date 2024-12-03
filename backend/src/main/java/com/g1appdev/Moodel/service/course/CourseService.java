@@ -51,6 +51,8 @@ public class CourseService {
         course.setTitle(newCourseDetails.getTitle());
         course.setDescription(newCourseDetails.getDescription());
         course.setCreatedAt(newCourseDetails.getCreatedAt());
+        course.setProjects(newCourseDetails.getProjects());
+        
 
         return crepo.save(course);
     }

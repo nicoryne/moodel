@@ -35,6 +35,7 @@ public class Projects {
     private int totalPoints;
     private boolean isGroupProject;
     private boolean isActive;
+    private Date createdAt;
 
     @ManyToOne
     @JoinColumn(name="course_id", referencedColumnName = "courseId")
@@ -50,7 +51,7 @@ public class Projects {
 
     public Projects() {}
 
-    public Projects(Course course, String description, boolean isActive, boolean isGroupProject, int projectId, Date submissionDeadline, String title, int totalPoints) {
+    public Projects(Course course, String description, boolean isActive, boolean isGroupProject, int projectId, Date submissionDeadline, String title, int totalPoints, Date createdAt) {
         this.course = course;
         this.description = description;
         this.isActive = isActive;
@@ -59,6 +60,7 @@ public class Projects {
         this.submissionDeadline = submissionDeadline;
         this.title = title;
         this.totalPoints = totalPoints;
+        this.createdAt = createdAt;
     }
 
     public int getProjectId() {
@@ -125,7 +127,52 @@ public class Projects {
         return submissions;
     }
 
+    public void setSubmissions(Set<Submissions> submissions) {
+        this.submissions = submissions;
+    }
+
     public Set<Group> getGroups() {
         return this.groups;
+    }
+
+    
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
+    public boolean isIsGroupProject() {
+        return this.isGroupProject;
+    }
+
+    public boolean getIsGroupProject() {
+        return this.isGroupProject;
+    }
+
+    public void setIsGroupProject(boolean isGroupProject) {
+        this.isGroupProject = isGroupProject;
+    }
+
+    public boolean isIsActive() {
+        return this.isActive;
+    }
+
+    public boolean getIsActive() {
+        return this.isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public Date getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
  }

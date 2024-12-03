@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.g1appdev.Moodel.entity.project.Projects;
 import com.g1appdev.Moodel.entity.student.StudentCourseEnrollment;
 import com.g1appdev.Moodel.entity.teacher.TeacherCourseOwnership;
 
@@ -35,6 +36,10 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.PERSIST)
     @JsonIgnoreProperties("course")
     private Set<TeacherCourseOwnership> ownedByTeachers = new HashSet<>();
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties("course")
+    private Set<Projects> projects = new HashSet<>();
 
     public Course() {}
 
@@ -92,5 +97,14 @@ public class Course {
     public void setOwnedByTeachers(Set<TeacherCourseOwnership> ownedByTeachers) {
         this.ownedByTeachers = ownedByTeachers;
     }
+
+    public Set<Projects> getProjects() {
+        return this.projects;
+    }
+
+    public void setProjects(Set<Projects> projects) {
+        this.projects = projects;
+    }
+
    
 }
