@@ -72,7 +72,7 @@ public class AdminController {
 
     @PutMapping("/update")
     public ResponseEntity<Admin> update(@RequestParam int id, @RequestBody Admin newAdminDetails) {
-        Admin updatedAdmin = aserv.updateAdminDetails(id, newAdminDetails);
+        Admin updatedAdmin = aserv.putAdmin(id, newAdminDetails);
         return ResponseEntity.status(HttpStatus.OK).body(updatedAdmin);
     }
 

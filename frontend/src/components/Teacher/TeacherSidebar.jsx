@@ -1,12 +1,18 @@
 import React from "react"
-import { TableCellsIcon, UserIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline"
+import {
+  TableCellsIcon,
+  UserIcon,
+  ArrowRightStartOnRectangleIcon,
+  HomeIcon,
+  Cog6ToothIcon,
+} from "@heroicons/react/24/outline"
 import { useAuth } from "../../middleware/AuthProvider"
 import { Link } from "react-router-dom"
 import light_logo from "../../assets/moodel-logo-light.png"
 
 const sidebarLinks = [
-  { text: "Profile", href: "/teacher/#profile", icon: UserIcon },
-  { text: "Courses", href: "/teacher/#courses", icon: TableCellsIcon },
+  { text: "Home", href: "/teacher/", icon: HomeIcon },
+  { text: "Profile", href: "/teacher/profile", icon: UserIcon },
 ]
 
 export default function TeacherSidebar() {
@@ -15,24 +21,14 @@ export default function TeacherSidebar() {
 
   return (
     <aside
-      className={`transition-width inset-y-0 left-0 z-50 min-h-screen border-r-2 border-blue-300 bg-blue-400 shadow-md duration-200 ${
+      className={`transition-width inset-y-0 left-0 z-40 min-h-screen border-r-2 border-blue-300 bg-blue-400 shadow-md duration-200 ${
         isMaximized ? "w-16 md:w-48" : "w-16"
       }`}
       onMouseEnter={() => setIsMaximized(true)}
       onMouseLeave={() => setIsMaximized(false)}
     >
       {/* Wrapper */}
-      <nav className="flex h-full min-w-full flex-col place-items-start justify-center space-y-4 md:justify-start">
-        {/* Header */}
-        <Link to="/teacher" className="ml-3 mt-4 flex place-items-center">
-          <img className="h-auto w-10" src={light_logo} alt="Logo" />
-          <h1
-            className={`duration-400 ease ml-2 transform font-bold text-neutral-100 transition-opacity ${isMaximized ? "hidden opacity-0 md:block md:opacity-100" : "hidden opacity-0"}`}
-          >
-            Dashboard
-          </h1>
-        </Link>
-
+      <nav className="flex h-full min-w-full flex-col place-items-start justify-start space-y-4 py-12">
         {/* Pages Section */}
         <section className="min-w-full border-b-2 border-blue-300 py-4">
           <ul className="space-y-4">

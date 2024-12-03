@@ -2,6 +2,7 @@ import React from "react"
 import { Outlet, useNavigate } from "react-router-dom"
 import { useAuth } from "../../middleware/AuthProvider"
 import StudentSidebar from "../../components/Student/StudentSidebar"
+import StudentNavbar from "../../components/Student/StudentNavbar"
 
 export const StudentContext = React.createContext(null)
 
@@ -18,6 +19,12 @@ export default function StudentLayout() {
     if (cookies.user) {
       let user = cookies.user
 
+      let sortedCourses = user.courseEnrollments.sort((a, b) => {
+        const dateA = new Date(a.createdAt)
+        const dateB = new Date(b.createdAt)
+        return dateB - dateA
+      })
+
       let userDetails = {
         fname: user.fname,
         lname: user.lname,
@@ -27,7 +34,7 @@ export default function StudentLayout() {
         phoneNumber: user.phoneNumber,
         address: user.address,
         createdAt: user.createdAt,
-        courses: user.ownedCourses,
+        courses: sortedCourses,
       }
 
       setUserDetails(userDetails)
@@ -38,8 +45,13 @@ export default function StudentLayout() {
     <StudentContext.Provider value={userDetails}>
       <div className="flex">
         <StudentSidebar />
-        <main className="mt-16 w-full overflow-x-hidden p-8">
-          <Outlet />
+        <main className="w-full">
+          <StudentNavbar />
+          {userDetails && (
+            <>
+              <Outlet />
+            </>
+          )}
         </main>
       </div>
     </StudentContext.Provider>

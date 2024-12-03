@@ -70,18 +70,34 @@ public class StudentService {
     //#################
 
     public Student putStudent(int id, Student newStudentDetails) {
-        Student Student = srepo.findById(id)
+        Student student = srepo.findById(id)
             .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Student record with ID " + id + " was NOT found."));
+    
+        if (newStudentDetails.getFname() != null && !newStudentDetails.getFname().isEmpty()) {
+            student.setFname(newStudentDetails.getFname());
+        }
+        if (newStudentDetails.getLname() != null && !newStudentDetails.getLname().isEmpty()) {
+            student.setLname(newStudentDetails.getLname());
+        }
+        if (newStudentDetails.getBirthDate() != null) {
+            student.setBirthDate(newStudentDetails.getBirthDate());
+        }
+        if (newStudentDetails.getPassword() != null && !newStudentDetails.getPassword().isEmpty()) {
+            student.setPassword(newStudentDetails.getPassword());
+        }
+        if (newStudentDetails.getEmail() != null) {
+            student.setEmail(newStudentDetails.getEmail());
+        }
+        if (newStudentDetails.getPhoneNumber() != null) {
+            student.setPhoneNumber(newStudentDetails.getPhoneNumber());
+        }
+        if (newStudentDetails.getAddress() != null) {
+            student.setAddress(newStudentDetails.getAddress());
+        }
 
-        Student.setFname(newStudentDetails.getFname());
-        Student.setLname(newStudentDetails.getLname());
-        Student.setBirthDate(newStudentDetails.getBirthDate());
-        Student.setAge(newStudentDetails.getAge());
-        Student.setPassword(newStudentDetails.getPassword());
-        Student.setEmail(newStudentDetails.getEmail());
-        Student.setPhoneNumber(newStudentDetails.getPhoneNumber());
-       
-        return srepo.save(Student);
+        student.setAge(newStudentDetails.getAge());
+    
+        return srepo.save(student);
     }
     
 

@@ -20,7 +20,7 @@ public class StudentCourseEnrollment {
     @ManyToOne
     @MapsId("studentId")
     @JoinColumn(name = "student_id", referencedColumnName = "studentId")
-    @JsonIgnoreProperties({"courseEnrollments", "individualSubmissions"}) // Specify properties to be ignored during serialization
+    @JsonIgnoreProperties({"courseEnrollments", "individualSubmissions"}) 
     Student student;
 
     @ManyToOne

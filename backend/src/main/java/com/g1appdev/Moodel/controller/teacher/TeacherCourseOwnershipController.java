@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.g1appdev.Moodel.entity.teacher.Teacher;
 import com.g1appdev.Moodel.entity.teacher.TeacherCourseOwnership;
 import com.g1appdev.Moodel.entity.teacher.TeacherCourseOwnershipKey;
 import com.g1appdev.Moodel.service.teacher.TeacherCourseOwnershipService;
@@ -44,6 +45,18 @@ public class TeacherCourseOwnershipController {
     @GetMapping("/getAll")
     public ResponseEntity<List<TeacherCourseOwnership>> getAll() {
         List<TeacherCourseOwnership> ownerships = tcoserv.getAllTeacherCourseOwnerships();
+        return ResponseEntity.status(HttpStatus.OK).body(ownerships);
+    }
+
+    @GetMapping("/getByCourseId")
+    public ResponseEntity<List<TeacherCourseOwnership>> getByCourseId(@RequestParam int courseId) {
+        List<TeacherCourseOwnership> ownerships = tcoserv.getTeacherCourseOwnershipsByCourseId(courseId);
+        return ResponseEntity.status(HttpStatus.OK).body(ownerships);
+    }
+
+    @GetMapping("/getByTeacherId")
+    public ResponseEntity<List<TeacherCourseOwnership>> getByTeacherId(@RequestParam int teacherId) {
+        List<TeacherCourseOwnership> ownerships = tcoserv.getTeacherCourseOwnershipsByTeacherId(teacherId);
         return ResponseEntity.status(HttpStatus.OK).body(ownerships);
     }
 

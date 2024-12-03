@@ -7,14 +7,13 @@ import LoginPage from "./pages/login";
 import SignUpPage from "./pages/signup";
 import Unauthorized from "./pages/unauthorized";
 
-import StudentCourses from "./pages/student/student-courses";
-import StudentLayout from "./pages/student/student-layout";
-import StudentProfilePage from "./pages/student/student-profile";
-import StudentProjects from "./pages/student/student-projects"; // Import the Projects Page
+import StudentHome from "./pages/student/home"
+import StudentLayout from "./pages/student/layout"
+import StudentProfile from "./pages/student/profile"
 
-import TeacherLayout from "./pages/teacher/teacher-layout";
-import TeacherProfile from "./pages/teacher/teacher-profile";
-import TeacherCourses from "./pages/teacher/teacher-courses";
+import TeacherHome from "./pages/teacher/home"
+import TeacherLayout from "./pages/teacher/layout"
+import TeacherProfile from "./pages/teacher/profile"
 
 import AdminLayout from "./pages/admin/admin-layout";
 import AdminTeachers from "./pages/admin/admin-teachers";
@@ -46,16 +45,15 @@ function App() {
           {/* Student Routes */}
           <Route element={<PrivateRoutes allowedRoles={["student"]} />}>
             <Route path="/student" element={<StudentLayout />}>
-              <Route path="courses" element={<StudentCourses />} />
-              <Route path="courses/:courseId/projects" element={<StudentProjects />} />
-              <Route path="profile" element={<StudentProfilePage />} />
+              <Route path="" element={<StudentHome />} />
+              <Route path="profile" element={<StudentProfile />} />
             </Route>
           </Route>
 
           {/* Teacher Routes */}
           <Route element={<PrivateRoutes allowedRoles={["teacher"]} />}>
             <Route path="/teacher" element={<TeacherLayout />}>
-              <Route path="courses" element={<TeacherCourses />} />
+              <Route path="" element={<TeacherHome />} />
               <Route path="profile" element={<TeacherProfile />} />
             </Route>
           </Route>
