@@ -2,8 +2,9 @@ import React from "react"
 import { useLocation, useOutletContext, Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../../middleware/AuthProvider"
 import { ArrowLeftCircleIcon, PresentationChartLineIcon, CalendarDaysIcon, ClockIcon } from "@heroicons/react/20/solid"
+import { getCourseById } from "../../services"
 
-export default function TeacherProjectView() {
+export default function StudentProjectView() {
   const { cookies, reloadUser } = useAuth()
   const { userDetails } = useOutletContext()
 
@@ -15,20 +16,23 @@ export default function TeacherProjectView() {
   const [courseDetails, setCourseDetails] = React.useState(null)
 
   React.useEffect(() => {
-    if (projectId && userDetails && courseId) {
-      const foundCourse = userDetails.courses.find((course) => course.course.courseId === courseId)
+    async function fetchCourseDetails() {
+      try {
+        if (courseId) {
+          const foundCourse = await getCourseById(courseId, cookies.token)
+          if (foundCourse) {
+            setCourseDetails(foundCourse)
+            console.log(foundCourse)
 
-      if (foundCourse) {
-        setCourseDetails(foundCourse)
-      }
-
-      const foundProject = foundCourse.course.projects.find((project) => project.projectId === projectId)
-
-      if (foundProject) {
-        setProjectDetails(foundProject)
+            setProjectDetails(foundCourse.projects.find((project) => project.projectId === projectId))
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching course details:", error)
       }
     }
-  }, [projectId, userDetails, courseId])
+    fetchCourseDetails()
+  }, [courseId, cookies.token, projectId])
 
   return (
     <>
@@ -85,25 +89,7 @@ export default function TeacherProjectView() {
             </div>
           </div>
 
-          <div>
-            <header>
-              <h3 className="text-lg font-semibold text-neutral-400">Students</h3>
-            </header>
-            <div>
-              {courseDetails.course.enrolledStudents.map((enrollment, index) => {
-                return (
-                  <>
-                    <details key={index}>
-                      <summary className="text-neutral-400">
-                        {enrollment.student.fname} {enrollment.student.lname}
-                      </summary>
-                      <p>Test</p>
-                    </details>
-                  </>
-                )
-              })}
-            </div>
-          </div>
+          <div></div>
         </section>
       )}
     </>

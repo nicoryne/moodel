@@ -29,6 +29,7 @@ public class Submissions {
     private String feedback;
     private String fileURL;
     private String description;
+    private String status;
     private int accumulatedPoints;
 
     @ManyToOne
@@ -45,6 +46,7 @@ public class Submissions {
         this.description = description;
         this.accumulatedPoints = accumulatedPoints;
         this.assignedToProject = assignedToProject;
+        this.status = "Pending";
     }
 
 
@@ -98,6 +100,14 @@ public class Submissions {
 
     public void setAssignedToProject(Projects assignedToProject) {
         this.assignedToProject = assignedToProject;
+    }
+    
+    public String getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

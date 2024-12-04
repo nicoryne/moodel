@@ -24,6 +24,8 @@ import AdminCourses from "./pages/admin/admin-courses"
 
 import PrivateRoutes from "./middleware/ProtectedRoutes"
 import TeacherProjectView from "./pages/teacher/project-view"
+import StudentProjectView from "./pages/student/project-view"
+import StudentCourseView from "./pages/student/course-view"
 
 function App() {
   return (
@@ -49,6 +51,8 @@ function App() {
             <Route path="/student" element={<StudentLayout />}>
               <Route path="" element={<StudentHome />} />
               <Route path="profile" element={<StudentProfile />} />
+              <Route path="courses/:courseName" element={<StudentCourseView />} />
+              <Route path="courses/:courseName/projects/:projectName" element={<StudentProjectView />} />
             </Route>
           </Route>
 

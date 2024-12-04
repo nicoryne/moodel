@@ -1,67 +1,70 @@
 import React from "react"
-import { CalendarDaysIcon, BriefcaseIcon } from "@heroicons/react/24/solid"
-import { tcoGetByCourseId } from "../../services/index"
+import { CalendarDaysIcon, BriefcaseIcon } from "@heroicons/react/24/outline"
+import { Link, useLocation } from "react-router-dom"
+import { tcoGetByCourseId } from "../../services"
+import { useAuth } from "../../middleware/AuthProvider"
 
-export default function StudentCourseTab({ courseData, index, token }) {
-  const [teacherNames, setTeacherNames] = React.useState([])
+export default function StudentCourseTab({ courseData }) {
+  const location = useLocation()
+  const courseSlug = courseData.course.title.replace(/\s+/g, "-").toLowerCase()
 
-  const fetchTeacherFromCourse = async (courseId) => {
-    try {
-      const courseOwnerships = await tcoGetByCourseId(courseId, token)
-      const teachers = courseOwnerships.map((ownership) => `${ownership.teacher.fname} ${ownership.teacher.lname}`)
-      setTeacherNames(teachers)
-    } catch (error) {
-      console.error("Error fetching teacher names:", error)
-    }
-  }
+  const { cookies } = useAuth()
+  const [teacherData, setTeacherData] = React.useState(null)
 
   React.useEffect(() => {
-    if (courseData?.course?.courseId) {
-      fetchTeacherFromCourse(courseData.course.courseId)
+    async function fetchData() {
+      try {
+        const data = await tcoGetByCourseId(courseData.course.courseId, cookies.token)
+        setTeacherData({
+          fname: data[0].teacher.fname,
+          lname: data[0].teacher.lname,
+        })
+      } catch (error) {
+        console.error("Error fetching teacher data:", error)
+        setTeacherData(null)
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courseData, token])
+    fetchData()
+  }, [courseData.course.courseId, cookies.token])
 
   return (
-    <li key={index} className="my-2 flex h-40 w-full border-t-2">
-      <div className="flex flex-col justify-between py-4">
+    <li className="my-2 flex h-40 w-full justify-between border-t-2 py-4">
+      <div className="flex flex-col justify-center gap-2">
         <h3>
-          {courseData.isVerified ? (
-            <a
-              href="/"
-              className="cursor-pointer border-b-2 border-transparent text-xl font-bold text-blue-400 hover:border-blue-400"
-            >
-              {courseData.course.title}
-            </a>
-          ) : (
-            <p className="border-b-2 border-transparent text-xl font-bold text-neutral-400">
-              {courseData.course.title}
-            </p>
-          )}
+          <Link
+            to={`${location.pathname.replace(/\/$/, "")}/courses/${courseSlug}`}
+            state={{ courseId: courseData.course.courseId }}
+            className="cursor-pointer border-b-2 border-transparent text-xl font-bold text-blue-400 hover:border-blue-400"
+          >
+            {courseData.course.title}
+          </Link>
         </h3>
-        <div>
+        <div className="">
           <p className="text-sm text-neutral-400">{courseData.course.description}</p>
         </div>
         <div className="mt-4 flex gap-8">
-          <span className="flex gap-1 text-xs text-neutral-600">
-            <CalendarDaysIcon className="h-4 w-auto" /> Created at{" "}
+          <span className="flex gap-1 text-xs text-neutral-400">
+            <CalendarDaysIcon className="h-4 w-auto" />
+            Created at{" "}
             {new Date(courseData.createdAt).toLocaleDateString("en-US", {
               month: "short",
               day: "2-digit",
               year: "numeric",
             })}
           </span>
-          <span className="flex gap-1 text-xs text-neutral-600">
-            <BriefcaseIcon className="h-4 w-auto" />
-            {teacherNames.length > 0 ? `Teachers: ${teacherNames.join(", ")}` : "No teachers found"}
-          </span>
+          {teacherData && (
+            <span className="flex gap-1 text-xs text-neutral-400">
+              <BriefcaseIcon className="h-4 w-auto" />
+              <p>Teacher: </p>
+              <ul>
+                <li>
+                  {teacherData.fname} {teacherData.lname}
+                </li>
+              </ul>
+            </span>
+          )}
         </div>
       </div>
-      {!courseData.isVerified && (
-        <div className="ml-auto mr-4 flex place-items-center">
-          <strong className="rounded bg-red-500 p-1 text-xs text-white">Pending Verification</strong>
-        </div>
-      )}
     </li>
   )
 }
