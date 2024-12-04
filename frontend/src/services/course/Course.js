@@ -68,7 +68,7 @@ async function getCourseByTitle(title, token) {
   return data
 }
 
-async function updateCourse(id, formData, token) {
+async function updateCourse(formData, token) {
   const headers = new Headers()
   headers.append("Content-Type", "application/json")
   headers.append("Authorization", `Bearer ${token}`)

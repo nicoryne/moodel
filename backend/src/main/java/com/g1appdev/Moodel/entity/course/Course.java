@@ -29,15 +29,15 @@ public class Course {
     private String description;
     private Date createdAt;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("course")
     private Set<StudentCourseEnrollment> enrolledStudents = new HashSet<>();
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("course")
     private Set<TeacherCourseOwnership> ownedByTeachers = new HashSet<>();
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("course")
     private Set<Projects> projects = new HashSet<>();
 

@@ -48,12 +48,14 @@ public class CourseService {
         Course course = crepo.findById(id)
             .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Course record with ID " + id + " was NOT found."));
 
-        course.setTitle(newCourseDetails.getTitle());
-        course.setDescription(newCourseDetails.getDescription());
-        course.setCreatedAt(newCourseDetails.getCreatedAt());
-        course.setProjects(newCourseDetails.getProjects());
-        
+        if (newCourseDetails.getDescription() != null) {
+            course.setDescription(newCourseDetails.getDescription());
+        }
 
+        if (newCourseDetails.getProjects() != null) {
+            course.setProjects(newCourseDetails.getProjects());
+        }
+        
         return crepo.save(course);
     }
 

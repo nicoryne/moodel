@@ -63,8 +63,8 @@ public class CourseController {
     //#################
 
     @PutMapping("/update")
-    public ResponseEntity<Course> update(@RequestParam int id, @RequestBody Course newCourseDetails) {
-        Course updatedCourse = cserv.updateCourseDetails(id, newCourseDetails);
+    public ResponseEntity<Course> update(@RequestBody Course newCourseDetails) {
+        Course updatedCourse = cserv.updateCourseDetails(newCourseDetails.getCourseId(), newCourseDetails);
         return ResponseEntity.status(HttpStatus.OK).body(updatedCourse);
     }
 
