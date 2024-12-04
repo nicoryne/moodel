@@ -1,5 +1,5 @@
 import BrettImage from "../../assets/team-members/brett.jpg"
-import RigelImage from "../../assets/team-members/rigel.jpg"
+import RigelImage from "../../assets/team-members/rigel.png"
 import MargaImage from "../../assets/team-members/marga.jpg"
 import PorterImage from "../../assets/team-members/porter.png"
 import GabeImage from "../../assets/team-members/gabe.jpg"
