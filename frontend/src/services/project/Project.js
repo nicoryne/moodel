@@ -68,7 +68,7 @@ async function getProjectById(id, token) {
   return data
 }
 
-async function updateProject(id, formData, token) {
+async function updateProject(formData, token) {
   const headers = new Headers()
   headers.append("Content-Type", "application/json")
   headers.append("Authorization", `Bearer ${token}`)

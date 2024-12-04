@@ -64,16 +64,38 @@ public class ProjectsService {
         Projects project = prepo.findById(id)
             .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Project record with ID " + id + " was NOT found."));
 
-        project.setTitle(newProjectDetails.getTitle());
         project.setDescription(newProjectDetails.getDescription());
         project.setSubmissionDeadline(newProjectDetails.getSubmissionDeadline());
         project.setTotalPoints(newProjectDetails.getTotalPoints());
         project.setActive(newProjectDetails.isActive());
         project.setGroupProject(newProjectDetails.isGroupProject());
 
-        if (newProjectDetails.getCourse() != null) {
-            project.setCourse(newProjectDetails.getCourse());
+
+        if(newProjectDetails.getDescription() != null) {
+            project.setDescription(newProjectDetails.getDescription());
         }
+
+        if(newProjectDetails.getSubmissionDeadline() != null) {
+            project.setSubmissionDeadline(newProjectDetails.getSubmissionDeadline());
+        }
+
+        if(newProjectDetails.getTotalPoints() > 0) {
+            project.setTotalPoints(newProjectDetails.getTotalPoints());
+        }
+
+        if(newProjectDetails.getIsActive() || !newProjectDetails.getIsActive()) {
+            project.setActive(newProjectDetails.getIsActive());
+        }
+
+        if(newProjectDetails.getIsGroupProject() || !newProjectDetails.isGroupProject()) {
+            project.setIsGroupProject(newProjectDetails.getIsGroupProject());
+        }
+
+        if(newProjectDetails.getSubmissions() != null) {
+            project.setSubmissions(newProjectDetails.getSubmissions());
+        }
+
+        
 
         return prepo.save(project);
     }

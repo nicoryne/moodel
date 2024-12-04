@@ -62,8 +62,8 @@ public class ProjectsController {
     //#################
 
     @PutMapping("/update")
-    public Projects update(@RequestParam int id, @RequestBody Projects newProject) {
-        return pserv.putProjectDetails(id, newProject);
+    public Projects update(@RequestBody Projects newProject) {
+        return pserv.putProjectDetails(newProject.getProjectId(), newProject);
     }
 
     //#################

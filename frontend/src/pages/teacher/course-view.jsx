@@ -1,20 +1,12 @@
 import React from "react"
 import { useLocation, useOutletContext } from "react-router-dom"
-import {
-  BookOpenIcon,
-  UserGroupIcon,
-  PresentationChartLineIcon,
-  CheckCircleIcon,
-  CalendarDaysIcon,
-  ClockIcon,
-  UserIcon,
-  TrophyIcon,
-} from "@heroicons/react/24/solid"
+import { BookOpenIcon, UserGroupIcon, PresentationChartLineIcon, CheckCircleIcon } from "@heroicons/react/24/solid"
 import { encryptCourseId } from "../../lib/utils/courseEncryptor"
 import { createProject } from "../../services"
 import temp_image from "../../assets/team-members/porter.png"
 import Modal from "../../components/Modal"
 import { useAuth } from "../../middleware/AuthProvider"
+import TeacherProjectTab from "../../components/Teacher/TeacherProjectTab"
 
 export default function TeacherCourseView() {
   const { cookies, reloadUser } = useAuth()
@@ -202,6 +194,10 @@ export default function TeacherCourseView() {
                   <small className="text-xs text-neutral-100">Course Title</small>
                   <h1 className="text-xl font-bold text-white">{courseDetails.course.title}</h1>
                 </div>
+                <div className="mx-20 flex flex-col border-l-2 px-4">
+                  <small className="text-xs text-neutral-100">Project Description</small>
+                  <p className="text-sm font-semibold text-white">{courseDetails.course.description}</p>
+                </div>
               </div>
 
               <div className="flex flex-col">
@@ -292,56 +288,7 @@ export default function TeacherCourseView() {
                 </aside>
                 <div className="flex flex-col gap-4">
                   {courseDetails.course.projects.map((project) => (
-                    <div className="rounded-lg border-2 border-blue-300 shadow-md">
-                      <div className="flex gap-8 p-8">
-                        <div className="flex gap-2">
-                          <PresentationChartLineIcon className="h-auto w-12 text-blue-400" />
-                          <div className="flex flex-col">
-                            <small className="text-xs text-neutral-400">Project Title</small>
-                            <h1 className="text-xl font-bold text-blue-400">{project.title}</h1>
-                          </div>
-                        </div>
-                        <div className="flex flex-col border-l-2 px-4">
-                          <small className="text-xs text-neutral-400">Project Description</small>
-                          <p className="text-sm font-semibold text-neutral-400">{project.description}</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-8 px-8 pb-4">
-                        <span className="flex gap-1 text-xs text-neutral-400">
-                          <CalendarDaysIcon className="h-4 w-auto" /> Created at{" "}
-                          {new Date(project.createdAt).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "2-digit",
-                            year: "numeric",
-                          })}
-                        </span>
-                        <span className="flex gap-1 text-xs text-neutral-400">
-                          <ClockIcon className="h-4 w-auto" /> Deadline on{" "}
-                          {new Date(project.submissionDeadline).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "2-digit",
-                            year: "numeric",
-                          })}
-                        </span>
-                        <span className="flex gap-1 text-xs text-neutral-400">
-                          <TrophyIcon className="h-4 w-auto" />
-                          {project.totalPoints} Total Points
-                        </span>
-                        <span className="flex gap-1 text-xs text-neutral-400">
-                          {project.isGroupProject ? (
-                            <>
-                              <UserGroupIcon className="h-4 w-auto" />
-                              Group Submission
-                            </>
-                          ) : (
-                            <>
-                              <UserIcon className="h-4 w-auto" />
-                              Individual Submission
-                            </>
-                          )}
-                        </span>
-                      </div>
-                    </div>
+                    <TeacherProjectTab project={project} />
                   ))}
                 </div>
               </div>
