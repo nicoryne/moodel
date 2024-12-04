@@ -5,7 +5,7 @@ import Modal from "../../components/Modal"
 import { useAuth } from "../../middleware/AuthProvider"
 
 export default function TeacherCourseRequest({ request, token, onRequestHandled }) {
-  const { updateUser } = useAuth()
+  const { reloadUser } = useAuth()
   const enrollmentInfo = request
 
   const [modalProps, setModalProps] = React.useState(null)
@@ -37,8 +37,7 @@ export default function TeacherCourseRequest({ request, token, onRequestHandled 
       })
 
       setTimeout(async () => {
-        let newTeacher = await teacherGetByEmail(enrollmentInfo.teacherEmail, token)
-        updateUser(newTeacher)
+        reloadUser()
         onRequestHandled()
         setModalProps(null)
       }, 2000)

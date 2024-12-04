@@ -6,7 +6,7 @@ export default function TeacherCourseTab({ courseData }) {
       <h3>
         <Link
           to={`/teacher/course/${courseData.course.title.replace(/\s+/g, "-").toLowerCase()}`}
-          state={{ courseDetails: courseData }}
+          state={{ courseId: courseData.course.courseId }}
           className="cursor-pointer border-b-2 border-transparent text-xl font-bold text-blue-400 hover:border-blue-400"
         >
           {courseData.course.title}
