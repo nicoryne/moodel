@@ -65,7 +65,7 @@ export default function StudentHome() {
               studentId: cookies.user.studentId,
               courseId: courseId,
             },
-            createdAt: new Date().toLocaleDateString("en-CA"),
+            createdAt: new Date(),
             isVerified: false,
           }
 

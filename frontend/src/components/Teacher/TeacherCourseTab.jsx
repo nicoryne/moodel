@@ -1,11 +1,14 @@
 import React from "react"
 import { CalendarDaysIcon, UserGroupIcon, EllipsisVerticalIcon } from "@heroicons/react/24/outline"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import Modal from "../../components/Modal"
 import { deleteCourse, updateCourse } from "../../services"
 import { useAuth } from "../../middleware/AuthProvider"
 
 export default function TeacherCourseTab({ courseData }) {
+  const location = useLocation()
+  const courseSlug = courseData.course.title.replace(/\s+/g, "-").toLowerCase()
+
   const { cookies, reloadUser } = useAuth()
   const [showOptions, setShowOptions] = React.useState(false)
 
@@ -128,7 +131,7 @@ export default function TeacherCourseTab({ courseData }) {
       <div className="flex flex-col justify-center gap-2">
         <h3>
           <Link
-            to={`/teacher/course/${courseData.course.title.replace(/\s+/g, "-").toLowerCase()}`}
+            to={`${location.pathname.replace(/\/$/, "")}/courses/${courseSlug}`}
             state={{ courseId: courseData.course.courseId }}
             className="cursor-pointer border-b-2 border-transparent text-xl font-bold text-blue-400 hover:border-blue-400"
           >

@@ -119,7 +119,7 @@ export default function TeacherHome() {
       let formData = {
         title: courseTitle,
         description: courseDescription,
-        createdAt: new Date().toLocaleDateString("en-CA"),
+        createdAt: new Date(),
       }
 
       createCourse(formData, cookies.token)

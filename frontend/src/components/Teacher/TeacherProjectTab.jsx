@@ -11,8 +11,12 @@ import {
 import { useAuth } from "../../middleware/AuthProvider"
 import { updateProject, deleteProject } from "../../services/index"
 import Modal from "../../components/Modal"
+import { Link, useLocation } from "react-router-dom"
 
-export default function TeacherProjectTab({ project }) {
+export default function TeacherProjectTab({ project, courseId }) {
+  const location = useLocation()
+  const projectSlug = project.title.replace(/\s+/g, "-").toLowerCase()
+
   const { cookies, reloadUser } = useAuth()
   const [showOptions, setShowOptions] = React.useState(false)
 
@@ -109,7 +113,7 @@ export default function TeacherProjectTab({ project }) {
   }
 
   return (
-    <div className="flex justify-between rounded-lg border-2 border-blue-300 px-8 shadow-md">
+    <div className="flex place-items-center justify-between rounded-lg border-2 border-blue-300 px-8 shadow-md">
       {editProjectModal && (
         <Modal
           ModalProps={{
@@ -136,7 +140,7 @@ export default function TeacherProjectTab({ project }) {
                       Submission Deadline
                     </label>
                     <input
-                      type="date"
+                      type="datetime-local"
                       id="submission-deadline"
                       name="submission-deadline"
                       className="rounded border-2 p-2 text-neutral-600 focus:outline-blue-400"
@@ -188,7 +192,14 @@ export default function TeacherProjectTab({ project }) {
             <PresentationChartLineIcon className="h-auto w-12 text-blue-400" />
             <div className="flex flex-col">
               <small className="text-xs text-neutral-400">Project Title</small>
-              <h1 className="text-xl font-bold text-blue-400">{project.title}</h1>
+              <Link
+                to={`${location.pathname.replace(/\/$/, "")}/projects/${projectSlug}`}
+                state={{ projectId: project.projectId, courseId: courseId }}
+              >
+                <h1 className="w-fit border-b-2 border-transparent text-xl font-bold text-blue-400 hover:border-blue-400">
+                  {project.title}
+                </h1>
+              </Link>
             </div>
           </div>
           <div className="flex flex-col border-l-2 px-4">
@@ -203,6 +214,9 @@ export default function TeacherProjectTab({ project }) {
               month: "short",
               day: "2-digit",
               year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              timeZone: "Asia/Manila",
             })}
           </span>
           <span className="flex gap-1 text-xs text-neutral-400">
@@ -211,6 +225,9 @@ export default function TeacherProjectTab({ project }) {
               month: "short",
               day: "2-digit",
               year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              timeZone: "Asia/Manila",
             })}
           </span>
           <span className="flex gap-1 text-xs text-neutral-400">

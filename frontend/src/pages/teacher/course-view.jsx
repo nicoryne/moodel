@@ -56,8 +56,8 @@ export default function TeacherCourseView() {
       let formData = {
         title: projectTitle,
         description: projectDescription,
-        createdAt: new Date().toLocaleDateString("en-CA"),
-        submissionDeadline: new Date(submissionDeadline).toLocaleDateString("en-CA"),
+        createdAt: new Date(),
+        submissionDeadline: new Date(submissionDeadline),
         totalPoints: totalPoints,
         groupProject: isGroupProject,
         active: true,
@@ -67,7 +67,7 @@ export default function TeacherCourseView() {
       }
 
       createProject(formData, cookies.token)
-        .then((newProject) => {
+        .then(() => {
           setModalProps({
             title: "Success",
             message: "Project created successfully!",
@@ -140,7 +140,7 @@ export default function TeacherCourseView() {
                           Submission Deadline
                         </label>
                         <input
-                          type="date"
+                          type="datetime-local"
                           id="submission-deadline"
                           name="submission-deadline"
                           className="rounded border-2 p-2 text-neutral-600 focus:outline-blue-400"
@@ -287,8 +287,8 @@ export default function TeacherCourseView() {
                   </button>
                 </aside>
                 <div className="flex flex-col gap-4">
-                  {courseDetails.course.projects.map((project) => (
-                    <TeacherProjectTab project={project} />
+                  {courseDetails.course.projects.map((project, index) => (
+                    <TeacherProjectTab key={index} project={project} courseId={courseDetails.course.courseId} />
                   ))}
                 </div>
               </div>

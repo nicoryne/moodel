@@ -23,6 +23,7 @@ import AdminLoginPage from "./pages/admin-login"
 import AdminCourses from "./pages/admin/admin-courses"
 
 import PrivateRoutes from "./middleware/ProtectedRoutes"
+import TeacherProjectView from "./pages/teacher/project-view"
 
 function App() {
   return (
@@ -56,7 +57,8 @@ function App() {
             <Route path="/teacher" element={<TeacherLayout />}>
               <Route path="" element={<TeacherHome />} />
               <Route path="profile" element={<TeacherProfile />} />
-              <Route path="course/:courseName" element={<TeacherCourseView />} />
+              <Route path="courses/:courseName" element={<TeacherCourseView />} />
+              <Route path="courses/:courseName/projects/:projectName" element={<TeacherProjectView />} />
             </Route>
           </Route>
 
