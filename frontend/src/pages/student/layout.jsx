@@ -4,8 +4,6 @@ import { useAuth } from "../../middleware/AuthProvider"
 import StudentSidebar from "../../components/Student/StudentSidebar"
 import StudentNavbar from "../../components/Student/StudentNavbar"
 
-export const StudentContext = React.createContext(null)
-
 export default function StudentLayout() {
   const navigate = useNavigate()
   const { cookies, isAuthenticated } = useAuth()
@@ -14,46 +12,28 @@ export default function StudentLayout() {
   React.useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login")
-    }
-
-    if (cookies.user) {
-      let user = cookies.user
-
-      let sortedCourses = user.courseEnrollments.sort((a, b) => {
-        const dateA = new Date(a.createdAt)
-        const dateB = new Date(b.createdAt)
-        return dateB - dateA
-      })
-
-      let userDetails = {
-        fname: user.fname,
-        lname: user.lname,
-        birthdate: user.birthDate,
-        age: user.age,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-        address: user.address,
-        createdAt: user.createdAt,
-        courses: sortedCourses,
+    } else if (cookies.user) {
+      try {
+        const user = cookies.user
+        setUserDetails(user)
+      } catch (error) {
+        console.error("🔴 ERROR parsing user cookie:", error)
+        navigate("/login")
       }
-
-      setUserDetails(userDetails)
     }
-  }, [isAuthenticated, navigate, cookies])
+  }, [isAuthenticated, cookies, navigate])
+
+  if (!isAuthenticated || !userDetails) {
+    return <p>Loading...</p>
+  }
 
   return (
-    <StudentContext.Provider value={userDetails}>
-      <div className="flex">
-        <StudentSidebar />
-        <main className="w-full">
-          <StudentNavbar />
-          {userDetails && (
-            <>
-              <Outlet />
-            </>
-          )}
-        </main>
-      </div>
-    </StudentContext.Provider>
+    <div className="flex">
+      <StudentSidebar />
+      <main className="w-full">
+        <StudentNavbar />
+        <Outlet context={{ userDetails }} />
+      </main>
+    </div>
   )
 }

@@ -1,15 +1,15 @@
 import React from "react"
+import { useOutletContext } from "react-router-dom"
 import Modal from "../../components/Modal"
 import { PencilSquareIcon } from "@heroicons/react/20/solid"
 import temp_image from "../../assets/team-members/porter.png"
-import { TeacherContext } from "./layout"
 import { useAuth } from "../../middleware/AuthProvider"
 import { getAge } from "../../lib/utils/getAge"
 import { updateTeacher } from "../../services/index"
 
 export default function TeacherProfile() {
-  const { cookies, updateUser } = useAuth()
-  const userDetails = React.useContext(TeacherContext)
+  const { cookies, reloadUser } = useAuth()
+  const { userDetails } = useOutletContext()
 
   const [modalProps, setModalProps] = React.useState(null)
   const [isDefaultFields, setIsDefaultFields] = React.useState(false)
@@ -80,7 +80,7 @@ export default function TeacherProfile() {
 
       updateTeacher(formData, cookies.token)
         .then((newTeacher) => {
-          updateUser(newTeacher)
+          reloadUser()
           setModalProps({
             title: "Success",
             message: "Profile updated successfully!",

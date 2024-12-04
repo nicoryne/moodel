@@ -1,14 +1,7 @@
 import React from "react"
-import {
-  TableCellsIcon,
-  UserIcon,
-  ArrowRightStartOnRectangleIcon,
-  HomeIcon,
-  Cog6ToothIcon,
-} from "@heroicons/react/24/outline"
+import { UserIcon, ArrowRightStartOnRectangleIcon, HomeIcon } from "@heroicons/react/24/outline"
 import { useAuth } from "../../middleware/AuthProvider"
 import { Link } from "react-router-dom"
-import light_logo from "../../assets/moodel-logo-light.png"
 
 const sidebarLinks = [
   { text: "Home", href: "/teacher/", icon: HomeIcon },

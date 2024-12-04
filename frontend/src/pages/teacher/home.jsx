@@ -1,34 +1,17 @@
 import React from "react"
-import { Link } from "react-router-dom"
-import { TeacherContext } from "./layout"
+import { Link, useOutletContext } from "react-router-dom"
 import dark_logo from "../../assets/moodel-logo-dark.png"
 import temp_image from "../../assets/team-members/porter.png"
 import Modal from "../../components/Modal"
-import {
-  BriefcaseIcon,
-  ClockIcon,
-  BookOpenIcon,
-  CalendarDaysIcon,
-  PhoneIcon,
-  CakeIcon,
-  HomeIcon,
-  UserGroupIcon,
-} from "@heroicons/react/24/solid"
-import { motion } from "framer-motion"
+import { BriefcaseIcon, ClockIcon, BookOpenIcon, PhoneIcon, CakeIcon, HomeIcon } from "@heroicons/react/24/solid"
 import { useAuth } from "../../middleware/AuthProvider"
 import TeacherCourseTab from "../../components/Teacher/TeacherCourseTab"
-import {
-  createCourse,
-  teacherGetByEmail,
-  createTeacherCourseOwnership,
-  getStudentCourseEnrollmentsByCourseId,
-} from "../../services/index"
-import { encryptCourseId } from "../../lib/utils/courseEncryptor"
+import { createCourse, createTeacherCourseOwnership, getStudentCourseEnrollmentsByCourseId } from "../../services/index"
 import TeacherCourseRequest from "../../components/Teacher/TeacherCourseRequest"
 
 export default function TeacherHome() {
-  const userDetails = React.useContext(TeacherContext)
-  const { cookies, updateUser } = useAuth()
+  const { cookies, reloadUser } = useAuth()
+  const { userDetails } = useOutletContext()
 
   // Submissions Graph
   const timeNow = new Date()
@@ -149,11 +132,6 @@ export default function TeacherHome() {
             createdAt: formData.createdAt,
           }
           createTeacherCourseOwnership(ownershipData, cookies.token)
-
-          let encrypedCode = encryptCourseId(newCourse.courseId)
-
-          console.log("Encryped Code: " + encrypedCode)
-
           setModalProps({
             title: "Success",
             message: "Course created successfully!",
@@ -161,8 +139,7 @@ export default function TeacherHome() {
           })
 
           setTimeout(async () => {
-            let newTeacher = await teacherGetByEmail(userDetails.email, cookies.token)
-            updateUser(newTeacher)
+            reloadUser()
             resetCreateCourse()
           }, 2000)
         })

@@ -1,5 +1,5 @@
 import React from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation, useOutletContext } from "react-router-dom"
 import {
   BookOpenIcon,
   UserGroupIcon,
@@ -14,12 +14,12 @@ import { encryptCourseId } from "../../lib/utils/courseEncryptor"
 import { createProject, teacherGetByEmail } from "../../services"
 import temp_image from "../../assets/team-members/porter.png"
 import Modal from "../../components/Modal"
-import { TeacherContext } from "./layout"
 import { useAuth } from "../../middleware/AuthProvider"
 
 export default function TeacherCourseView() {
-  const userDetails = React.useContext(TeacherContext)
-  const { cookies, updateUser } = useAuth()
+  const { cookies, reloadUser } = useAuth()
+  const { userDetails } = useOutletContext()
+
   const location = useLocation()
   const { courseDetails } = location.state || {}
   const activeStudents = courseDetails.course.enrolledStudents.filter((student) => student.isVerified)
@@ -70,8 +70,7 @@ export default function TeacherCourseView() {
           })
 
           setTimeout(async () => {
-            let newTeacher = await teacherGetByEmail(userDetails.email, cookies.token)
-            updateUser(newTeacher)
+            reloadUser()
             resetCreateProject()
           }, 2000)
         })

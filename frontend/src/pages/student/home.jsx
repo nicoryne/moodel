@@ -1,6 +1,5 @@
 import React from "react"
-import { Link } from "react-router-dom"
-import { StudentContext } from "./layout"
+import { Link, useOutletContext } from "react-router-dom"
 import dark_logo from "../../assets/moodel-logo-dark.png"
 import temp_image from "../../assets/team-members/porter.png"
 import Modal from "../../components/Modal"
@@ -8,11 +7,11 @@ import { ClockIcon, BookOpenIcon, PhoneIcon, CakeIcon, HomeIcon, AcademicCapIcon
 import { useAuth } from "../../middleware/AuthProvider"
 import StudentCourseTab from "../../components/Student/StudentCourseTab"
 import { decryptJoinCode } from "../../lib/utils/courseEncryptor"
-import { studentGetByEmail, createStudentCourseEnrollment } from "../../services/index"
+import { createStudentCourseEnrollment } from "../../services/index"
 
 export default function StudentHome() {
-  const userDetails = React.useContext(StudentContext)
-  const { cookies, updateUser } = useAuth()
+  const { cookies, reloadUser } = useAuth()
+  const { userDetails } = useOutletContext()
 
   // Submissions Graph
   const timeNow = new Date()
@@ -79,8 +78,7 @@ export default function StudentHome() {
               })
 
               setTimeout(async () => {
-                let updatedStudent = await studentGetByEmail(userDetails.email, cookies.token)
-                updateUser(updatedStudent)
+                reloadUser()
                 resetJoinCourse()
               }, 2000)
             })
