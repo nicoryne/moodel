@@ -29,12 +29,12 @@ public class Submissions {
     private String feedback;
     private String fileURL;
     private String description;
-    private String status;
+    private String status = "Pending";
     private int accumulatedPoints;
 
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName="projectId")
-    @JsonIgnoreProperties("submissions")
+    @JsonIgnoreProperties({"submissions", "course"})
     private Projects assignedToProject;
 
     public Submissions() {}
@@ -46,7 +46,6 @@ public class Submissions {
         this.description = description;
         this.accumulatedPoints = accumulatedPoints;
         this.assignedToProject = assignedToProject;
-        this.status = "Pending";
     }
 
 

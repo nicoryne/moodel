@@ -68,6 +68,25 @@ public class SubmissionsController {
                          .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 
+    @GetMapping("/getByProjectId")
+    public ResponseEntity<List<Submissions>> getSubmissionsByProjectId(@RequestParam int projectId) {
+        List<Submissions> submissions = sserv.getSubmissionsByProjectId(projectId);
+        return ResponseEntity.status(HttpStatus.OK).body(submissions);
+    }
+
+    @GetMapping("/getByProjectIdAndStudentId")
+    public ResponseEntity<List<Submissions>> getSubmissionsByProjectId(@RequestParam int studentId, @RequestParam int projectId) {
+        List<Submissions> submissions = sserv.getIndividualSubmissionsByProjectId(studentId, projectId);
+        return ResponseEntity.status(HttpStatus.OK).body(submissions);
+    }
+
+    @GetMapping("/getByStudentId")
+    public ResponseEntity<List<Submissions>> getSubmissionByStudentI(@RequestParam int studentId) {
+        List<Submissions> submissions = sserv.getSubmissionByStudentId(studentId);
+        return ResponseEntity.status(HttpStatus.OK).body(submissions);
+    }
+
+
     //#################
     // UPDATE FUNCTIONS
     //#################

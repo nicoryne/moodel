@@ -7,24 +7,61 @@ import { ClockIcon, BookOpenIcon, PhoneIcon, CakeIcon, HomeIcon, AcademicCapIcon
 import { useAuth } from "../../middleware/AuthProvider"
 import StudentCourseTab from "../../components/Student/StudentCourseTab"
 import { decryptJoinCode } from "../../lib/utils/courseEncryptor"
-import { createStudentCourseEnrollment } from "../../services/index"
+import { createStudentCourseEnrollment, getSubmissionsByStudentId } from "../../services/index"
 
 export default function StudentHome() {
   const { cookies, reloadUser } = useAuth()
   const { userDetails } = useOutletContext()
 
-  // Submissions Graph
   const timeNow = new Date()
   const [submissionsYear, setSubmissionsYear] = React.useState(timeNow.getFullYear())
-  const getAllDaysGroupedByMonth = (year) =>
-    Array.from({ length: 12 }, (_, month) => ({
+  const [mySubmissions, setMySubmissions] = React.useState(null)
+
+  React.useEffect(() => {
+    const fetchSubmissions = async () => {
+      if (userDetails?.studentId) {
+        try {
+          const data = await getSubmissionsByStudentId(userDetails.studentId, cookies.token)
+
+          if (data) {
+            setMySubmissions(data)
+            console.log(data)
+          }
+        } catch (error) {
+          console.error("Error fetching submissions:", error)
+        }
+      }
+    }
+
+    fetchSubmissions()
+  }, [cookies.token, userDetails.studentId])
+
+  const getAllDaysGroupedByMonth = (year, submissions) => {
+    const submissionsCountByDate = submissions.reduce((acc, submission) => {
+      const submissionDate = new Date(submission.submissionDate).toDateString()
+      acc[submissionDate] = (acc[submissionDate] || 0) + 1
+      return acc
+    }, {})
+
+    return Array.from({ length: 12 }, (_, month) => ({
       month: new Date(year, month, 1).toLocaleString("en-US", { month: "short" }),
-      days: Array.from({ length: new Date(year, month + 1, 0).getDate() }, (_, day) => ({
-        date: new Date(year, month, day + 1),
-        submissions: Math.floor(Math.random() * 10),
-      })),
+      days: Array.from({ length: new Date(year, month + 1, 0).getDate() }, (_, day) => {
+        const currentDate = new Date(year, month, day + 1).toDateString()
+        return {
+          date: new Date(year, month, day + 1),
+          submissions: submissionsCountByDate[currentDate] || 0,
+        }
+      }),
     }))
-  const [submissionsByMonth] = React.useState(getAllDaysGroupedByMonth(submissionsYear))
+  }
+
+  const [submissionsByMonth, setSubmissionsByMonth] = React.useState([])
+
+  React.useEffect(() => {
+    if (mySubmissions) {
+      setSubmissionsByMonth(getAllDaysGroupedByMonth(submissionsYear, mySubmissions))
+    }
+  }, [mySubmissions, submissionsYear])
 
   // Courses Filter Rendering
   const [renderCourses, setRenderCourses] = React.useState(userDetails.courses)

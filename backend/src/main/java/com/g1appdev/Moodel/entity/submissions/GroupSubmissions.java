@@ -17,7 +17,6 @@ import jakarta.persistence.Table;
 public class GroupSubmissions extends Submissions {
 
     @ManyToOne
-    @MapsId("groupId")
     @JoinColumn(name = "group_id", referencedColumnName="groupId")
     @JsonIgnoreProperties("groupSubmissions")
     private Group ownedByGroup;

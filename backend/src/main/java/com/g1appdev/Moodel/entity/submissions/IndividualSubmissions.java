@@ -9,7 +9,6 @@ import com.g1appdev.Moodel.entity.student.Student;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,9 +16,8 @@ import jakarta.persistence.Table;
 public class IndividualSubmissions extends Submissions {
 
     @ManyToOne
-    @MapsId("studentId")
     @JoinColumn(name = "student_id", referencedColumnName="studentId")
-    @JsonIgnoreProperties("individualSubmissions")
+    @JsonIgnoreProperties({"individualSubmissions", "courseEnrollments", "password"})
     private Student ownedByStudent;
 
     public IndividualSubmissions() {}

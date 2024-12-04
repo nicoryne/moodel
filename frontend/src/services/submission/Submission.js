@@ -89,6 +89,60 @@ async function getSubmissionById(id, token) {
   return data
 }
 
+async function getSubmissionsByProjectId(projectId, token) {
+  const res = await fetch(`http://localhost:8080/api/submissions/getByProjectId?projectId=${projectId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`🔴 ERROR: Request failed with status ${res.status}`)
+  }
+
+  const data = await res.json()
+  return data
+}
+
+async function getSubmissionsByStudentId(studentId, token) {
+  const res = await fetch(`http://localhost:8080/api/submissions/getByStudentId?studentId=${studentId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`🔴 ERROR: Request failed with status ${res.status}`)
+  }
+
+  const data = await res.json()
+  return data
+}
+
+async function getIndividualSubmissionsByProjectId(projectId, studentId, token) {
+  const res = await fetch(
+    `http://localhost:8080/api/submissions/getByProjectIdAndStudentId?projectId=${projectId}&studentId=${studentId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    },
+  )
+
+  if (!res.ok) {
+    throw new Error(`🔴 ERROR: Request failed with status ${res.status}`)
+  }
+
+  const data = await res.json()
+  return data
+}
+
 async function updateSubmission(id, formData, token) {
   const headers = new Headers()
   headers.append("Content-Type", "application/json")
@@ -142,6 +196,9 @@ export {
   createIndividualSubmission,
   getAllSubmissions,
   getSubmissionById,
+  getSubmissionsByStudentId,
+  getSubmissionsByProjectId,
+  getIndividualSubmissionsByProjectId,
   updateSubmission,
   deleteSubmission,
   testSubmissionConnection,

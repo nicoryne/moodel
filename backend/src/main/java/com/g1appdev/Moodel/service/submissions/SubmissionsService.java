@@ -21,12 +21,19 @@ import com.g1appdev.Moodel.respository.student.StudentRepo;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SubmissionsService {
 
     @Autowired
     private SubmissionsRepo srepo;
+
+    @Autowired
+    private IndividualSubmissionsRepo isrepo;
+
+    @Autowired
+    private GroupSubmissionsRepo gsrepo;
 
     @Autowired
     private GroupRepo groupRepo;
@@ -36,6 +43,8 @@ public class SubmissionsService {
 
     @Autowired
     private StudentRepo studentRepo;
+
+  
 
     //#################
     // CREATE HELPER METHOD
@@ -96,6 +105,34 @@ public class SubmissionsService {
     public Optional<Submissions> getSubmissionById(int id) {
         return srepo.findById(id);
     }
+
+    public List<Submissions> getSubmissionsByProjectId(int projectId) {
+        return srepo.findByAssignedToProject_ProjectId(projectId);
+    }
+
+    public List<Submissions> getIndividualSubmissionsByProjectId(int studentId, int projectId) {
+        List<Submissions> allSubmissions = srepo.findByAssignedToProject_ProjectId(projectId);
+
+        return allSubmissions.stream()
+            .filter(submission -> submission instanceof IndividualSubmissions) 
+            .filter(submission -> 
+                ((IndividualSubmissions) submission).getOwnedByStudent().getStudentId() == studentId
+            )
+            .collect(Collectors.toList());
+    }
+
+    public List<Submissions> getSubmissionByStudentId(int studentId) {
+        List<Submissions> allSubmissions = srepo.findAll();
+
+        return allSubmissions.stream()
+            .filter(submission -> submission instanceof IndividualSubmissions) 
+            .filter(submission -> 
+                ((IndividualSubmissions) submission).getOwnedByStudent().getStudentId() == studentId
+            )
+            .collect(Collectors.toList());
+    }
+
+
 
     //#################
     // UPDATE FUNCTIONS
