@@ -36,7 +36,7 @@ export default function StudentHome() {
     fetchSubmissions()
   }, [cookies.token, userDetails.studentId])
 
-  // Documention because this looks like confusing lol
+  // documention because this looks confusing lol
   const getAllDaysGroupedByMonth = (year, submissions) => {
     // step 1: turn the submissions array into a map (key-value pairs) grouped by date.
     // - key: a normalized string representation of the date (e.g., "Mon Nov 11 2024").
