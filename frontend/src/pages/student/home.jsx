@@ -7,24 +7,75 @@ import { ClockIcon, BookOpenIcon, PhoneIcon, CakeIcon, HomeIcon, AcademicCapIcon
 import { useAuth } from "../../middleware/AuthProvider"
 import StudentCourseTab from "../../components/Student/StudentCourseTab"
 import { decryptJoinCode } from "../../lib/utils/courseEncryptor"
-import { createStudentCourseEnrollment } from "../../services/index"
+import { createStudentCourseEnrollment, getSubmissionsByStudentId } from "../../services/index"
 
 export default function StudentHome() {
   const { cookies, reloadUser } = useAuth()
   const { userDetails } = useOutletContext()
 
-  // Submissions Graph
   const timeNow = new Date()
   const [submissionsYear, setSubmissionsYear] = React.useState(timeNow.getFullYear())
-  const getAllDaysGroupedByMonth = (year) =>
-    Array.from({ length: 12 }, (_, month) => ({
+  const [mySubmissions, setMySubmissions] = React.useState(null)
+
+  React.useEffect(() => {
+    const fetchSubmissions = async () => {
+      if (userDetails?.studentId) {
+        try {
+          const data = await getSubmissionsByStudentId(userDetails.studentId, cookies.token)
+
+          if (data) {
+            setMySubmissions(data)
+            console.log(data)
+          }
+        } catch (error) {
+          console.error("Error fetching submissions:", error)
+        }
+      }
+    }
+
+    fetchSubmissions()
+  }, [cookies.token, userDetails.studentId])
+
+  // documention because this looks confusing lol
+  const getAllDaysGroupedByMonth = (year, submissions) => {
+    // step 1: turn the submissions array into a map (key-value pairs) grouped by date.
+    // - key: a normalized string representation of the date (e.g., "Mon Nov 11 2024").
+    // - value: the count of submissions on that specific date.
+    const submissionsCountByDate = submissions.reduce((acc, submission) => {
+      const submissionDate = new Date(submission.submissionDate).toDateString() // ignore time for normalization
+      acc[submissionDate] = (acc[submissionDate] || 0) + 1 // counts the submissions for each date
+      return acc
+    }, {})
+
+    // step 2: generate an array for all 12 months of the year.
+    return Array.from({ length: 12 }, (_, month) => ({
+      // `month`: get the short name of the month (e.g., "Jan").
       month: new Date(year, month, 1).toLocaleString("en-US", { month: "short" }),
-      days: Array.from({ length: new Date(year, month + 1, 0).getDate() }, (_, day) => ({
-        date: new Date(year, month, day + 1),
-        submissions: Math.floor(Math.random() * 10),
-      })),
+
+      // `days`: generate an array for all the days in the current month.
+      days: Array.from(
+        { length: new Date(year, month + 1, 0).getDate() }, // number of days in the month
+        (_, day) => {
+          // create a Date object for the current day.
+          const currentDate = new Date(year, month, day + 1).toDateString()
+
+          // return the day object with the date and number of submissions.
+          return {
+            date: new Date(year, month, day + 1), // full Date object for precise representation
+            submissions: submissionsCountByDate[currentDate] || 0, // get submission count or default to 0
+          }
+        },
+      ),
     }))
-  const [submissionsByMonth] = React.useState(getAllDaysGroupedByMonth(submissionsYear))
+  }
+
+  const [submissionsByMonth, setSubmissionsByMonth] = React.useState([])
+
+  React.useEffect(() => {
+    if (mySubmissions) {
+      setSubmissionsByMonth(getAllDaysGroupedByMonth(submissionsYear, mySubmissions))
+    }
+  }, [mySubmissions, submissionsYear])
 
   // Courses Filter Rendering
   const [renderCourses, setRenderCourses] = React.useState(userDetails.courses)

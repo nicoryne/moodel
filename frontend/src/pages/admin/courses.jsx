@@ -32,11 +32,42 @@ export default function AdminCourses() {
   }, [cookies])
 
   const handleDelete = (courseId) => {
-    // TODO: delete
+    setModalProps({
+      title: "Delete Course",
+      message: "Are you sure you want to delete this course?",
+      type: "OK",
+      onConfirm: async () => {
+        try {
+          await deleteCourse(courseId, cookies.token)
+          setCoursesList((prev) => prev.filter((course) => course.courseId !== courseId))
+          setIsModalOpen(false)
+        } catch (error) {
+          console.error(error)
+        }
+      },
+      onCancel: () => setIsModalOpen(false),
+    })
+    setIsModalOpen(true)
   }
 
   const handleEdit = (courseId) => {
-    // TODO: Edit
+    const course = coursesList.find((c) => c.courseId === courseId)
+    setModalProps({
+      title: "Edit Course",
+      message: `Edit details for ${course.title}.`,
+      type: "Edit",
+      onConfirm: async (updatedData) => {
+        try {
+          await updateCourse(courseId, updatedData, cookies.token)
+          setIsModalOpen(false)
+        } catch (error) {
+          console.error(error)
+        }
+      },
+      onCancel: () => setIsModalOpen(false),
+      course,
+    })
+    setIsModalOpen(true)
   }
 
   return (
@@ -86,6 +117,8 @@ export default function AdminCourses() {
           </div>
         </div>
       </div>
+      {/* Render Modal */}
+      {isModalOpen && <Modal ModalProps={modalProps} />}
     </>
   )
 }

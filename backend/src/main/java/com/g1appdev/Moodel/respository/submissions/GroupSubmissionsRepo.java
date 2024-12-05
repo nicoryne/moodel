@@ -8,6 +8,6 @@ import com.g1appdev.Moodel.entity.submissions.GroupSubmissions;
 
 public interface GroupSubmissionsRepo extends JpaRepository<GroupSubmissions, Integer> {
 
-    List<GroupSubmissions> findByOwnedByGroup_GroupId(Integer groupId);
+    List<GroupSubmissions> findByOwnedByGroup_GroupId(int groupId);
     
 }
