@@ -21,7 +21,6 @@ export default function StudentCourseView() {
   const { courseId } = location.state || {}
   const [courseDetails, setCourseDetails] = React.useState(null)
   const [activeStudents, setActiveStudents] = React.useState([])
-  const [pendingStudents, setPendingStudents] = React.useState([])
   const [teacherList, setTeacherList] = React.useState([])
 
   React.useEffect(() => {
@@ -44,7 +43,6 @@ export default function StudentCourseView() {
     if (courseDetails) {
       const enrolledStudents = courseDetails.enrolledStudents || []
       setActiveStudents(enrolledStudents.filter((student) => student.isVerified))
-      setPendingStudents(enrolledStudents.filter((student) => !student.isVerified))
       setTeacherList(courseDetails.ownedByTeachers)
     }
   }, [courseDetails])
@@ -113,30 +111,6 @@ export default function StudentCourseView() {
                       </li>
                     ))}
                   </ul>
-                </div>
-                <div className="flex min-h-36 flex-col gap-2 border-b-2 py-2">
-                  <h4 className="text-xs font-semibold text-neutral-400">Pending</h4>
-                  {pendingStudents.length > 0 ? (
-                    <ul>
-                      {pendingStudents.map((data, index) => (
-                        <li key={index} className="flex place-items-center gap-1">
-                          <img
-                            src={temp_image}
-                            className="h-auto w-6 rounded-full opacity-40"
-                            alt={data.student.fname + "Profile"}
-                          />
-                          <p className="text-sm font-semibold text-neutral-400">
-                            {data.student.fname} {""} {data.student.lname}
-                          </p>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <span className="flex gap-1 py-2 text-xs font-semibold text-neutral-400">
-                      <CheckCircleIcon className="h-auto w-4" />
-                      All students are verified!
-                    </span>
-                  )}
                 </div>
               </div>
             </aside>
