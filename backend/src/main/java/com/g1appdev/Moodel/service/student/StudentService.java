@@ -14,12 +14,16 @@ import org.springframework.stereotype.Service;
 import com.g1appdev.Moodel.entity.student.Student;
 import com.g1appdev.Moodel.respository.student.StudentRepo;
 import com.g1appdev.Moodel.security.services.JWTService;
+import com.g1appdev.Moodel.service.utils.FileStorageService;
 
 @Service
 public class StudentService {
     
     @Autowired
     StudentRepo srepo;
+
+    @Autowired
+    FileStorageService fileStorageService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -93,6 +97,16 @@ public class StudentService {
         }
         if (newStudentDetails.getAddress() != null) {
             student.setAddress(newStudentDetails.getAddress());
+        }
+
+        if (newStudentDetails.getProfilePicture() != null) {
+
+            if(student.getProfilePicture() != null && !student.getProfilePicture().isEmpty()) {
+                String fileName = student.getProfilePicture();
+                fileStorageService.deleteFile(fileName);
+            }
+
+            student.setProfilePicture(newStudentDetails.getProfilePicture());
         }
 
         student.setAge(newStudentDetails.getAge());

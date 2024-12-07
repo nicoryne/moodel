@@ -14,12 +14,16 @@ import org.springframework.stereotype.Service;
 import com.g1appdev.Moodel.entity.teacher.Teacher;
 import com.g1appdev.Moodel.respository.teacher.TeacherRepo;
 import com.g1appdev.Moodel.security.services.JWTService;
+import com.g1appdev.Moodel.service.utils.FileStorageService;
 
 @Service
 public class TeacherService {
     
     @Autowired
     TeacherRepo trepo;
+    
+    @Autowired
+    FileStorageService fileStorageService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -95,6 +99,18 @@ public class TeacherService {
         }
         if (newTeacherDetails.getAddress() != null) {
             teacher.setAddress(newTeacherDetails.getAddress());
+        }
+
+        if (newTeacherDetails.getProfilePicture() != null) {
+            // Teacher already has a profile picture, delete
+            // old profile picture to save space
+            if(teacher.getProfilePicture() != null && !teacher.getProfilePicture().isEmpty()) {
+                String fileName = teacher.getProfilePicture();
+                fileStorageService.deleteFile(fileName);
+            }
+
+            // Set new profile picture
+            teacher.setProfilePicture(newTeacherDetails.getProfilePicture());
         }
         
         teacher.setAge(newTeacherDetails.getAge());

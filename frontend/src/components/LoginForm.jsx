@@ -15,7 +15,6 @@ import { MotionComponent } from "./MotionComponent"
 import { useAuth } from "../middleware/AuthProvider"
 
 export default function LoginForm() {
-  const navigate = useNavigate()
   const { setAuth } = useAuth()
   const [passwordHidden, togglePasswordHidden] = React.useState(false)
   const [email, setEmail] = React.useState(null)
@@ -33,7 +32,6 @@ export default function LoginForm() {
       let loginToken = await login(email, password, role)
       if (loginToken) {
         setAuth(loginToken, email, role)
-        navigate(`/${role}`)
       }
     } catch (error) {
       setError(error.message || "Login failed. Please try again.")

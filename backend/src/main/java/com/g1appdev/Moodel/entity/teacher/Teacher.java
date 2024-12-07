@@ -1,13 +1,8 @@
 package com.g1appdev.Moodel.entity.teacher;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -40,6 +35,7 @@ public class Teacher {
     private String phoneNumber;
     private String address;
     private Date createdAt;
+    private String profilePicture;
 
    
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
@@ -48,7 +44,7 @@ public class Teacher {
     
     public Teacher() {}
 
-    public Teacher(String lname, String fname, Date birthDate, int age, String password, String email, String phoneNumber, String address, Date createdAt) {
+    public Teacher(String lname, String fname, Date birthDate, int age, String password, String email, String phoneNumber, String address, Date createdAt, String profilePicture) {
         this.lname = lname;
         this.fname = fname;
         this.birthDate = birthDate;
@@ -58,6 +54,7 @@ public class Teacher {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.createdAt = createdAt;
+        this.profilePicture = profilePicture;
     }
 
 
@@ -148,5 +145,14 @@ public class Teacher {
     public void setOwnedCourses(Set<TeacherCourseOwnership> ownedCourses) {
         this.ownedCourses = ownedCourses;
     }
+
+    public String getProfilePicture() {
+        return this.profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
 
 }

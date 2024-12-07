@@ -44,6 +44,10 @@ async function login(email, password, roleType) {
       throw new Error("🔴 ERROR: Invalid role type.")
   }
 
+  if (!loginToken) {
+    throw new Error("🔴 ERROR: Failed to login.")
+  }
+
   return loginToken
 }
 

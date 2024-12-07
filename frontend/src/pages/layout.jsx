@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom"
 import { AnimatePresence, motion } from "framer-motion"
 import Navbar from "../components/Navbar"
+import React from "react"
 
 export default function Layout() {
   const location = useLocation()

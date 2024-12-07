@@ -20,26 +20,27 @@ export default function TeacherProjectView() {
   const groupSubmissionsByStudent = async () => {
     try {
       const fetchedSubmissions = await getSubmissionsByProjectId(projectId, cookies.token)
-
       const submissionsArray = Array.isArray(fetchedSubmissions) ? fetchedSubmissions : []
 
-      return submissionsArray.reduce((acc, submission) => {
+      const groupedSubmissions = submissionsArray.reduce((acc, submission) => {
         const studentId = submission?.ownedByStudent?.studentId
         if (!studentId) {
           console.warn("Submission missing studentId:", submission)
           return acc
         }
 
-        if (!acc.has(studentId)) {
-          acc.set(studentId, [])
+        if (!acc[studentId]) {
+          acc[studentId] = []
         }
 
-        acc.get(studentId).push(submission)
+        acc[studentId].push(submission)
         return acc
-      }, new Map())
+      }, {})
+
+      return groupedSubmissions
     } catch (error) {
       console.error("Error grouping submissions:", error)
-      return new Map()
+      return {}
     }
   }
 
@@ -130,40 +131,49 @@ export default function TeacherProjectView() {
             <div>
               {courseDetails.course.enrolledStudents.map((enrollment, index) => {
                 const studentId = enrollment.student.studentId
-                const studentSubmissions = submissions.get(studentId) || [] // Fetch submissions for the student
+                const studentSubmissions = submissions[studentId] || []
 
                 return (
                   <details key={index}>
-                    <summary className="text-neutral-400">
+                    <summary className="mb-4 font-bold text-neutral-400">
                       {enrollment.student.fname} {enrollment.student.lname}
                     </summary>
                     <div>
                       {studentSubmissions.length > 0 ? (
-                        <ul className="flex flex-col gap-4">
-                          {studentSubmissions.map((submission) => (
-                            <li key={submission.submissionId} className="text-xs">
-                              <p>
-                                <strong>Submission Date:</strong>{" "}
-                                {new Date(submission.submissionDate).toLocaleDateString()}
-                              </p>
-                              <p>
-                                <strong>Description:</strong> {submission.description}
-                              </p>
-                              <p>
-                                <strong>Feedback:</strong> {submission.feedback || "No feedback yet"}
-                              </p>
-                              <p>
-                                <strong>Status:</strong> {submission.status || "No status"}
-                              </p>
-                              <p>
-                                <strong>Points:</strong> {submission.accumulatedPoints}/
-                                {submission.assignedToProject.totalPoints}
-                              </p>
-                            </li>
-                          ))}
-                        </ul>
+                        <table className="w-full border-collapse border border-neutral-300 text-left text-sm text-neutral-400">
+                          <thead>
+                            <tr className="bg-neutral-100">
+                              <th className="border border-neutral-300 px-4 py-2">Submission Date</th>
+                              <th className="border border-neutral-300 px-4 py-2">File</th>
+                              <th className="border border-neutral-300 px-4 py-2">Description</th>
+                              <th className="border border-neutral-300 px-4 py-2">Feedback</th>
+                              <th className="border border-neutral-300 px-4 py-2">Status</th>
+                              <th className="border border-neutral-300 px-4 py-2">Points</th>
+                            </tr>
+                          </thead>
+                          <tbody className="text-neutral-500">
+                            {studentSubmissions.map((submission) => (
+                              <tr key={submission.submissionId}>
+                                <td className="border border-neutral-300 px-4 py-2">
+                                  {new Date(submission.submissionDate).toLocaleDateString()}
+                                </td>
+                                <td className="border border-neutral-300 px-4 py-2"></td>
+                                <td className="border border-neutral-300 px-4 py-2">{submission.description}</td>
+                                <td className="border border-neutral-300 px-4 py-2">
+                                  {submission.feedback || "No feedback yet"}
+                                </td>
+                                <td className="border border-neutral-300 px-4 py-2">
+                                  {submission.status || "No status"}
+                                </td>
+                                <td className="border border-neutral-300 px-4 py-2">
+                                  {submission.accumulatedPoints}/{submission.assignedToProject.totalPoints}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
                       ) : (
-                        <p>No submissions yet</p>
+                        <p className="text-neutral-400">No submissions yet</p>
                       )}
                     </div>
                   </details>

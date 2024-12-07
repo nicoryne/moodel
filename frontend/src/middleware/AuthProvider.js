@@ -2,12 +2,14 @@ import React from "react"
 import CryptoJS from "crypto-js"
 import * as AuthServices from "../services/index"
 import { useCookies } from "react-cookie"
+import { useNavigate } from "react-router-dom"
 
 const AuthContext = React.createContext()
 
 export const AuthProvider = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["user", "token", "username", "role"])
-  const [isLoggedIn, setLoggedIn] = React.useState(false)
+  const [isAuthenticated, setAuthenticated] = React.useState(false)
+  const navigate = useNavigate()
 
   const options = {
     path: "/",
@@ -24,6 +26,7 @@ export const AuthProvider = ({ children }) => {
     removeCookie(key, { path: "/" })
   }
 
+  // environment variables who?
   const encryptionKey = "a2f4e58f98b53cd61a34f87d62bb8931a38e5e3f99d42b60e5b943c8a7cf0f53"
 
   const encrypt = (value) => {
@@ -35,18 +38,27 @@ export const AuthProvider = ({ children }) => {
     return bytes.toString(CryptoJS.enc.Utf8)
   }
 
+  const removeAuth = () => {
+    deleteCookie("user")
+    deleteCookie("role")
+    deleteCookie("username")
+    deleteCookie("token")
+    setAuthenticated(false)
+  }
+
+  const reloadUser = () => {
+    saveUserDetails()
+  }
+
   const setAuth = async (userToken, username, role) => {
     try {
       saveCookie("token", userToken)
       saveCookie("username", encrypt(username))
       saveCookie("role", encrypt(role))
-      saveUserDetails()
+      setAuthenticated(true)
     } catch (error) {
       console.error("🔴 ERROR setting authentication:", error)
-      deleteCookie("token")
-      deleteCookie("username")
-      deleteCookie("role")
-      deleteCookie("user")
+      removeAuth()
     }
   }
 
@@ -76,9 +88,11 @@ export const AuthProvider = ({ children }) => {
             address: user.address,
             createdAt: new Date(user.createdAt).toLocaleDateString("en-CA"),
             courses: user.ownedCourses,
+            profilePicture: user.profilePicture,
             role: decryptedRole,
           }
         }
+
         break
       case "student":
         user = await AuthServices.studentGetByEmail(decryptedUsername, cookies.token)
@@ -95,6 +109,7 @@ export const AuthProvider = ({ children }) => {
             address: user.address,
             createdAt: new Date(user.createdAt).toLocaleDateString("en-CA"),
             courses: user.courseEnrollments,
+            profilePicture: user.profilePicture,
             role: decryptedRole,
           }
         }
@@ -113,26 +128,48 @@ export const AuthProvider = ({ children }) => {
   }
 
   React.useEffect(() => {
-    if (!isLoggedIn && cookies.token) {
-      setLoggedIn(true)
+    if (!isAuthenticated) {
+      removeAuth()
+    } else {
       saveUserDetails()
+
+      let role = decrypt(cookies.role)
+      navigate(`/${role}`)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn, cookies.token])
+  }, [isAuthenticated])
 
-  const removeAuth = () => {
-    setLoggedIn(false)
-    deleteCookie("user")
-    deleteCookie("role")
-    deleteCookie("username")
-    deleteCookie("token")
-  }
+  // Logger
+  React.useEffect(() => {
+    if (cookies.token) {
+      console.log("✅ TOKEN")
+    } else {
+      console.log("🔴 NO TOKEN")
+    }
 
-  const reloadUser = () => {
-    saveUserDetails()
-  }
+    if (cookies.username) {
+      console.log("✅ USERNAME")
+    } else {
+      console.log("🔴 NO USERNAME")
+    }
 
-  const isAuthenticated = !!cookies.token
+    if (cookies.role) {
+      console.log("✅ ROLE")
+    } else {
+      console.log("🔴 NO ROLE")
+    }
+
+    if (cookies.user) {
+      console.log("✅ USER")
+    } else {
+      console.log("🔴 NO USER")
+    }
+
+    if (isAuthenticated) {
+      console.log("✅ AUTHENTICATED")
+    } else {
+      console.log("🔴 NOT AUTHENTICATED")
+    }
+  }, [cookies, isAuthenticated])
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, cookies, removeAuth, setAuth, reloadUser }}>

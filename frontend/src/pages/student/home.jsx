@@ -1,9 +1,16 @@
 import React from "react"
 import { Link, useOutletContext } from "react-router-dom"
 import dark_logo from "../../assets/moodel-logo-dark.png"
-import temp_image from "../../assets/team-members/porter.png"
 import Modal from "../../components/Modal"
-import { ClockIcon, BookOpenIcon, PhoneIcon, CakeIcon, HomeIcon, AcademicCapIcon } from "@heroicons/react/24/solid"
+import {
+  ClockIcon,
+  BookOpenIcon,
+  PhoneIcon,
+  UserCircleIcon,
+  CakeIcon,
+  HomeIcon,
+  AcademicCapIcon,
+} from "@heroicons/react/24/solid"
 import { useAuth } from "../../middleware/AuthProvider"
 import StudentCourseTab from "../../components/Student/StudentCourseTab"
 import { decryptJoinCode } from "../../lib/utils/courseEncryptor"
@@ -25,7 +32,6 @@ export default function StudentHome() {
 
           if (data) {
             setMySubmissions(data)
-            console.log(data)
           }
         } catch (error) {
           console.error("Error fetching submissions:", error)
@@ -202,7 +208,17 @@ export default function StudentHome() {
       <div className="mx-auto flex gap-8 p-8 md:w-[900px] lg:w-[1100px]">
         {/* Profile */}
         <section className="flex w-72 flex-col gap-4">
-          <img className="rounded-full border-2" src={temp_image} width={256} height={256} alt="Profile" />
+          {userDetails.profilePicture ? (
+            <img
+              className="rounded-full border-2"
+              width={256}
+              height={256}
+              src={userDetails.profilePicture}
+              alt="Profile"
+            />
+          ) : (
+            <UserCircleIcon width={256} height={256} className="rounded-full border-2 text-neutral-400" />
+          )}
           {/* Name and Email */}
           <div>
             <h2 className="text-3xl font-bold text-neutral-600">
@@ -217,20 +233,20 @@ export default function StudentHome() {
             Edit Profile
           </Link>
           <div className="flex gap-1 text-sm">
-            <AcademicCapIcon className="h-auto w-4 text-blue-300" />
-            <span className="font-bold text-blue-400">{userDetails.courses?.length}</span>
-            <span className="text-blue-300">Courses Enrolled</span>
+            <AcademicCapIcon className="h-auto w-4 text-neutral-400" />
+            <span className="font-bold text-neutral-400">{userDetails.courses?.length}</span>
+            <span className="text-neutral-400">Courses Enrolled</span>
           </div>
           <div className="flex gap-1 border-b-2 pb-2 text-sm">
-            <ClockIcon className="h-auto w-4 text-blue-300" />
-            <span className="font-bold text-blue-400">
+            <ClockIcon className="h-auto w-4 text-neutral-400" />
+            <span className="font-bold text-neutral-400">
               {timeNow.toLocaleTimeString("en-US", {
                 hour12: false,
                 hour: "2-digit",
                 minute: "2-digit",
               })}
             </span>
-            <span className="text-blue-300">
+            <span className="text-neutral-300">
               {timeNow
                 .toLocaleTimeString("en-US", {
                   second: "2-digit",
@@ -241,12 +257,12 @@ export default function StudentHome() {
           </div>
           <h3 className="text-xs font-semibold text-neutral-400">Account Details</h3>
           <div className="flex gap-1 text-sm">
-            <PhoneIcon className="h-auto w-4 text-blue-300" />
-            <span className="text-blue-300">{userDetails.phoneNumber}</span>
+            <PhoneIcon className="h-auto w-4 text-neutral-400" />
+            <span className="text-neutral-400">{userDetails.phoneNumber}</span>
           </div>
           <div className="flex gap-1 text-sm">
-            <CakeIcon className="h-auto w-4 text-blue-300" />
-            <span className="text-blue-300">
+            <CakeIcon className="h-auto w-4 text-neutral-400" />
+            <span className="text-neutral-400">
               {new Date(userDetails.birthdate).toLocaleDateString("en-US", {
                 month: "short",
                 day: "2-digit",
@@ -255,8 +271,8 @@ export default function StudentHome() {
             </span>
           </div>
           <div className="flex w-full gap-1 text-sm">
-            <HomeIcon className="h-auto w-4 text-blue-300" />
-            <span className="text-blue-300">{userDetails.address}</span>
+            <HomeIcon className="h-auto w-4 text-neutral-400" />
+            <span className="text-neutral-400">{userDetails.address}</span>
           </div>
         </section>
 

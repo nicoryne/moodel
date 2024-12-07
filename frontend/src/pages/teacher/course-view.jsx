@@ -1,9 +1,14 @@
 import React from "react"
 import { useLocation, useOutletContext } from "react-router-dom"
-import { BookOpenIcon, UserGroupIcon, PresentationChartLineIcon, CheckCircleIcon } from "@heroicons/react/24/solid"
+import {
+  BookOpenIcon,
+  UserGroupIcon,
+  PresentationChartLineIcon,
+  CheckCircleIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/solid"
 import { encryptCourseId } from "../../lib/utils/courseEncryptor"
-import { createProject } from "../../services"
-import temp_image from "../../assets/team-members/porter.png"
+import { createProject, retrieveFile, getCourseById } from "../../services"
 import Modal from "../../components/Modal"
 import { useAuth } from "../../middleware/AuthProvider"
 import TeacherProjectTab from "../../components/Teacher/TeacherProjectTab"
@@ -19,16 +24,46 @@ export default function TeacherCourseView() {
   const [pendingStudents, setPendingStudents] = React.useState([])
 
   React.useEffect(() => {
-    if (courseId && userDetails && userDetails.courses) {
-      const foundCourse = userDetails.courses.find((course) => course.course.courseId === courseId)
-
-      if (foundCourse) {
-        setCourseDetails(foundCourse)
-        setActiveStudents(foundCourse.course.enrolledStudents.filter((student) => student.isVerified))
-        setPendingStudents(foundCourse.course.enrolledStudents.filter((student) => !student.isVerified))
+    async function fetchCourseDetails() {
+      try {
+        if (courseId) {
+          const foundCourse = await getCourseById(courseId, cookies.token)
+          if (foundCourse) {
+            setCourseDetails(foundCourse)
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching course details:", error)
       }
     }
-  }, [courseId, userDetails])
+    fetchCourseDetails()
+  }, [courseId, cookies.token])
+
+  const fetchProfilePictures = async (list) => {
+    for (let data of list) {
+      if (data.student.profilePicture) {
+        let profilePictureUrl = await retrieveFile(data.student.profilePicture, cookies.token)
+        data.student.profilePicture = profilePictureUrl
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      if (courseDetails) {
+        let tempActiveStudents = courseDetails.enrolledStudents.filter((student) => student.isVerified)
+        let tempPendingStudents = courseDetails.enrolledStudents.filter((student) => !student.isVerified)
+
+        await fetchProfilePictures(tempActiveStudents)
+        await fetchProfilePictures(tempPendingStudents)
+
+        setActiveStudents(tempActiveStudents)
+        setPendingStudents(tempPendingStudents)
+      }
+    }
+
+    fetchData()
+  }, [courseDetails])
 
   // Modal
   const [modalProps, setModalProps] = React.useState()
@@ -62,7 +97,7 @@ export default function TeacherCourseView() {
         groupProject: isGroupProject,
         active: true,
         course: {
-          courseId: courseDetails.course.courseId,
+          courseId: courseDetails.courseId,
         },
       }
 
@@ -192,30 +227,29 @@ export default function TeacherCourseView() {
                 <BookOpenIcon className="h-auto w-12 text-white" />
                 <div className="flex flex-col">
                   <small className="text-xs text-neutral-100">Course Title</small>
-                  <h1 className="text-xl font-bold text-white">{courseDetails.course.title}</h1>
+                  <h1 className="text-xl font-bold text-white">{courseDetails.title}</h1>
                 </div>
                 <div className="mx-20 flex flex-col border-l-2 px-4">
                   <small className="text-xs text-neutral-100">Project Description</small>
-                  <p className="text-sm font-semibold text-white">{courseDetails.course.description}</p>
+                  <p className="text-sm font-semibold text-white">{courseDetails.description}</p>
                 </div>
               </div>
 
               <div className="flex flex-col">
                 <small className="text-xs text-neutral-100">Invite students using this code</small>
-                <h2 className="text-xl font-bold text-white">Code: {encryptCourseId(courseDetails.course.courseId)}</h2>
+                <h2 className="text-xl font-bold text-white">Code: {encryptCourseId(courseDetails.courseId)}</h2>
               </div>
             </div>
             <div className="flex justify-between">
               <div className="flex gap-8">
                 <span className="flex gap-1 text-xs text-white">
                   <UserGroupIcon className="h-4 w-auto" />
-                  {courseDetails.course.enrolledStudents.length}{" "}
-                  {courseDetails.course.enrolledStudents.length === 1 ? "student" : "students"}
+                  {courseDetails.enrolledStudents.length}{" "}
+                  {courseDetails.enrolledStudents.length === 1 ? "student" : "students"}
                 </span>
                 <span className="flex gap-1 text-xs text-white">
                   <PresentationChartLineIcon className="h-4 w-auto" />
-                  {courseDetails.course.projects.length}{" "}
-                  {courseDetails.course.projects.length === 1 ? "project" : "projects"}
+                  {courseDetails.projects.length} {courseDetails.projects.length === 1 ? "project" : "projects"}
                 </span>
               </div>
             </div>
@@ -230,11 +264,15 @@ export default function TeacherCourseView() {
                   <ul>
                     {activeStudents.map((data, index) => (
                       <li key={index} className="flex place-items-center gap-1">
-                        <img
-                          src={temp_image}
-                          className="h-auto w-6 rounded-full"
-                          alt={data.student.fname + "Profile"}
-                        />
+                        {data.student.profilePicture ? (
+                          <img
+                            className="h-auto w-6 rounded-full"
+                            src={data.student.profilePicture}
+                            alt={data.student.fname + "Profile"}
+                          />
+                        ) : (
+                          <UserCircleIcon className="w-6 rounded-full border-2 text-neutral-400" />
+                        )}
                         <p className="text-sm font-semibold text-blue-400">
                           {data.student.fname} {""} {data.student.lname}
                         </p>
@@ -249,7 +287,7 @@ export default function TeacherCourseView() {
                       {pendingStudents.map((data, index) => (
                         <li key={index} className="flex place-items-center gap-1">
                           <img
-                            src={temp_image}
+                            src={data.student.profilePicture}
                             className="h-auto w-6 rounded-full opacity-40"
                             alt={data.student.fname + "Profile"}
                           />
@@ -287,8 +325,8 @@ export default function TeacherCourseView() {
                   </button>
                 </aside>
                 <div className="flex flex-col gap-4">
-                  {courseDetails.course.projects.map((project, index) => (
-                    <TeacherProjectTab key={index} project={project} courseId={courseDetails.course.courseId} />
+                  {courseDetails.projects.map((project, index) => (
+                    <TeacherProjectTab key={index} project={project} courseId={courseDetails.courseId} />
                   ))}
                 </div>
               </div>

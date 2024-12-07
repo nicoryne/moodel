@@ -6,7 +6,9 @@ import { InboxIcon } from "@heroicons/react/20/solid"
 import { ExclamationCircleIcon } from "@heroicons/react/24/solid"
 import temp_image from "../../assets/team-members/porter.png"
 
-export default function StudentNavbar() {
+export default function StudentNavbar({ context }) {
+  const { userDetails } = context
+
   return (
     <header className="h-16 w-full border-b-4 border-blue-300 bg-blue-400">
       <div className="flex h-full justify-between px-8 py-4">
@@ -25,7 +27,7 @@ export default function StudentNavbar() {
           </button>
           {/* Profile Picture */}
           <button>
-            <img className="h-auto w-10 rounded-full" src={temp_image} alt="Logo" />
+            <img className="h-auto w-10 rounded-full" src={userDetails.profilePicture} alt="Logo" />
           </button>
         </div>
       </div>

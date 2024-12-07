@@ -2,8 +2,7 @@ import React from "react"
 import { useOutletContext } from "react-router-dom"
 
 import Modal from "../../components/Modal"
-import { PencilSquareIcon } from "@heroicons/react/20/solid"
-import temp_image from "../../assets/team-members/porter.png"
+import { PencilSquareIcon, UserCircleIcon } from "@heroicons/react/20/solid"
 import { useAuth } from "../../middleware/AuthProvider"
 import { getAge } from "../../lib/utils/getAge"
 import { updateStudent } from "../../services/index"
@@ -26,13 +25,23 @@ export default function StudentProfile() {
   const [newPassword, setNewPassword] = React.useState("")
   const [confirmPassword, setConfirmPassword] = React.useState("")
 
+  const [profilePicture, setProfilePicture] = React.useState(userDetails.profilePicture)
+  const [profilePicturePreview, setProfilePicturePreview] = React.useState(null)
+
   const fields = React.useMemo(
-    () => [firstName, lastName, phoneNumber, address, birthdate],
-    [firstName, lastName, phoneNumber, address, birthdate],
+    () => [firstName, lastName, phoneNumber, address, birthdate, profilePicture],
+    [firstName, lastName, phoneNumber, address, birthdate, profilePicture],
   )
 
   const details = React.useMemo(
-    () => [userDetails.fname, userDetails.lname, userDetails.phoneNumber, userDetails.address, userDetails.birthdate],
+    () => [
+      userDetails.fname,
+      userDetails.lname,
+      userDetails.phoneNumber,
+      userDetails.address,
+      userDetails.birthdate,
+      userDetails.profilePicture,
+    ],
     [userDetails],
   )
 
@@ -44,12 +53,26 @@ export default function StudentProfile() {
     )
   }, [fields, details])
 
+  React.useEffect(() => {
+    if (profilePicture) {
+      if (profilePicture instanceof Blob) {
+        let fileURL = URL.createObjectURL(profilePicture)
+        setProfilePicturePreview(fileURL)
+      } else {
+        setProfilePicturePreview(profilePicture)
+      }
+    } else {
+      setProfilePicturePreview(null)
+    }
+  }, [profilePicture])
+
   const cancelUpdateDetails = () => {
     setFirstName(userDetails.fname)
     setLastName(userDetails.lname)
     setBirthDate(userDetails.birthdate)
     setAddress(userDetails.address)
     setPhoneNumber(userDetails.phoneNumber)
+    setProfilePicture(userDetails.profilePicture)
   }
 
   const handleEditProfile = () => {
@@ -78,6 +101,7 @@ export default function StudentProfile() {
       }
       if (phoneNumber) formData.phoneNumber = phoneNumber
       if (address) formData.address = address
+      if (profilePicture) formData.profilePicture = profilePicture
 
       updateStudent(formData, cookies.token)
         .then((newTeacher) => {
@@ -92,6 +116,7 @@ export default function StudentProfile() {
 
           setTimeout(() => {
             setModalProps(null)
+            setIsDefaultFields(true)
           }, 2000)
         })
         .catch((error) => {
@@ -111,6 +136,39 @@ export default function StudentProfile() {
         onCancel: () => setModalProps(null),
       })
     }
+  }
+
+  const handleProfilePictureChange = (e) => {
+    const file = e.target.files[0]
+    const validTypes = ["image/jpeg", "image/png", "image/webp"]
+
+    if (file) {
+      if (!validTypes.includes(file.type)) {
+        setModalProps({
+          title: "Error",
+          message: "Invalid file type. Please Upload a JPEG, PNG, or WEBP image.",
+          type: "error",
+          onCancel: () => setModalProps(null),
+        })
+        e.target.value = ""
+        return
+      }
+
+      const maxSizeInBytes = 2 * 1024 * 1024 // 2MB
+      if (file.size > maxSizeInBytes) {
+        setModalProps({
+          title: "Error",
+          message: "File size exceeds the 2MB limit. Please upload a smaller file.",
+          type: "error",
+          onCancel: () => setModalProps(null),
+        })
+        e.target.value = ""
+        return
+      }
+
+      setProfilePicture(file)
+    }
+    e.target.value = ""
   }
 
   const handlePasswordChange = () => {
@@ -171,11 +229,27 @@ export default function StudentProfile() {
           {/* Profile Picture */}
           <div className="flex flex-col gap-2 md:col-start-4">
             <h3 className="text-base font-semibold text-blue-400">Profile Picture</h3>
-            <img className="rounded-full border-2" src={temp_image} width={256} height={256} alt="Profile" />
-            <button className="relative bottom-8 left-8 flex w-fit items-center gap-1 rounded bg-neutral-600 p-2 text-xs text-white hover:bg-neutral-500">
+            <div className="relative h-64 w-64 overflow-hidden rounded-full border-2 bg-gray-100">
+              {profilePicture ? (
+                <img className="h-full w-full object-cover" src={profilePicturePreview} alt="Profile" />
+              ) : (
+                <UserCircleIcon className="h-full w-full text-neutral-400" />
+              )}
+            </div>
+            <label
+              htmlFor="profile-picture"
+              className="relative bottom-8 left-8 flex w-fit cursor-pointer items-center gap-1 rounded bg-neutral-600 p-2 text-xs text-white hover:bg-neutral-500"
+            >
               <PencilSquareIcon className="h-auto w-4" />
               Edit
-            </button>
+            </label>
+            <input
+              id="profile-picture"
+              type="file"
+              name="profile-picture"
+              onChange={handleProfilePictureChange}
+              className="hidden"
+            />
           </div>
 
           <div className="flex w-full flex-col gap-4 md:col-start-1 md:col-end-3">
@@ -311,7 +385,7 @@ export default function StudentProfile() {
 
           <div className="flex w-fit flex-col gap-4">
             <div className="flex flex-col gap-4">
-              <h3 className="text-base font-semibold text-blue-400">Change Password</h3>
+              <h3 className="text-base font-semibold text-neutral-400">Change Password</h3>
               <div className="flex flex-col gap-1">
                 <label htmlFor="currentPassword" className="text-sm font-semibold text-neutral-500">
                   Current Password

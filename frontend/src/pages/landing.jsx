@@ -4,7 +4,6 @@ import AboutSection from "../components/Landing/AboutSection"
 import TeamSection from "../components/Landing/TeamSection"
 import ContactSection from "../components/Landing/ContactSection"
 import FooterSection from "../components/Landing/FooterSection"
-
 export default function Landing() {
   return (
     <>

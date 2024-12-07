@@ -31,7 +31,7 @@ export default function StudentLayout() {
     <div className="flex">
       <StudentSidebar />
       <main className="w-full">
-        <StudentNavbar />
+        <StudentNavbar context={{ userDetails }} />
         <Outlet context={{ userDetails }} />
       </main>
     </div>

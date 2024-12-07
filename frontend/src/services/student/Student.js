@@ -1,3 +1,5 @@
+import { retrieveFile, uploadFile } from "../file"
+
 async function studentLogin(formData) {
   const headers = new Headers()
   headers.append("Content-Type", "application/json")
@@ -71,10 +73,20 @@ async function studentGetByEmail(email, token) {
     throw new Error(`🔴 ERROR: No data found for email ${email}`)
   }
 
+  if (data.profilePicture) {
+    data.profilePicture = await retrieveFile(data.profilePicture, token)
+  }
+
   return data
 }
 
 async function updateStudent(formData, token) {
+  if (formData.profilePicture) {
+    const file = formData.profilePicture
+    const fileUuid = await uploadFile(file, token)
+    formData.profilePicture = fileUuid
+  }
+
   const res = await fetch("http://localhost:8080/api/student/update", {
     method: "PUT",
     body: JSON.stringify(formData),
@@ -106,6 +118,7 @@ async function studentGetAll(token) {
   }
 
   const data = await res.json()
+
   return data
 }
 

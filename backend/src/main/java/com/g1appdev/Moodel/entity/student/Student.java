@@ -33,6 +33,7 @@ public class Student {
     private String phoneNumber;
     private String address;
     private Date createdAt;
+    private String profilePicture;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("student")
@@ -45,7 +46,7 @@ public class Student {
     public Student() {}
 
     public Student(String lname, String fname, Date birthDate, int age, String password, 
-                   String email, String phoneNumber, Date createdAt, String address) {
+                   String email, String phoneNumber, Date createdAt, String address, String profilePicture) {
         this.lname = lname;
         this.fname = fname;
         this.birthDate = birthDate;
@@ -55,6 +56,7 @@ public class Student {
         this.phoneNumber = phoneNumber;
         this.createdAt = createdAt;
         this.address = address;
+        this.profilePicture = profilePicture;
     }
 
 
@@ -149,4 +151,13 @@ public class Student {
     public void setIndividualSubmissions(Set<IndividualSubmissions> individualSubmissions) {
         this.individualSubmissions = individualSubmissions;
     }
+
+    public String getProfilePicture() {
+        return this.profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
 }

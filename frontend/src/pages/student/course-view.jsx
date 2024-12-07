@@ -5,13 +5,13 @@ import {
   UserGroupIcon,
   PresentationChartLineIcon,
   CheckCircleIcon,
+  UserCircleIcon,
   BriefcaseIcon,
 } from "@heroicons/react/24/solid"
-import temp_image from "../../assets/team-members/porter.png"
-import StuentProjectTab from "../../components/Student/StudentProjectTab"
 import { useAuth } from "../../middleware/AuthProvider"
 import { getCourseById } from "../../services"
 import StudentProjectTab from "../../components/Student/StudentProjectTab"
+import { retrieveFile } from "../../services/file"
 
 export default function StudentCourseView() {
   const { cookies, reloadUser } = useAuth()
@@ -42,7 +42,21 @@ export default function StudentCourseView() {
   React.useEffect(() => {
     if (courseDetails) {
       const enrolledStudents = courseDetails.enrolledStudents || []
-      setActiveStudents(enrolledStudents.filter((student) => student.isVerified))
+      const tempActiveStudents = enrolledStudents.filter((student) => student.isVerified)
+
+      const fetchProfilePictures = async () => {
+        for (let data of tempActiveStudents) {
+          if (data.student.profilePicture) {
+            let profilePictureUrl = await retrieveFile(data.student.profilePicture, cookies.token)
+            data.student.profilePicture = profilePictureUrl
+          }
+        }
+
+        setActiveStudents(tempActiveStudents)
+      }
+
+      fetchProfilePictures()
+
       setTeacherList(courseDetails.ownedByTeachers)
     }
   }, [courseDetails])
@@ -100,11 +114,15 @@ export default function StudentCourseView() {
                   <ul>
                     {activeStudents.map((data, index) => (
                       <li key={index} className="flex place-items-center gap-1">
-                        <img
-                          src={temp_image}
-                          className="h-auto w-6 rounded-full"
-                          alt={data.student.fname + "Profile"}
-                        />
+                        {data.student.profilePicture ? (
+                          <img
+                            className="h-auto w-6 rounded-full"
+                            src={data.student.profilePicture}
+                            alt={data.student.fname + "Profile"}
+                          />
+                        ) : (
+                          <UserCircleIcon className="w-6 rounded-full border-2 text-neutral-400" />
+                        )}
                         <p className="text-sm font-semibold text-blue-400">
                           {data.student.fname} {""} {data.student.lname}
                         </p>
