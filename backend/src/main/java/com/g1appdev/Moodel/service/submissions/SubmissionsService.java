@@ -11,6 +11,7 @@ import com.g1appdev.Moodel.entity.student.Student;
 import com.g1appdev.Moodel.respository.submissions.GroupSubmissionsRepo;
 import com.g1appdev.Moodel.respository.submissions.IndividualSubmissionsRepo;
 import com.g1appdev.Moodel.respository.submissions.SubmissionsRepo;
+import com.g1appdev.Moodel.service.utils.FileStorageService;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -28,6 +29,9 @@ public class SubmissionsService {
 
     @Autowired
     private SubmissionsRepo srepo;
+
+    @Autowired
+    FileStorageService fileStorageService;
 
     @Autowired
     private IndividualSubmissionsRepo isrepo;

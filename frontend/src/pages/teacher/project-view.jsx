@@ -3,7 +3,7 @@ import { useLocation, useOutletContext, Link, useNavigate } from "react-router-d
 import { useAuth } from "../../middleware/AuthProvider"
 import { ArrowLeftCircleIcon, PresentationChartLineIcon, CalendarDaysIcon, ClockIcon } from "@heroicons/react/20/solid"
 import Modal from "../../components/Modal"
-import { getSubmissionsByProjectId } from "../../services"
+import { getSubmissionsByProjectId, retrieveFile } from "../../services"
 
 export default function TeacherProjectView() {
   const { cookies, reloadUser } = useAuth()
@@ -44,6 +44,31 @@ export default function TeacherProjectView() {
     }
   }
 
+  const fetchFilesForSubmissions = async (submissions) => {
+    const updatedSubmissions = {}
+
+    for (const studentId in submissions) {
+      if (submissions[studentId]) {
+        updatedSubmissions[studentId] = await Promise.all(
+          submissions[studentId].map(async (submission) => {
+            if (submission.fileURL) {
+              try {
+                const fileUrl = await retrieveFile(submission.fileURL, cookies.token)
+                return { ...submission, fileURL: fileUrl }
+              } catch (error) {
+                console.error(`Failed to fetch file for submission ${submission.submissionId}:`, error)
+                return { ...submission, fileURL: null }
+              }
+            }
+            return submission
+          }),
+        )
+      }
+    }
+
+    return updatedSubmissions
+  }
+
   React.useEffect(() => {
     const fetchData = async () => {
       if (projectId && userDetails && courseId) {
@@ -58,7 +83,9 @@ export default function TeacherProjectView() {
         if (foundProject) {
           setProjectDetails(foundProject)
           const groupedSubmissions = await groupSubmissionsByStudent()
-          setSubmissions(groupedSubmissions)
+          const submissionsWithFiles = await fetchFilesForSubmissions(groupedSubmissions)
+
+          setSubmissions(submissionsWithFiles)
         }
       }
     }
@@ -132,7 +159,6 @@ export default function TeacherProjectView() {
               {courseDetails.course.enrolledStudents.map((enrollment, index) => {
                 const studentId = enrollment.student.studentId
                 const studentSubmissions = submissions[studentId] || []
-
                 return (
                   <details key={index}>
                     <summary className="mb-4 font-bold text-neutral-400">
@@ -157,7 +183,20 @@ export default function TeacherProjectView() {
                                 <td className="border border-neutral-300 px-4 py-2">
                                   {new Date(submission.submissionDate).toLocaleDateString()}
                                 </td>
-                                <td className="border border-neutral-300 px-4 py-2"></td>
+                                <td className="border border-neutral-300 px-4 py-2">
+                                  {submission.fileURL ? (
+                                    <a
+                                      href={submission.fileURL}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-400 hover:underline"
+                                    >
+                                      View File
+                                    </a>
+                                  ) : (
+                                    "No file"
+                                  )}
+                                </td>
                                 <td className="border border-neutral-300 px-4 py-2">{submission.description}</td>
                                 <td className="border border-neutral-300 px-4 py-2">
                                   {submission.feedback || "No feedback yet"}

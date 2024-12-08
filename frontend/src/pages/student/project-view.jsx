@@ -55,6 +55,8 @@ export default function StudentProjectView() {
   const [modalProps, setModalProps] = React.useState(null)
 
   const [submissionDescription, setSubmissionDescription] = React.useState("")
+  const [submissionFile, setSubmissionFile] = React.useState(null)
+  const [fileName, setFileName] = React.useState("No file selected")
 
   const resetCreateSubmission = () => {
     setModalProps(null)
@@ -66,11 +68,56 @@ export default function StudentProjectView() {
     setShowCreateSubmissionModal(true)
   }
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    const validTypes = [
+      "application/pdf", // PDF
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation", // PPTX
+      "application/vnd.ms-powerpoint", // PPT (older PowerPoint format)
+      "application/msword", // DOC (older Word format)
+      "application/vnd.oasis.opendocument.text", // ODT (OpenDocument Text)
+      "application/vnd.oasis.opendocument.presentation", // ODP (OpenDocument Presentation)
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+    ]
+
+    if (file) {
+      if (!validTypes.includes(file.type)) {
+        setModalProps({
+          title: "Error",
+          message: "Invalid file type. Please upload a PNG, JPEG, WEBP, DOCX, PDF, PPTX, or other supported document.",
+          type: "error",
+          onCancel: () => setModalProps(null),
+        })
+        e.target.value = ""
+        return
+      }
+
+      const maxSizeInBytes = 15 * 1024 * 1024 // 15MB
+      if (file.size > maxSizeInBytes) {
+        setModalProps({
+          title: "Error",
+          message: "File size exceeds the 2MB limit. Please upload a smaller file.",
+          type: "error",
+          onCancel: () => setModalProps(null),
+        })
+        e.target.value = ""
+        return
+      }
+
+      setSubmissionFile(file)
+      setFileName(file.name)
+    }
+    e.target.value = ""
+  }
+
   const createIndividualSubmissionFunction = () => {
-    if (submissionDescription) {
+    if (submissionDescription && submissionFile) {
       let formData = {
         submissionDate: new Date(),
-        fileURL: null,
+        fileURL: submissionFile,
         description: submissionDescription,
         accumulatedPoints: 0,
         assignedToProject: {
@@ -135,6 +182,27 @@ export default function StudentProjectView() {
                       value={submissionDescription}
                       onChange={(e) => setSubmissionDescription(e.target.value)}
                     ></textarea>
+                  </div>
+                  <div className="flex place-items-center gap-2">
+                    <label
+                      htmlFor="project-file"
+                      className="cursor-pointer rounded bg-blue-400 p-2 text-sm font-bold text-white hover:bg-blue-500"
+                    >
+                      Upload your File
+                    </label>
+                    <input
+                      type="file"
+                      id="project-file"
+                      name="project-file"
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
+                    <small
+                      className="block max-w-[200px] overflow-hidden truncate text-ellipsis whitespace-nowrap"
+                      title={fileName}
+                    >
+                      Filename: {fileName}
+                    </small>
                   </div>
                 </div>
               </form>

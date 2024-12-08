@@ -1,7 +1,15 @@
+import { retrieveFile, uploadFile } from "../file"
+
 async function createSubmission(formData, token) {
   const headers = new Headers()
   headers.append("Content-Type", "application/json")
   headers.append("Authorization", `Bearer ${token}`)
+
+  if (formData.fileURL) {
+    const file = formData.fileURL
+    const fileUUid = await uploadFile(file, token)
+    formData.fileURL = fileUUid
+  }
 
   const res = await fetch("http://localhost:8080/api/submissions/create", {
     method: "POST",
@@ -22,6 +30,12 @@ async function createGroupSubmission(formData, token) {
   headers.append("Content-Type", "application/json")
   headers.append("Authorization", `Bearer ${token}`)
 
+  if (formData.fileURL) {
+    const file = formData.fileURL
+    const fileUUid = await uploadFile(file, token)
+    formData.fileURL = fileUUid
+  }
+
   const res = await fetch("http://localhost:8080/api/submissions/createGroup", {
     method: "POST",
     body: JSON.stringify(formData),
@@ -40,6 +54,12 @@ async function createIndividualSubmission(formData, token) {
   const headers = new Headers()
   headers.append("Content-Type", "application/json")
   headers.append("Authorization", `Bearer ${token}`)
+
+  if (formData.fileURL) {
+    const file = formData.fileURL
+    const fileUUid = await uploadFile(file, token)
+    formData.fileURL = fileUUid
+  }
 
   const res = await fetch("http://localhost:8080/api/submissions/createIndividual", {
     method: "POST",
