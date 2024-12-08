@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class FileStorageService {
@@ -44,16 +44,46 @@ public class FileStorageService {
         }
     }
 
-    public Path loadFile(String fileName) {
-        return fileStorageLocation.resolve(fileName).normalize();
+    public Path loadFile(String baseFileName) {
+        List<Path> matchingFiles = findFile(baseFileName);
+
+        if(matchingFiles.isEmpty()) {
+            throw new RuntimeException("No file found with base name: " + baseFileName);
+        }
+
+        return matchingFiles.get(0);
     }
 
-    public void deleteFile(String fileName) {
+    public void deleteFile(String baseFileName) {
+        List<Path> matchingFiles = findFile(baseFileName);
+    
+        if (matchingFiles.isEmpty()) {
+            System.out.println("No file found to delete with base name: " + baseFileName);
+            return;
+        }
+    
+        matchingFiles.forEach(matchedFile -> {
+            try {
+                Files.delete(matchedFile);
+                System.out.println("Deleted file: " + matchedFile);
+            } catch (IOException e) {
+                throw new RuntimeException("Could not delete file: " + matchedFile, e);
+            }
+        });
+    }
+
+    private List<Path> findFile(String baseFileName) {
         try {
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
-            Files.deleteIfExists(filePath);
+            return Files.list(this.fileStorageLocation)
+                .filter(path -> {
+                    String fileName = path.getFileName().toString();
+                    int dotIndex = fileName.lastIndexOf('.');
+                    String fileBaseName = (dotIndex == -1) ? fileName : fileName.substring(0, dotIndex);
+                    return fileBaseName.equals(baseFileName);
+                })
+                .toList();
         } catch (IOException e) {
-            throw new RuntimeException("Could not delete file " + fileName, e);
+            throw new RuntimeException("Failed to search for files with base name: " + baseFileName, e);
         }
     }
 }

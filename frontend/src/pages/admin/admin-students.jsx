@@ -1,16 +1,14 @@
 import React from "react"
-import { Outlet, useNavigate } from "react-router-dom"
 import { useAuth } from "../../middleware/AuthProvider"
 import { studentGetAll, studentDeleteById, updateStudent } from "../../services"
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid"
 import Modal from "../../components/Modal"
+import { getAge } from "../../lib/utils/getAge"
 
 export default function AdminStudents() {
-  const navigate = useNavigate()
   const [studentsList, setStudentsList] = React.useState([])
   const [modalProps, setModalProps] = React.useState(null)
-  const [isModalOpen, setIsModalOpen] = React.useState(false)
-  const { cookies, isAuthenticated } = useAuth()
+  const { cookies, reloadUser } = useAuth()
 
   const headers = [
     { name: "First Name", key: "fname" },
@@ -40,43 +38,197 @@ export default function AdminStudents() {
     setModalProps({
       title: "Delete Student",
       message: "Are you sure you want to delete this student?",
-      type: "OK",
+      type: "warning",
       onConfirm: async () => {
         try {
           await studentDeleteById(studentId, cookies.token)
           setStudentsList((prev) => prev.filter((student) => student.studentId !== studentId))
-          setIsModalOpen(false)
+          setModalProps({
+            title: "Success",
+            message: "Student deleted successfully!",
+            type: "success",
+            onCancel: () => setModalProps(null),
+          })
+
+          setTimeout(() => {
+            reloadUser()
+            setModalProps(null)
+          }, 2000)
         } catch (error) {
           console.error(error)
         }
       },
-      onCancel: () => setIsModalOpen(false),
+      onCancel: () => setModalProps(null),
     })
-    setIsModalOpen(true)
   }
 
-  const handleEdit = (studentId) => {
-    const student = studentsList.find((s) => s.studentId === studentId)
+  // Edit Student
+  const [studentToEdit, setStudentToEdit] = React.useState(null)
+  const [editStudentModal, setEditStudentModal] = React.useState(false)
+  const [firstName, setFirstName] = React.useState("")
+  const [lastName, setLastName] = React.useState("")
+  const [phoneNumber, setPhoneNumber] = React.useState("")
+  const [birthdate, setBirthDate] = React.useState("")
+  const [address, setAddress] = React.useState("")
+
+  const handleEdit = (student) => {
+    setStudentToEdit(student)
+    setEditStudentModal(true)
+  }
+
+  const cancelUpdateDetails = () => {
+    setFirstName("")
+    setLastName("")
+    setBirthDate("")
+    setAddress("")
+    setPhoneNumber("")
+    setModalProps(null)
+    setEditStudentModal(false)
+  }
+
+  const handleEditProfile = () => {
     setModalProps({
-      title: "Edit Student",
-      message: `Edit details for ${student.fname} ${student.lname}.`,
-      type: "Edit",
-      onConfirm: async (updatedData) => {
-        try {
-          await updateStudent(studentId, updatedData, cookies.token)
-          setIsModalOpen(false)
-        } catch (error) {
-          console.error(error)
-        }
+      title: "Account Update",
+      message: "Are you sure you want to update this student?",
+      type: "warning",
+      onCancel: () => cancelUpdateDetails(null),
+      onConfirm: () => {
+        editProfile()
       },
-      onCancel: () => setIsModalOpen(false),
-      student, // Pass student data for editing
     })
-    setIsModalOpen(true)
+  }
+
+  const editProfile = () => {
+    if (studentToEdit) {
+      let formData = {
+        studentId: studentToEdit.studentId,
+      }
+
+      if (lastName) formData.lname = lastName
+      if (firstName) formData.fname = firstName
+      if (birthdate) {
+        formData.birthDate = birthdate
+        formData.age = getAge(birthdate)
+      }
+      if (phoneNumber) formData.phoneNumber = phoneNumber
+      if (address) formData.address = address
+
+      updateStudent(formData, cookies.token)
+        .then(() => {
+          reloadUser()
+          setModalProps({
+            title: "Success",
+            message: "Student updated successfully!",
+            type: "success",
+            onCancel: () => cancelUpdateDetails(null),
+          })
+
+          setTimeout(() => {
+            cancelUpdateDetails(null)
+          }, 2000)
+        })
+        .catch((error) => {
+          console.error("Error updating student:", error)
+          setModalProps({
+            title: "Error",
+            message: "Failed to update student. Please try again.",
+            type: "error",
+            onCancel: () => cancelUpdateDetails(null),
+          })
+        })
+    } else {
+      setModalProps({
+        title: "Invalid Input",
+        message: "Invalid student or missing fields.",
+        type: "warning",
+        onCancel: () => cancelUpdateDetails(null),
+      })
+    }
   }
 
   return (
     <>
+      {editStudentModal && (
+        <Modal
+          ModalProps={{
+            title: `Editing Course`,
+            type: "OK",
+            children: (
+              <form className="flex flex-col gap-8">
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="fname" className="text-sm font-semibold text-neutral-500">
+                    First Name
+                  </label>
+                  <input
+                    id="fname"
+                    name="fname"
+                    type="text"
+                    className="resize-none rounded border-2 p-2 text-neutral-600 focus:outline-blue-400"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  ></input>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="lname" className="text-sm font-semibold text-neutral-500">
+                    Last Name
+                  </label>
+                  <input
+                    id="lname"
+                    name="lname"
+                    type="text"
+                    className="resize-none rounded border-2 p-2 text-neutral-600 focus:outline-blue-400"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  ></input>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="phoneNumber" className="text-sm font-semibold text-neutral-500">
+                    Phone Number
+                  </label>
+                  <input
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    type="tel"
+                    className="resize-none rounded border-2 p-2 text-neutral-600 focus:outline-blue-400"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                  ></input>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="birthdate" className="text-sm font-semibold text-neutral-500">
+                    Birthdate
+                  </label>
+                  <input
+                    id="birthdate"
+                    name="birthdate"
+                    type="date"
+                    className="resize-none rounded border-2 p-2 text-neutral-600 focus:outline-blue-400"
+                    value={birthdate}
+                    onChange={(e) => setBirthDate(e.target.value)}
+                  ></input>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="address" className="text-sm font-semibold text-neutral-500">
+                    Address
+                  </label>
+                  <input
+                    id="address"
+                    name="address"
+                    type="text"
+                    className="resize-none rounded border-2 p-2 text-neutral-600 focus:outline-blue-400"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  ></input>
+                </div>
+              </form>
+            ),
+            onCancel: () => cancelUpdateDetails(),
+            onConfirm: () => handleEditProfile(),
+          }}
+        />
+      )}
+      {modalProps && <Modal ModalProps={modalProps} />}
       <h1 className="mb-8 text-center text-4xl font-bold text-blue-400">All Students</h1>
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -107,12 +259,14 @@ export default function AdminStudents() {
                     ))}
                     <td className="flex space-x-2 whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
                       <button
-                        onClick={() => handleEdit(student.studentId)}
+                        type="button"
+                        onClick={() => handleEdit(student)}
                         className="text-blue-600 hover:text-blue-900"
                       >
                         <PencilSquareIcon className="h-5 w-5" />
                       </button>
                       <button
+                        type="button"
                         onClick={() => handleDelete(student.studentId)}
                         className="text-red-600 hover:text-red-900"
                       >
@@ -126,8 +280,6 @@ export default function AdminStudents() {
           </div>
         </div>
       </div>
-      {/* Render Modal */}
-      {isModalOpen && <Modal ModalProps={modalProps} />}
     </>
   )
 }

@@ -20,14 +20,14 @@ export default function TeacherNavBar({ context }) {
         {/* Right Side Controls */}
         <div className="flex place-items-center gap-2">
           {/* Inbox */}
-          <button className="rounded-xl border-2 bg-blue-400 p-2 text-white hover:bg-white hover:text-blue-400 active:bg-blue-300">
+          {/* <button className="rounded-xl border-2 bg-blue-400 p-2 text-white hover:bg-white hover:text-blue-400 active:bg-blue-300">
             <ExclamationCircleIcon className="absolute top-2 ml-3 h-auto w-4 fill-red-400" />
             <InboxIcon className="h-auto w-4" />
-          </button>
+          </button> */}
           {/* Profile Picture */}
-          <button>
+          <Link to="/teacher/profile" className="flex place-items-center">
             <img className="h-auto w-10 rounded-full" src={userDetails.profilePicture} alt="Logo" />
-          </button>
+          </Link>
         </div>
       </div>
     </header>

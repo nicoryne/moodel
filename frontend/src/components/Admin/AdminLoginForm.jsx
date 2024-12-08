@@ -1,14 +1,6 @@
 import React from "react"
 import { Link, useNavigate } from "react-router-dom"
-import {
-  EyeIcon,
-  EyeSlashIcon,
-  LockClosedIcon,
-  EnvelopeIcon,
-  AcademicCapIcon,
-  BriefcaseIcon,
-  XMarkIcon,
-} from "@heroicons/react/20/solid"
+import { EyeIcon, EyeSlashIcon, LockClosedIcon, EnvelopeIcon, XMarkIcon } from "@heroicons/react/20/solid"
 import { motion } from "framer-motion"
 import { login } from "../../services/auth"
 import { MotionComponent } from "../MotionComponent"

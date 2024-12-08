@@ -8,8 +8,15 @@ import {
   ClockIcon,
   UserIcon,
 } from "@heroicons/react/20/solid"
-import { getCourseById, getIndividualSubmissionsByProjectId, createIndividualSubmission } from "../../services"
+import {
+  getCourseById,
+  getIndividualSubmissionsByProjectId,
+  retrieveFile,
+  createIndividualSubmission,
+} from "../../services"
 import Modal from "../../components/Modal"
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer"
+import "@cyntler/react-doc-viewer/dist/index.css"
 
 export default function StudentProjectView() {
   const { cookies, reloadUser } = useAuth()
@@ -22,6 +29,26 @@ export default function StudentProjectView() {
   const [projectDetails, setProjectDetails] = React.useState(null)
   const [courseDetails, setCourseDetails] = React.useState(null)
   const [submissions, setSubmissions] = React.useState(null)
+
+  const fetchFilesForSubmissions = async (submissions) => {
+    const updatedSubmissions = []
+
+    for (const submission of submissions) {
+      if (submission.fileURL) {
+        try {
+          const fileUrl = await retrieveFile(submission.fileURL, cookies.token)
+          updatedSubmissions.push({ ...submission, fileURL: fileUrl })
+        } catch (error) {
+          console.error(`Failed to fetch file for submission ${submission.submissionId}:`, error)
+          updatedSubmissions.push({ ...submission, fileURL: null })
+        }
+      } else {
+        updatedSubmissions.push(submission)
+      }
+    }
+
+    return updatedSubmissions
+  }
 
   React.useEffect(() => {
     async function fetchCourseDetails() {
@@ -40,7 +67,8 @@ export default function StudentProjectView() {
           }
 
           if (submissionsData) {
-            setSubmissions(submissionsData)
+            const updatedSubmissions = await fetchFilesForSubmissions(submissionsData)
+            setSubmissions(updatedSubmissions)
           }
         }
       } catch (error) {
@@ -62,6 +90,7 @@ export default function StudentProjectView() {
     setModalProps(null)
     setShowCreateSubmissionModal(false)
     setSubmissionDescription("")
+    setFileName("No file selected")
   }
 
   const handleSubmissionCreation = () => {
@@ -113,6 +142,15 @@ export default function StudentProjectView() {
     e.target.value = ""
   }
 
+  // FileViewer
+  const [fileToView, setFileToView] = React.useState(null)
+
+  const handleFileView = (blob) => {
+    if (blob) {
+      setFileToView(blob)
+    }
+  }
+
   const createIndividualSubmissionFunction = () => {
     if (submissionDescription && submissionFile) {
       let formData = {
@@ -162,6 +200,30 @@ export default function StudentProjectView() {
 
   return (
     <>
+      {fileToView && (
+        <section>
+          <aside className="flex w-full">
+            <div className="w-full border-b-2 px-4 py-8">
+              <button
+                type="button"
+                onClick={() => setFileToView(null)}
+                className="flex cursor-pointer place-items-center gap-2 text-neutral-400 hover:text-blue-400"
+              >
+                <ArrowLeftCircleIcon className="h-auto w-8" />
+                <p>Close file</p>
+              </button>
+            </div>
+          </aside>
+          <DocViewer
+            documents={[
+              {
+                uri: fileToView,
+              },
+            ]}
+            pluginRenderers={DocViewerRenderers}
+          />
+        </section>
+      )}
       {showCreateSubmissionsModal && (
         <Modal
           ModalProps={{
@@ -213,7 +275,7 @@ export default function StudentProjectView() {
         />
       )}
       {modalProps && <Modal ModalProps={modalProps} />}
-      {projectDetails && courseDetails && (
+      {!fileToView && projectDetails && courseDetails && (
         <section className="flex flex-col gap-8 p-16">
           <aside className="flex w-full">
             <div className="w-full border-b-2 py-8">
@@ -289,30 +351,58 @@ export default function StudentProjectView() {
             {submissions && (
               <div>
                 {submissions.length > 0 ? (
-                  <ul className="flex flex-col gap-4">
-                    {submissions.map((submission) => (
-                      <li key={submission.submissionId} className="text-xs">
-                        <p>
-                          <strong>Submission Date:</strong> {new Date(submission.submissionDate).toLocaleDateString()}
-                        </p>
-                        <p>
-                          <strong>Description:</strong> {submission.description}
-                        </p>
-                        <p>
-                          <strong>Feedback:</strong> {submission.feedback || "No feedback yet"}
-                        </p>
-                        <p>
-                          <strong>Status:</strong> {submission.status || "No status"}
-                        </p>
-                        <p>
-                          <strong>Points:</strong> {submission.accumulatedPoints}/
-                          {submission.assignedToProject.totalPoints}
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
+                  <table className="w-full border-collapse border border-neutral-300 text-left text-sm text-neutral-400">
+                    <thead>
+                      <tr className="bg-neutral-100">
+                        <th className="border border-neutral-300 px-4 py-2">Submission Date</th>
+                        <th className="border border-neutral-300 px-4 py-2">File</th>
+                        <th className="border border-neutral-300 px-4 py-2">Description</th>
+                        <th className="border border-neutral-300 px-4 py-2">Feedback</th>
+                        <th className="border border-neutral-300 px-4 py-2">Status</th>
+                        <th className="border border-neutral-300 px-4 py-2">Points</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-neutral-500">
+                      {submissions.map((submission) => (
+                        <tr key={submission.submissionId}>
+                          <td className="border border-neutral-300 px-4 py-2">
+                            {new Date(submission.submissionDate).toLocaleDateString()}
+                          </td>
+                          <td className="border border-neutral-300 px-4 py-2">
+                            {submission.fileURL ? (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => handleFileView(submission.fileURL)}
+                                  className="ml-2 text-blue-400 hover:underline"
+                                >
+                                  View File
+                                </button>
+                              </>
+                            ) : (
+                              "No file"
+                            )}
+                          </td>
+                          <td className="border border-neutral-300 px-4 py-2">{submission.description}</td>
+                          <td className="border border-neutral-300 px-4 py-2">
+                            {submission.feedback || "No feedback yet"}
+                          </td>
+                          <td className="border border-neutral-300 px-4 py-2">{submission.status || "No status"}</td>
+                          <td className="border border-neutral-300 px-4 py-2">
+                            {submission.status === "Accepted" ? (
+                              <span>
+                                {submission.accumulatedPoints}/{submission.assignedToProject.totalPoints}
+                              </span>
+                            ) : (
+                              <span>--/{submission.assignedToProject.totalPoints}</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 ) : (
-                  <p>No submissions yet</p>
+                  <p className="text-neutral-400">No submissions yet</p>
                 )}
               </div>
             )}

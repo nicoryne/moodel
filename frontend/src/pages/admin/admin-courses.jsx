@@ -1,25 +1,12 @@
 import React from "react"
-import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../middleware/AuthProvider"
 import { getAllCourses, deleteCourse, updateCourse } from "../../services"
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid"
 import Modal from "../../components/Modal"
 
 export default function AdminCourses() {
-  const navigate = useNavigate()
   const [coursesList, setCoursesList] = React.useState([])
-  const [modalProps, setModalProps] = React.useState(null)
-  const [isModalOpen, setIsModalOpen] = React.useState(false)
-  const { cookies, isAuthenticated } = useAuth()
-
-  const headers = [
-    { name: "Title", key: "title" },
-    { name: "Description", key: "description" },
-    { name: "Created At", key: "createdAt" },
-    { name: "Enrolled Students", key: "enrolledStudents" },
-    { name: "Owned By Teachers", key: "ownedByTeachers" },
-    { name: "Actions", key: "actions" },
-  ]
+  const { cookies, reloadUser } = useAuth()
 
   React.useEffect(() => {
     const fetchCourses = async () => {
@@ -34,47 +21,125 @@ export default function AdminCourses() {
     fetchCourses()
   }, [cookies])
 
-  const handleDelete = (courseId) => {
-    setModalProps({
-      title: "Delete Course",
-      message: "Are you sure you want to delete this course?",
-      type: "OK",
-      onConfirm: async () => {
-        try {
-          await deleteCourse(courseId, cookies.token)
-          setCoursesList((prev) => prev.filter((course) => course.courseId !== courseId))
-          setIsModalOpen(false)
-        } catch (error) {
-          console.error(error)
-        }
-      },
-      onCancel: () => setIsModalOpen(false),
-    })
-    setIsModalOpen(true)
+  // Modal
+  const [modalProps, setModalProps] = React.useState(null)
+  const [editCourseModal, setEditCourseModal] = React.useState(false)
+  const [courseDescription, setCourseDescription] = React.useState("")
+  const [courseData, setCourseData] = React.useState(null)
+
+  const handleEditCourse = (course) => {
+    setEditCourseModal(true)
+    setCourseData(course)
   }
 
-  const handleEdit = (courseId) => {
-    const course = coursesList.find((c) => c.courseId === courseId)
+  const editCourseFunction = () => {
+    if (courseDescription) {
+      let courseId = courseData.courseId
+      let formData = {
+        courseId: courseId,
+        description: courseDescription,
+      }
+
+      updateCourse(formData, cookies.token)
+        .then(() => {
+          setModalProps({
+            title: "Success",
+            message: "Course has been sucessfully edited!",
+            type: "success",
+            onCancel: () => resetEditCourse(),
+          })
+
+          setTimeout(() => {
+            resetEditCourse()
+            reloadUser()
+          }, 2000)
+        })
+        .catch(() => {
+          setModalProps({
+            title: "Error",
+            message: "Failed to edit course. Please try again.",
+            type: "error",
+            onCancel: () => resetEditCourse(),
+          })
+        })
+    }
+  }
+
+  const resetEditCourse = () => {
+    setEditCourseModal(false)
+    setCourseDescription("")
+    setModalProps(null)
+  }
+
+  // Delete
+  const handleDeleteCourse = () => {
     setModalProps({
-      title: "Edit Course",
-      message: `Edit details for ${course.title}.`,
-      type: "Edit",
-      onConfirm: async (updatedData) => {
-        try {
-          await updateCourse(courseId, updatedData, cookies.token)
-          setIsModalOpen(false)
-        } catch (error) {
-          console.error(error)
-        }
+      title: `Deleting Course: ${courseData.title}`,
+      message: "Are you sure you want to delete this course? This action is irreversible.",
+      type: "warning",
+      onCancel: () => setModalProps(null),
+      onConfirm: () => {
+        deleteCourseFunction()
+        setModalProps(null)
       },
-      onCancel: () => setIsModalOpen(false),
-      course, // Pass course data for editing
     })
-    setIsModalOpen(true)
+  }
+
+  const deleteCourseFunction = () => {
+    deleteCourse(courseData.courseId, cookies.token)
+      .then(() => {
+        setModalProps({
+          title: "Success",
+          message: "Course has been sucessfully deleted!",
+          type: "success",
+          onCancel: () => setModalProps(null),
+        })
+
+        setTimeout(() => {
+          setModalProps(null)
+          reloadUser()
+        }, 2000)
+      })
+      .catch(() => {
+        setModalProps({
+          title: "Error",
+          message: "Failed to delete course. Please try again.",
+          type: "error",
+          onCancel: () => setModalProps(null),
+        })
+      })
   }
 
   return (
     <>
+      {editCourseModal && (
+        <Modal
+          ModalProps={{
+            title: `Editing Course`,
+            type: "OK",
+            children: (
+              <form className="flex flex-col gap-8">
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="course-description" className="text-sm font-semibold text-neutral-500">
+                    Description
+                  </label>
+                  <textarea
+                    id="course-description"
+                    name="course-description"
+                    rows="3"
+                    className="resize-none rounded border-2 p-2 text-neutral-600 focus:outline-blue-400"
+                    value={courseDescription}
+                    onChange={(e) => setCourseDescription(e.target.value)}
+                  ></textarea>
+                </div>
+              </form>
+            ),
+            onCancel: () => resetEditCourse(),
+            onConfirm: () => editCourseFunction(),
+          }}
+        />
+      )}
+      {modalProps && <Modal ModalProps={modalProps} />}
       <h1 className="mb-8 text-center text-4xl font-bold text-blue-400">All Courses</h1>
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -82,34 +147,72 @@ export default function AdminCourses() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  {headers.map((header) => (
-                    <th
-                      key={header.key}
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                    >
-                      {header.name}
-                    </th>
-                  ))}
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Title
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Description
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Created At
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Enrolled Students
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Owned By Teachers
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                  >
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
                 {coursesList.map((course) => (
                   <tr key={course.courseId}>
-                    {headers.slice(0, -1).map((header) => (
-                      <td key={header.key} className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
-                        {header.key === "createdAt"
-                          ? new Date(course[header.key]).toLocaleDateString()
-                          : header.key === "enrolledStudents" || header.key === "ownedByTeachers"
-                            ? course[header.key].join(", ")
-                            : course[header.key]}
-                      </td>
-                    ))}
+                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">{course.title}</td>
+                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                      {course.description}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                      {new Date(course.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                      {course.enrolledStudents.length > 0
+                        ? course.enrolledStudents
+                            .map((data) => `${data.student.fname} ${data.student.lname}`)
+                            .join(", ")
+                        : "None"}
+                    </td>
+
+                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                      {course.ownedByTeachers.length > 0
+                        ? course.ownedByTeachers.map((data) => `${data.teacher.fname} ${data.teacher.lname}`).join(", ")
+                        : "None"}
+                    </td>
                     <td className="flex space-x-2 whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
-                      <button onClick={() => handleEdit(course.courseId)} className="text-blue-600 hover:text-blue-900">
+                      <button onClick={() => handleEditCourse(course)} className="text-blue-600 hover:text-blue-900">
                         <PencilSquareIcon className="h-5 w-5" />
                       </button>
-                      <button onClick={() => handleDelete(course.courseId)} className="text-red-600 hover:text-red-900">
+                      <button onClick={() => handleDeleteCourse(course)} className="text-red-600 hover:text-red-900">
                         <TrashIcon className="h-5 w-5" />
                       </button>
                     </td>
@@ -120,8 +223,6 @@ export default function AdminCourses() {
           </div>
         </div>
       </div>
-      {/* Render Modal */}
-      {isModalOpen && <Modal ModalProps={modalProps} />}
     </>
   )
 }

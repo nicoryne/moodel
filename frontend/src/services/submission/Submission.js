@@ -163,7 +163,7 @@ async function getIndividualSubmissionsByProjectId(projectId, studentId, token) 
   return data
 }
 
-async function updateSubmission(id, formData, token) {
+async function updateSubmission(formData, token) {
   const headers = new Headers()
   headers.append("Content-Type", "application/json")
   headers.append("Authorization", `Bearer ${token}`)

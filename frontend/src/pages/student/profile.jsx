@@ -104,7 +104,7 @@ export default function StudentProfile() {
       if (profilePicture) formData.profilePicture = profilePicture
 
       updateStudent(formData, cookies.token)
-        .then((newTeacher) => {
+        .then(() => {
           reloadUser()
           setModalProps({
             title: "Success",

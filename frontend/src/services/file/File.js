@@ -1,8 +1,11 @@
 async function uploadFile(file, token) {
   const fileUuid = crypto.randomUUID()
 
+  const fileExtension = file.name.split(".").pop()
+  const fileNameWithExtension = `${fileUuid}.${fileExtension}`
+
   const formDataWithFile = new FormData()
-  formDataWithFile.append("file", file, fileUuid)
+  formDataWithFile.append("file", file, fileNameWithExtension)
 
   const res = await fetch("http://localhost:8080/api/files/upload", {
     method: "POST",

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Link, useOutletContext } from "react-router-dom"
 import dark_logo from "../../assets/moodel-logo-dark.png"
 import Modal from "../../components/Modal"

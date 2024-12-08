@@ -147,10 +147,18 @@ public class SubmissionsService {
             .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Submission record with ID " + id + " was NOT found."));
 
         submission.setAccumulatedPoints(updatedSubmission.getAccumulatedPoints());
-        submission.setDescription(updatedSubmission.getDescription());
-        submission.setFeedback(updatedSubmission.getFeedback());
-        submission.setFileURL(updatedSubmission.getFileURL());
-        submission.setSubmissionDate(updatedSubmission.getSubmissionDate());
+        
+        if(updatedSubmission.getDescription() != null && !updatedSubmission.getDescription().isEmpty()) {
+            submission.setDescription(updatedSubmission.getDescription());
+        }
+
+        if(updatedSubmission.getFeedback() != null && !updatedSubmission.getFeedback().isEmpty()) {
+            submission.setFeedback(updatedSubmission.getFeedback());
+        }
+
+        if(updatedSubmission.getStatus() != null && !updatedSubmission.getStatus().isEmpty()) {
+            submission.setStatus(updatedSubmission.getStatus());
+        }
 
         return saveSubmissionDetails(submission);
     }
@@ -160,9 +168,12 @@ public class SubmissionsService {
     //#################
 
     public void deleteSubmission(int id) {
-        if (!srepo.existsById(id)) {
-            throw new RuntimeException("Submission not found");
-        }
+        Submissions submission = srepo.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("🔴 ERROR: Submission record with ID " + id + " was NOT found."));
+
+        String fileUrl = submission.getFileURL();
+        fileStorageService.deleteFile(fileUrl);
+
         srepo.deleteById(id);
     }
 }

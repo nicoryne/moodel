@@ -31,13 +31,22 @@ export default function StudentCourseTab({ courseData }) {
     <li className="my-2 flex h-40 w-full justify-between border-t-2 py-4">
       <div className="flex flex-col justify-center gap-2">
         <h3>
-          <Link
-            to={`${location.pathname.replace(/\/$/, "")}/courses/${courseSlug}`}
-            state={{ courseId: courseData.course.courseId }}
-            className="cursor-pointer border-b-2 border-transparent text-xl font-bold text-blue-400 hover:border-blue-400"
-          >
-            {courseData.course.title}
-          </Link>
+          {courseData.isVerified ? (
+            <Link
+              to={`${location.pathname.replace(/\/$/, "")}/courses/${courseSlug}`}
+              state={{ courseId: courseData.course.courseId }}
+              className="cursor-pointer border-b-2 border-transparent text-xl font-bold text-blue-400 hover:border-blue-400"
+            >
+              {courseData.course.title}
+            </Link>
+          ) : (
+            <div>
+              <p className="cursor-pointer border-b-2 border-transparent text-xl font-bold text-neutral-400">
+                {courseData.course.title}
+              </p>
+              <small className="font-bold text-red-400">Pending Verification</small>
+            </div>
+          )}
         </h3>
         <div className="">
           <p className="text-sm text-neutral-400">{courseData.course.description}</p>

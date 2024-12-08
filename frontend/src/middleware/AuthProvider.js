@@ -117,6 +117,22 @@ export const AuthProvider = ({ children }) => {
         break
       case "admin":
         user = await AuthServices.adminGetByEmail(decryptedUsername, cookies.token)
+
+        if (user) {
+          data = {
+            adminId: user.adminId,
+            fname: user.fname,
+            lname: user.lname,
+            birthdate: new Date(user.birthDate).toLocaleDateString("en-CA"),
+            age: user.age,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            address: user.address,
+            createdAt: new Date(user.createdAt).toLocaleDateString("en-CA"),
+            role: decryptedRole,
+          }
+        }
+
         break
       default:
         throw new Error("🔴 ERROR: Invalid role type.")

@@ -92,8 +92,8 @@ public class SubmissionsController {
     //#################
 
     @PutMapping("/update")
-    public ResponseEntity<Submissions> update(@RequestParam int id, @RequestBody Submissions updatedSubmission) {
-        Submissions updated = sserv.putSubmission(id, updatedSubmission);
+    public ResponseEntity<Submissions> update(@RequestBody Submissions updatedSubmission) {
+        Submissions updated = sserv.putSubmission(updatedSubmission.getSubmissionId(), updatedSubmission);
         return ResponseEntity.status(HttpStatus.OK).body(updated);
     }
 
