@@ -37,7 +37,7 @@ export default function TeacherCourseView() {
       }
     }
     fetchCourseDetails()
-  }, [courseId, cookies.token])
+  }, [courseId, cookies.token, reloadUser])
 
   const fetchProfilePictures = async (list) => {
     for (let data of list) {

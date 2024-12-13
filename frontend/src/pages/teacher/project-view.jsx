@@ -32,23 +32,37 @@ export default function TeacherProjectView() {
   const [courseDetails, setCourseDetails] = React.useState(null)
   const [submissions, setSubmissions] = React.useState([])
 
-  const groupSubmissionsByStudent = async () => {
+  const groupSubmissionsByType = async (isGroupProject) => {
     try {
       const fetchedSubmissions = await getSubmissionsByProjectId(projectId, cookies.token)
       const submissionsArray = Array.isArray(fetchedSubmissions) ? fetchedSubmissions : []
 
       const groupedSubmissions = submissionsArray.reduce((acc, submission) => {
-        const studentId = submission?.ownedByStudent?.studentId
-        if (!studentId) {
-          console.warn("Submission missing studentId:", submission)
-          return acc
-        }
+        if (!isGroupProject) {
+          const studentId = submission?.ownedByStudent?.studentId
+          if (!studentId) {
+            console.warn("Submission missing studentId:", submission)
+            return acc
+          }
 
-        if (!acc[studentId]) {
-          acc[studentId] = []
-        }
+          if (!acc[studentId]) {
+            acc[studentId] = []
+          }
 
-        acc[studentId].push(submission)
+          acc[studentId].push(submission)
+        } else {
+          const groupId = submission?.ownedByGroup?.groupId
+          if (!groupId) {
+            console.warn("Submission missing groupId:", submission)
+            return acc
+          }
+
+          if (!acc[groupId]) {
+            acc[groupId] = []
+          }
+
+          acc[groupId].push(submission)
+        }
         return acc
       }, {})
 
@@ -97,7 +111,9 @@ export default function TeacherProjectView() {
 
         if (foundProject) {
           setProjectDetails(foundProject)
-          const groupedSubmissions = await groupSubmissionsByStudent()
+
+          const groupedSubmissions = await groupSubmissionsByType(foundProject.isGroupProject)
+          console.log(groupedSubmissions)
           const submissionsWithFiles = await fetchFilesForSubmissions(groupedSubmissions)
 
           setSubmissions(submissionsWithFiles)
@@ -190,7 +206,7 @@ export default function TeacherProjectView() {
       submissionId: submission.submissionId,
       feedback: submissionFeedback,
       status: submissionStatus,
-      accumulatedPoints: submission.accumulatedPoints,
+      accumulatedPoints: submissionPoints,
     }
 
     if (
@@ -378,90 +394,98 @@ export default function TeacherProjectView() {
             </div>
           </div>
 
+          {/* Submissions */}
           <div>
             <header>
-              <h3 className="text-lg font-semibold text-neutral-400">Students</h3>
+              <h3 className="text-lg font-semibold text-neutral-400">
+                {projectDetails.isGroupProject ? "Groups" : "Students"}
+              </h3>
             </header>
-            <div>
-              {courseDetails.course.enrolledStudents.map((enrollment, index) => {
-                const studentId = enrollment.student.studentId
-                const studentSubmissions = submissions[studentId] || []
-                return (
-                  <details key={index}>
-                    <summary className="mb-4 font-bold text-neutral-400">
-                      {enrollment.student.fname} {enrollment.student.lname}
-                    </summary>
-                    <div>
-                      {studentSubmissions.length > 0 ? (
-                        <table className="w-full border-collapse border border-neutral-300 text-left text-sm text-neutral-400">
-                          <thead>
-                            <tr className="bg-neutral-100">
-                              <th className="border border-neutral-300 px-4 py-2">Submission Date</th>
-                              <th className="border border-neutral-300 px-4 py-2">File</th>
-                              <th className="border border-neutral-300 px-4 py-2">Description</th>
-                              <th className="border border-neutral-300 px-4 py-2">Feedback</th>
-                              <th className="border border-neutral-300 px-4 py-2">Status</th>
-                              <th className="border border-neutral-300 px-4 py-2">Points</th>
-                              <th className="border border-neutral-300 px-4 py-2">Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody className="text-neutral-500">
-                            {studentSubmissions.map((submission) => (
-                              <tr key={submission.submissionId}>
-                                <td className="border border-neutral-300 px-4 py-2">
-                                  {new Date(submission.submissionDate).toLocaleDateString()}
-                                </td>
-                                <td className="border border-neutral-300 px-4 py-2">
-                                  {submission.fileURL ? (
-                                    <>
-                                      <button
-                                        type="button"
-                                        onClick={() => handleFileView(submission.fileURL)}
-                                        className="ml-2 text-blue-400 hover:underline"
-                                      >
-                                        View File
-                                      </button>
-                                    </>
-                                  ) : (
-                                    "No file"
-                                  )}
-                                </td>
-                                <td className="border border-neutral-300 px-4 py-2">{submission.description}</td>
-                                <td className="border border-neutral-300 px-4 py-2">
-                                  {submission.feedback || "No feedback yet"}
-                                </td>
-                                <td className="border border-neutral-300 px-4 py-2">
-                                  {submission.status || "No status"}
-                                </td>
-                                <td className="border border-neutral-300 px-4 py-2">
-                                  {submission.status === "Accepted" ? (
-                                    <span>
-                                      {submission.accumulatedPoints}/{submission.assignedToProject.totalPoints}
-                                    </span>
-                                  ) : (
-                                    <span>--/{submission.assignedToProject.totalPoints}</span>
-                                  )}
-                                </td>
-                                <td className="border border-neutral-300 px-4 py-2">
-                                  <button type="button" onClick={() => handleDeleteSubmission(submission)}>
-                                    <TrashIcon className="w-4 fill-red-400" />
-                                  </button>
-                                  <button type="button" onClick={() => showEditSubmissionModal(submission)}>
-                                    <PencilSquareIcon className="w-4 fill-blue-400" />
-                                  </button>
-                                </td>
+
+            {projectDetails.isGroupProject ? (
+              <div></div>
+            ) : (
+              <div>
+                {courseDetails.course.enrolledStudents.map((enrollment, index) => {
+                  const studentId = enrollment.student.studentId
+                  const studentSubmissions = submissions[studentId] || []
+                  return (
+                    <details key={index}>
+                      <summary className="mb-4 font-bold text-neutral-400">
+                        {enrollment.student.fname} {enrollment.student.lname}
+                      </summary>
+                      <div>
+                        {studentSubmissions.length > 0 ? (
+                          <table className="w-full border-collapse border border-neutral-300 text-left text-sm text-neutral-400">
+                            <thead>
+                              <tr className="bg-neutral-100">
+                                <th className="border border-neutral-300 px-4 py-2">Submission Date</th>
+                                <th className="border border-neutral-300 px-4 py-2">File</th>
+                                <th className="border border-neutral-300 px-4 py-2">Description</th>
+                                <th className="border border-neutral-300 px-4 py-2">Feedback</th>
+                                <th className="border border-neutral-300 px-4 py-2">Status</th>
+                                <th className="border border-neutral-300 px-4 py-2">Points</th>
+                                <th className="border border-neutral-300 px-4 py-2">Actions</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      ) : (
-                        <p className="text-neutral-400">No submissions yet</p>
-                      )}
-                    </div>
-                  </details>
-                )
-              })}
-            </div>
+                            </thead>
+                            <tbody className="text-neutral-500">
+                              {studentSubmissions.map((submission) => (
+                                <tr key={submission.submissionId}>
+                                  <td className="border border-neutral-300 px-4 py-2">
+                                    {new Date(submission.submissionDate).toLocaleDateString()}
+                                  </td>
+                                  <td className="border border-neutral-300 px-4 py-2">
+                                    {submission.fileURL ? (
+                                      <>
+                                        <button
+                                          type="button"
+                                          onClick={() => handleFileView(submission.fileURL)}
+                                          className="ml-2 text-blue-400 hover:underline"
+                                        >
+                                          View File
+                                        </button>
+                                      </>
+                                    ) : (
+                                      "No file"
+                                    )}
+                                  </td>
+                                  <td className="border border-neutral-300 px-4 py-2">{submission.description}</td>
+                                  <td className="border border-neutral-300 px-4 py-2">
+                                    {submission.feedback || "No feedback yet"}
+                                  </td>
+                                  <td className="border border-neutral-300 px-4 py-2">
+                                    {submission.status || "No status"}
+                                  </td>
+                                  <td className="border border-neutral-300 px-4 py-2">
+                                    {submission.status === "Accepted" ? (
+                                      <span>
+                                        {submission.accumulatedPoints}/{submission.assignedToProject.totalPoints}
+                                      </span>
+                                    ) : (
+                                      <span>--/{submission.assignedToProject.totalPoints}</span>
+                                    )}
+                                  </td>
+                                  <td className="border border-neutral-300 px-4 py-2">
+                                    <button type="button" onClick={() => handleDeleteSubmission(submission)}>
+                                      <TrashIcon className="w-4 fill-red-400" />
+                                    </button>
+                                    <button type="button" onClick={() => showEditSubmissionModal(submission)}>
+                                      <PencilSquareIcon className="w-4 fill-blue-400" />
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        ) : (
+                          <p className="text-neutral-400">No submissions yet</p>
+                        )}
+                      </div>
+                    </details>
+                  )
+                })}
+              </div>
+            )}
           </div>
         </section>
       )}

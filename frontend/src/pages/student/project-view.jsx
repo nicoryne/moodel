@@ -6,6 +6,7 @@ import {
   PresentationChartLineIcon,
   CalendarDaysIcon,
   ClockIcon,
+  UsersIcon,
   UserIcon,
 } from "@heroicons/react/20/solid"
 import {
@@ -28,7 +29,10 @@ export default function StudentProjectView() {
   const { projectId, courseId } = location.state || {}
   const [projectDetails, setProjectDetails] = React.useState(null)
   const [courseDetails, setCourseDetails] = React.useState(null)
+
+  // Submissions
   const [submissions, setSubmissions] = React.useState(null)
+  const [myGroup, setMyGroup] = React.useState(null)
 
   const fetchFilesForSubmissions = async (submissions) => {
     const updatedSubmissions = []
@@ -70,6 +74,11 @@ export default function StudentProjectView() {
             const updatedSubmissions = await fetchFilesForSubmissions(submissionsData)
             setSubmissions(updatedSubmissions)
           }
+
+          if (projectDetails && projectDetails.isGroupProject) {
+            console.log("YEAH")
+          }
+          console.log(projectDetails)
         }
       } catch (error) {
         console.error("Error fetching course details:", error)
@@ -337,9 +346,20 @@ export default function StudentProjectView() {
                 </button>
 
                 <span className="flex gap-1 text-xs text-neutral-400">
-                  <UserIcon className="h-4 w-auto" />
-                  This is an <strong>Individual</strong> project. Submissions are graded individually.
+                  {projectDetails.isGroupProject ? (
+                    <UsersIcon className="h-4 w-auto" />
+                  ) : (
+                    <UserIcon className="h-4 w-auto" />
+                  )}
+                  This is <strong>{projectDetails.isGroupProject ? "a Group" : "an Individual"}</strong> project.
                 </span>
+
+                {projectDetails.isGroupProject && (
+                  <span className="flex gap-1 text-xs text-neutral-400">
+                    <UsersIcon className="h-4 w-auto" />
+                    This is <strong>{projectDetails.isGroupProject ? "a Group" : "an Individual"}</strong> project.
+                  </span>
+                )}
               </div>
             </div>
           </div>
