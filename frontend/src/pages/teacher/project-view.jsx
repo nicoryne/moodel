@@ -113,7 +113,6 @@ export default function TeacherProjectView() {
           setProjectDetails(foundProject)
 
           const groupedSubmissions = await groupSubmissionsByType(foundProject.isGroupProject)
-          console.log(groupedSubmissions)
           const submissionsWithFiles = await fetchFilesForSubmissions(groupedSubmissions)
 
           setSubmissions(submissionsWithFiles)
@@ -127,10 +126,13 @@ export default function TeacherProjectView() {
 
   // FileViewer
   const [fileToView, setFileToView] = React.useState(null)
+  const [AIScore, setAIScore] = React.useState(null)
 
-  const handleFileView = (blob) => {
+  const handleFileView = async (blob) => {
     if (blob) {
       setFileToView(blob)
+      const score = await detectAiScore(blob)
+      setAIScore(score)
     }
   }
 
@@ -328,6 +330,7 @@ export default function TeacherProjectView() {
                 <ArrowLeftCircleIcon className="h-auto w-8" />
                 <p>Close file</p>
               </button>
+              {AIScore && <span className="font-semibold text-neutral-400">AI-Index: {AIScore}%</span>}
             </div>
           </aside>
           <DocViewer

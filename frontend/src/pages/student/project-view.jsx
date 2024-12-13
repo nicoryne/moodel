@@ -76,9 +76,7 @@ export default function StudentProjectView() {
           }
 
           if (projectDetails && projectDetails.isGroupProject) {
-            console.log("YEAH")
           }
-          console.log(projectDetails)
         }
       } catch (error) {
         console.error("Error fetching course details:", error)

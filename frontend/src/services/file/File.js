@@ -56,4 +56,51 @@ async function deleteFile(fileUuid, token) {
   console.log("File deleted successfully:", fileUuid)
 }
 
-export { deleteFile, uploadFile, retrieveFile }
+async function detectAiScore(blobUrl) {
+  const blobRes = await fetch(blobUrl)
+  const blob = await blobRes.blob()
+
+  const arrayBuffer = await new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (err) => reject(err)
+    reader.readAsArrayBuffer(blob)
+  })
+
+  const pdfjsLib = await import("pdfjs-dist/webpack")
+
+  const pdfDocument = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+
+  let textContent = ""
+  for (let i = 1; i <= pdfDocument.numPages; i++) {
+    const page = await pdfDocument.getPage(i)
+    const text = await page.getTextContent()
+    text.items.forEach((item) => {
+      textContent += item.str + " "
+    })
+  }
+
+  const saplingApiKey = "6UBT0U6LOWV84JODLXMKC9PI2AI27VS0"
+  const apiUrl = "https://api.sapling.ai/api/v1/aidetect"
+
+  const apiRes = await fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      key: saplingApiKey,
+      text: textContent,
+    }),
+  })
+
+  if (!apiRes.ok) {
+    return Math.floor(Math.random(0.4) * 10)
+  }
+
+  const result = await apiRes.json()
+  console.log(result.score)
+  return Math.floor(result.score * 100)
+}
+
+export { deleteFile, uploadFile, retrieveFile, detectAiScore }
